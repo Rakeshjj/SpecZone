@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Sliding Curtain Reveal Transition</title>
+  <style>
+    /* Reset and Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+ 
+    body {
+      background-color: #0d0c0b;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+ 
+    /* Top Spacer to scroll into the transition */
+    .scroll-intro {
+      height: 70vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #161412;
+      color: #a3907c;
+      text-align: center;
+      padding: 20px;
+    }
+ 
+    .scroll-intro h1 {
+      font-size: 2.8rem;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+ 
+    /* --------------------------------------------------
+       THE CURTAIN REVEAL & FIXED CLIPPING SYSTEM
+       -------------------------------------------------- */
+   
+    .row {
+      position: relative;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      /* Crucial: clips fixed children inside the bounding box of this row container */
+      clip-path: inset(0 0 0 0);
+    }
+ 
+    /* Row 1 is base sticky layer */
+    .row-1 {
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+ 
+    /* Row 2 sits on top and slides over Row 1 as you scroll */
+    .row-2 {
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.5); /* Shadow adds deep physical overlap separation */
+    }
+ 
+    /* Dynamic Fixed Background Container */
+    .bg-holder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+ 
+    .bg-image {
+      position: fixed; /* Keeps image locked relative to the viewport window */
+      top: -10%; /* Extra height padding to accommodate the scroll-drift translation */
+      left: 0;
+      width: 100%;
+      height: 120%;
+      background-size: cover;
+      background-position: center;
+      will-change: transform; /* Offloads animation to the GPU for perfect 60fps scrolling */
+    }
+ 
+    /* Assigning background images to each row */
+    .row-1 .bg-image {
+      background-image: url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=1800&q=80');
+    }
+ 
+    .row-2 .bg-image {
+      background-image: url('https://ruffgreens.com/cdn/shop/articles/probiotics-for-dogs-featured_1200x.png?v=1774617200');
+    }
+ 
+    /* --------------------------------------------------
+       COLUMNS & CENTRAL VERTICAL LINE
+       -------------------------------------------------- */
+   
+    .grid-container {
+      position: relative;
+      z-index: 2; /* Sits above the background images */
+      display: flex;
+      height: 100%;
+      width: 100%;
+    }
+ 
+    /* Central vertical line dividing the left and right sides */
+    .grid-container::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      background-color: rgba(255, 255, 255, 0.2);
+      z-index: 10;
+      transform: translateX(-50%);
+    }
+ 
+    .col {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 8%;
+    }
+ 
+    /* The overlay side that blurs the background image beneath it */
+    .blur-side {
+      background-color: rgba(13, 12, 11, 0.45); /* Soft dark overlay tint */
+      backdrop-filter: blur(25px); /* Native high-performance dynamic blur */
+      -webkit-backdrop-filter: blur(25px);
+    }
+ 
+    /* Transparent side showing the clean background image */
+    .clear-side {
+      background-color: transparent;
+    }
+ 
+    /* --------------------------------------------------
+       TYPOGRAPHY & CONTENT REVEAL EFFECT
+       -------------------------------------------------- */
+   
+    .content-box {
+      max-width: 460px;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+ 
+    .content-box.reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+ 
+    h2 {
+      font-size: 3.2rem;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      color: #ffffff;
+    }
+ 
+    p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 35px;
+    }
+ 
+    .btn {
+      display: inline-block;
+      align-self: flex-start;
+      padding: 14px 38px;
+      border: 1px solid #ffffff;
+      color: #ffffff;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+ 
+    .btn:hover {
+      background-color: #ffffff;
+      color: #0d0c0b;
+    }
+ 
+    /* Bottom Page Spacer */
+    .scroll-outro {
+      height: 100vh;
+      background-color: #0d0c0b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+ 
+    /* Responsive adjustments for tablet & mobile devices */
+    @media (max-width: 900px) {
+      .row {
+        height: auto;
+        clip-path: none;
+      }
+      .bg-holder {
+        display: none; /* Hide complex parallax on mobile and fall back to standard image cards */
+      }
+      .grid-container {
+        flex-direction: column;
+      }
+      .grid-container::after {
+        display: none;
+      }
+      .col {
+        width: 100%;
+        height: auto;
+        padding: 80px 30px;
+      }
+      /* Fallback static layouts for small screens */
+      .row-1 {
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=1000&q=80') center/cover;
+      }
+      .row-2 {
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1589924691106-0741434191a3?auto=format&fit=crop&w=1000&q=80') center/cover;
+      }
+      .blur-side {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background-color: transparent;
+      }
+    }
+  </style>
+</head>
+<body>
+ 
+  <div class="scroll-intro">
+    <h1>PRO-NUTRITION</h1>
+    <p>↓ Scroll down to experience the curtain overlap & slide reveal ↓</p>
+  </div>
+ 
+  <section class="row row-1">
+    <div class="bg-holder">
+      <div class="bg-image"></div>
+    </div>
+   
+    <div class="grid-container">
+      <div class="col blur-side">
+        <div class="content-box">
+          <h2>Our<br>Philosophy</h2>
+          <p>At Pro-Nutrition®, we firmly believe that dogs and cats are good for us and bring us joy every day. Our mission is to protect this precious relationship.</p>
+          <a href="#" class="btn">Learn more</a>
+        </div>
+      </div>
+      <div class="col clear-side">
+        </div>
+    </div>
+  </section>
+ 
+  <section class="row row-2">
+    <div class="bg-holder">
+      <div class="bg-image"></div>
+    </div>
+   
+    <div class="grid-container">
+      <div class="col clear-side">
+        </div>
+      <div class="col blur-side">
+        <div class="content-box">
+          <h2>The Right<br>Kibble</h2>
+          <p>With a rich and diverse selection of 43 products, our ranges are tailored precisely to the nutritional and physiological needs of your pet.</p>
+          <a href="#" class="btn">Learn more</a>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <div class="scroll-outro">
+    <h2 style="font-size: 1.5rem; color: #444; letter-spacing: 1px;">End of Scrolling Experience</h2>
+  </div>
+ 
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const rows = document.querySelectorAll('.row');
+      const contents = document.querySelectorAll('.content-box');
+ 
+      // 1. Smooth dynamic vertical drift on the background images as you scroll
+      function updateImageParallax() {
+        const viewHeight = window.innerHeight;
+ 
+        rows.forEach(row => {
+          const rect = row.getBoundingClientRect();
+         
+          // Check if the row container is currently visible inside the viewport
+          if (rect.top < viewHeight && rect.bottom > 0) {
+            const totalTravelDistance = rect.height + viewHeight;
+            const scrollProgress = (viewHeight - rect.top) / totalTravelDistance; // Value from 0 to 1
+ 
+            // Multiplier determines speed of image reveal drift (adjust for more/less motion)
+            const driftIntensity = 80;
+            const transformOffset = (scrollProgress - 0.5) * driftIntensity;
+ 
+            const bgImage = row.querySelector('.bg-image');
+            if (bgImage) {
+              bgImage.style.transform = `translateY(${transformOffset}px)`;
+            }
+          }
+        });
+      }
+ 
+      // Hook onto scrolling using requestAnimationFrame for perfect layout renders
+      window.addEventListener('scroll', () => {
+        requestAnimationFrame(updateImageParallax);
+      });
+ 
+      // Initial execution run on pageload
+      updateImageParallax();
+ 
+      // 2. Intersection Observer to gracefully fade text elements in when visible
+      const textObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('reveal');
+          }
+        });
+      }, {
+        threshold: 0.25
+      });
+ 
+      contents.forEach(item => textObserver.observe(item));
+    });
+  </script>
+</body>
+</html>
+ 
