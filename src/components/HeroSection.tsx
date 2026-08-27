@@ -471,7 +471,7 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
             y: cadY,
             pointerEvents: cadPointerEvents as any
           }}
-  className="absolute inset-0 z-30 flex flex-col justify-center items-center px-6 md:px-12 py-16"
+          className="absolute inset-0 z-30 flex flex-col justify-center items-center px-2 md:px-12 py-16"
         >
 
         </motion.div>
