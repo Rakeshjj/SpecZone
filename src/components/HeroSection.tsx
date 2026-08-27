@@ -409,8 +409,8 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
                 </div>
               </div>
 
-              {/* Badge 4: Bottom Left - 11.2g Aero-Light Weight */}
-              <div className="absolute bottom-[6%] left-[0%] md:left-[2%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-2xl">
+              {/* Badge 4: Left - 11.2g Aero-Light Weight */}
+              <div className="absolute bottom-[20%] md:bottom-[22%] left-[0%] md:left-[2%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-2xl">
                 <Zap size={12} className="text-brand-blue" />
                 <div>
                   <span className="block font-mono text-[7px] text-zinc-400 uppercase tracking-wider">TOTAL MASS</span>
@@ -418,8 +418,8 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
                 </div>
               </div>
 
-              {/* Badge 5: Bottom Right - 18mm Keyhole Bridge */}
-              <div className="absolute bottom-[6%] right-[0%] md:right-[2%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-2xl">
+              {/* Badge 5: Right - 18mm Keyhole Bridge */}
+              <div className="absolute bottom-[20%] md:bottom-[22%] right-[0%] md:right-[2%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-2xl">
                 <Layers size={12} className="text-brand-blue" />
                 <div>
                   <span className="block font-mono text-[7px] text-zinc-400 uppercase tracking-wider">ANATOMICAL FIT</span>
@@ -471,7 +471,7 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
             y: cadY,
             pointerEvents: cadPointerEvents as any
           }}
-  className="absolute inset-0 z-30 flex flex-col justify-center items-center px-6 md:px-12 py-16"
+          className="absolute inset-0 z-30 flex flex-col justify-center items-center px-6 md:px-12 py-16"
         >
 
         </motion.div>

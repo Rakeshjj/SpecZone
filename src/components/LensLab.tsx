@@ -106,7 +106,7 @@ export default function LensLab() {
             <span className="font-mono text-xs tracking-[0.35em] text-brand-blue block uppercase font-bold">
               [ ADVANCED LENS TECHNOLOGY ]
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase leading-[0.9] tracking-tight">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-[50px] font-black text-white uppercase leading-[0.95] tracking-tight">
               INTERACTIVE <br />
               <span className="text-zinc-500 italic font-black">LENS LAB</span>
             </h2>
