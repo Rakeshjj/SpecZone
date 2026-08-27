@@ -99,17 +99,17 @@ export default function BrandTicker() {
   const extendedBrands = [...BRAND_LOGOS, ...BRAND_LOGOS, ...BRAND_LOGOS];
 
   return (
-    <section 
-      id="brand-ticker-section" 
-      className="bg-zinc-950/60 border-b border-white/5 py-14 overflow-hidden relative backdrop-blur-md"
-    >
+    <section
+  id="brand-ticker-section"
+  className="bg-zinc-950/60 border-b border-white/5 py-4 overflow-hidden relative backdrop-blur-md"
+>
       {/* Decorative gradient overlay bounds for clean luxury fade */}
       <div className="absolute inset-y-0 left-0 w-24 md:w-48 bg-gradient-to-r from-zinc-950 to-transparent z-20 pointer-events-none" />
       <div className="absolute inset-y-0 right-0 w-24 md:w-48 bg-gradient-to-l from-zinc-950 to-transparent z-20 pointer-events-none" />
 
       {/* Scrolling Marquee Container */}
-      <div className="relative flex items-center overflow-x-hidden py-10 bg-zinc-950/20 backdrop-blur-sm ">
-        <motion.div 
+      <div className="relative flex items-center overflow-x-hidden py-4 bg-zinc-950/20 backdrop-blur-sm ">
+        <motion.div
           className="flex gap-16 items-center shrink-0"
           animate={{ x: ["0%", "-33.333%"] }}
           transition={{
@@ -125,7 +125,7 @@ export default function BrandTicker() {
               whileHover={{ scale: 1.1, y: -2 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              <span 
+              <span
                 className={`${brand.fontStyle} text-3xl sm:text-4xl lg:text-5xl text-zinc-400 hover:text-white transition-colors duration-300 hover:drop-shadow-[0_0_20px_rgba(10,100,255,0.6)]`}
               >
                 {brand.name}

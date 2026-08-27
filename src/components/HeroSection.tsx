@@ -67,7 +67,7 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
   const productRotateZ = useTransform(scrollYProgress, [0, 0.35, 0.75, 1], [0, -2, -4.5, -7]);
   const productX = useTransform(scrollYProgress, [0, 0.4, 0.75, 1], ["0%", "-3%", "-8%", "-16%"]);
   const productY = useTransform(scrollYProgress, [0, 0.4, 0.75, 1], ["0%", "2%", "6%", "12%"]);
-  
+
   // Optical Defocus & Lighting Shimmer
   const productBlur = useTransform(
     scrollYProgress,
@@ -160,11 +160,11 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
     <div
       ref={containerRef}
       id="hero"
-      className="relative bg-[#09090b] text-white h-[280vh] w-full"
+      className="relative bg-[#09090b] text-white h-[220vh] w-full"
     >
       {/* Sticky Fullscreen Stage */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between z-10 [perspective:1200px]">
-        
+
         {/* Luxury Background Canvas (Replaced video with static dark aesthetics & glowing radial aura) */}
         <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
           {/* Deep dark canvas gradient */}
@@ -224,7 +224,7 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
         {/* CENTER VIEWPORT: HERO TEXT (LEFT) + FLOATING 3D GLASSES & BADGES (RIGHT) */}
         {/* ========================================================================= */}
         <div className="relative z-10 my-auto flex-1 max-w-7xl mx-auto w-full px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center h-full min-h-[560px]">
-          
+
           {/* LEFT COLUMN: HERO INFORMATION (Fixed minimum height container so slide changes don't shift layout) */}
           <motion.div
             style={{
@@ -359,9 +359,8 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
                         <button
                           key={dotIndex}
                           onClick={() => setCurrentSlide(dotIndex)}
-                          className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                            currentSlide === dotIndex ? "w-7 bg-brand-blue" : "w-2 bg-white/20 hover:bg-white/40"
-                          }`}
+                          className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${currentSlide === dotIndex ? "w-7 bg-brand-blue" : "w-2 bg-white/20 hover:bg-white/40"
+                            }`}
                           aria-label={`Slide ${dotIndex + 1}`}
                         />
                       ))}
@@ -374,7 +373,7 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
 
           {/* RIGHT COLUMN: ENLARGED, PERFECTLY CENTERED & ELEVATED 3D PRODUCT VIEWPORT */}
           <div className="lg:col-span-6 relative flex items-center justify-center h-full min-h-[500px] select-none pointer-events-none -translate-y-16 lg:-translate-y-24">
-            
+
             {/* FLOATING SPECIFICATION BADGES AROUND THE GLASSES (Restored around the enlarged frame) */}
             <motion.div
               style={{
@@ -472,206 +471,9 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
             y: cadY,
             pointerEvents: cadPointerEvents as any
           }}
-          className="absolute inset-0 z-30 flex flex-col justify-center items-center px-6 md:px-12 py-16 bg-[#06080e]/95 backdrop-blur-xl"
+  className="absolute inset-0 z-30 flex flex-col justify-center items-center px-6 md:px-12 py-16"
         >
-          <div className="max-w-7xl mx-auto w-full space-y-8 my-auto">
-            
-            {/* Header: Technical CAD Title */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-white/10 pb-6">
-              <div className="space-y-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-blue/10 border border-brand-blue/30">
-                  <Sliders size={11} className="text-brand-blue" />
-                  <span className="font-mono text-[9px] text-brand-blue font-bold tracking-[0.25em] uppercase">
-                    [ MIL-SPEC OPTICAL BLUEPRINT // REV 2.4 ]
-                  </span>
-                </div>
-                <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl font-black text-white uppercase tracking-tight">
-                  PRECISION CAD <span className="text-brand-blue italic">ARCHITECTURE</span>
-                </h2>
-              </div>
 
-              <div className="flex items-center gap-3">
-                <span className="font-mono text-[10px] text-zinc-400 uppercase tracking-widest">
-                  TOLERANCE: ±0.01mm CNC MILLED
-                </span>
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              </div>
-            </div>
-
-            {/* Core CAD Visualizer + Specification Metric Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              
-              {/* Center CAD Blueprint Vector Visualization (7 columns) */}
-              <div className="lg:col-span-7 bg-zinc-950/80 border border-brand-blue/30 rounded-3xl p-6 md:p-8 relative overflow-hidden shadow-2xl group">
-                
-                {/* Blueprint Neon Grid Background */}
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,102,204,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,102,204,0.06)_1px,transparent_1px)] bg-[size:1.5rem_1.5rem]" />
-                
-                {/* Crosshairs & Center Point */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="w-16 h-16 border border-brand-blue/20 rounded-full" />
-                  <div className="absolute w-full h-px bg-brand-blue/10" />
-                  <div className="absolute h-full w-px bg-brand-blue/10" />
-                </div>
-
-                {/* Laser Telemetry Label */}
-                <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
-                  <span className="font-mono text-[8px] text-brand-blue bg-brand-blue/10 px-2 py-0.5 rounded border border-brand-blue/20 uppercase tracking-wider font-bold">
-                    CAD SCHEMATIC : AURA-01
-                  </span>
-                </div>
-
-                <div className="absolute top-4 right-4 z-10">
-                  <span className="font-mono text-[8px] text-zinc-400 uppercase tracking-widest">
-                    ORTHOGRAPHIC PROJECTION
-                  </span>
-                </div>
-
-                {/* CAD Eyeglasses Vector Wireframe with Dimension Callouts */}
-                <div className="relative aspect-[16/9] w-full flex items-center justify-center my-4 z-10">
-                  <svg viewBox="0 0 600 320" className="w-full h-full text-brand-blue stroke-brand-blue drop-shadow-[0_0_12px_rgba(0,102,204,0.4)]">
-                    {/* Left Frame Rim */}
-                    <path
-                      d="M 90,90 Q 220,80 230,130 Q 235,210 180,225 Q 90,230 75,160 Q 70,100 90,90 Z"
-                      fill="rgba(0, 102, 204, 0.05)"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    />
-                    {/* Right Frame Rim */}
-                    <path
-                      d="M 510,90 Q 380,80 370,130 Q 365,210 420,225 Q 510,230 525,160 Q 530,100 510,90 Z"
-                      fill="rgba(0, 102, 204, 0.05)"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    />
-                    {/* Center Keyhole Bridge */}
-                    <path
-                      d="M 230,120 Q 300,100 370,120 M 235,145 Q 300,125 365,145"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                    />
-                    {/* Left & Right Temples */}
-                    <path d="M 75,110 L 25,100 M 525,110 L 575,100" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="3 3" />
-
-                    {/* Dimension Arrow: Lens Width (54mm) */}
-                    <g className="text-white">
-                      <line x1="90" y1="60" x2="230" y2="60" stroke="#0066cc" strokeWidth="1" markerEnd="url(#arrow)" />
-                      <line x1="90" y1="50" x2="90" y2="70" stroke="#0066cc" strokeWidth="1" />
-                      <line x1="230" y1="50" x2="230" y2="70" stroke="#0066cc" strokeWidth="1" />
-                      <text x="160" y="52" fill="#ffffff" fontSize="10" fontFamily="monospace" textAnchor="middle" fontWeight="bold">54 mm (LENS WIDTH)</text>
-                    </g>
-
-                    {/* Dimension Arrow: Bridge Width (18mm) */}
-                    <g className="text-white">
-                      <line x1="235" y1="180" x2="365" y2="180" stroke="#0066cc" strokeWidth="1" />
-                      <line x1="235" y1="170" x2="235" y2="190" stroke="#0066cc" strokeWidth="1" />
-                      <line x1="365" y1="170" x2="365" y2="190" stroke="#0066cc" strokeWidth="1" />
-                      <text x="300" y="172" fill="#ffffff" fontSize="10" fontFamily="monospace" textAnchor="middle" fontWeight="bold">18 mm (BRIDGE)</text>
-                    </g>
-
-                    {/* Dimension Arrow: Temple Length (145mm) */}
-                    <g className="text-white">
-                      <line x1="525" y1="60" x2="585" y2="60" stroke="#0066cc" strokeWidth="1" />
-                      <text x="555" y="52" fill="#ffffff" fontSize="10" fontFamily="monospace" textAnchor="middle" fontWeight="bold">145 mm</text>
-                    </g>
-
-                    {/* Vertical Dimension: Lens Height (38mm) */}
-                    <g className="text-white">
-                      <line x1="45" y1="90" x2="45" y2="225" stroke="#0066cc" strokeWidth="1" />
-                      <line x1="35" y1="90" x2="55" y2="90" stroke="#0066cc" strokeWidth="1" />
-                      <line x1="35" y1="225" x2="55" y2="225" stroke="#0066cc" strokeWidth="1" />
-                      <text x="40" y="160" fill="#ffffff" fontSize="10" fontFamily="monospace" textAnchor="middle" transform="rotate(-90 40 160)" fontWeight="bold">38 mm (HEIGHT)</text>
-                    </g>
-                  </svg>
-                </div>
-
-                {/* Bottom Vector Telemetry Bar */}
-                <div className="flex justify-between items-center pt-3 border-t border-white/10 font-mono text-[9px] text-zinc-400">
-                  <span>PANTOSCOPIC TILT: 9.8°</span>
-                  <span>FACE-FORM ANGLE: 5.2°</span>
-                  <span>VERTEX DISTANCE: 12.0mm</span>
-                </div>
-              </div>
-
-              {/* Right Specification Metric Cards Grid (5 columns) */}
-              <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3.5">
-                
-                {/* Spec 1 */}
-                <div className="bg-zinc-900/60 border border-white/10 rounded-2xl p-4 flex items-start gap-3.5 hover:border-brand-blue/40 transition-colors">
-                  <div className="p-2 rounded-xl bg-brand-blue/10 border border-brand-blue/20 text-brand-blue shrink-0">
-                    <Cpu size={16} />
-                  </div>
-                  <div>
-                    <span className="block font-mono text-[8px] text-brand-blue uppercase tracking-widest font-bold">FRAME ARCHITECTURE</span>
-                    <h4 className="font-serif text-sm font-bold text-white uppercase tracking-wide">Japanese Beta-Titanium</h4>
-                    <p className="font-sans text-xs text-zinc-400 mt-0.5">Aerospace Grade 5 alloy with 0.6mm micro-milled profile. 100% hypoallergenic.</p>
-                  </div>
-                </div>
-
-                {/* Spec 2 */}
-                <div className="bg-zinc-900/60 border border-white/10 rounded-2xl p-4 flex items-start gap-3.5 hover:border-brand-blue/40 transition-colors">
-                  <div className="p-2 rounded-xl bg-brand-blue/10 border border-brand-blue/20 text-brand-blue shrink-0">
-                    <Eye size={16} />
-                  </div>
-                  <div>
-                    <span className="block font-mono text-[8px] text-brand-blue uppercase tracking-widest font-bold">LENS TECHNOLOGY</span>
-                    <h4 className="font-serif text-sm font-bold text-white uppercase tracking-wide">ZEISS Polarized HD + 9-Layer AR</h4>
-                    <p className="font-sans text-xs text-zinc-400 mt-0.5">Zero-glare wavefront clarity with oleophobic and hydrophobic nano-armor.</p>
-                  </div>
-                </div>
-
-                {/* Spec 3 */}
-                <div className="bg-zinc-900/60 border border-white/10 rounded-2xl p-4 flex items-start gap-3.5 hover:border-brand-blue/40 transition-colors">
-                  <div className="p-2 rounded-xl bg-brand-blue/10 border border-brand-blue/20 text-brand-blue shrink-0">
-                    <Layers size={16} />
-                  </div>
-                  <div>
-                    <span className="block font-mono text-[8px] text-brand-blue uppercase tracking-widest font-bold">HINGE MECHANISM</span>
-                    <h4 className="font-serif text-sm font-bold text-white uppercase tracking-wide">Screwless 5-Axis Dual Cam</h4>
-                    <p className="font-sans text-xs text-zinc-400 mt-0.5">Friction-calibrated spring mechanism tested to over 50,000 continuous flex cycles.</p>
-                  </div>
-                </div>
-
-                {/* Spec 4 */}
-                <div className="bg-zinc-900/60 border border-white/10 rounded-2xl p-4 flex items-start gap-3.5 hover:border-brand-blue/40 transition-colors">
-                  <div className="p-2 rounded-xl bg-brand-blue/10 border border-brand-blue/20 text-brand-blue shrink-0">
-                    <Zap size={16} />
-                  </div>
-                  <div>
-                    <span className="block font-mono text-[8px] text-brand-blue uppercase tracking-widest font-bold">MASS TELEMETRY</span>
-                    <h4 className="font-serif text-sm font-bold text-white uppercase tracking-wide">11.2 Grams Featherweight</h4>
-                    <p className="font-sans text-xs text-zinc-400 mt-0.5">Optimum ergonomic gravity distribution preventing pressure on nasal bridge.</p>
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
-
-            {/* Bottom Actions for Specs Section */}
-            <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-white/10">
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => scrollToId("opticals-shop")}
-                  className="px-6 py-3.5 bg-brand-blue hover:bg-white hover:text-black text-white font-display text-[10px] font-black tracking-widest uppercase rounded-xl transition-all duration-300 shadow-xl cursor-pointer"
-                >
-                  SHOP COMPATIBLE FRAMES →
-                </button>
-                <button
-                  onClick={() => scrollToId("lens-lab")}
-                  className="px-6 py-3.5 bg-zinc-900/80 hover:bg-zinc-800 text-zinc-300 font-mono text-[10px] tracking-wider uppercase border border-white/10 rounded-xl transition-all cursor-pointer"
-                >
-                  EXPLORE LENS LAB
-                </button>
-              </div>
-
-              <div className="font-mono text-[9px] text-zinc-400 uppercase tracking-widest">
-                [ SPECTACAL ZONE PRECISION LAB // BENGALURU ]
-              </div>
-            </div>
-
-          </div>
         </motion.div>
 
         {/* HUD Bottom Scroll Prompt */}
