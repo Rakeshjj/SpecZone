@@ -177,7 +177,7 @@ export default function VirtualTryOn({ onPreSelectFrame }: VirtualTryOnProps) {
             <span className="font-mono text-xs tracking-[0.3em] text-brand-blue block">
               [ HIGH-TECH INTERACTIVE : ATELIER SIMULATOR ]
             </span>
-            <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl font-black text-white uppercase leading-[0.85] tracking-tighter">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase leading-[0.9] tracking-tight">
               VIRTUAL <br />
               <span className="text-zinc-500 italic font-black">TRY-ON</span>
             </h2>

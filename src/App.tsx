@@ -1,13 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useSpring } from "motion/react";
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
 import BrandTicker from "./components/BrandTicker";
 import TrustStrip from "./components/TrustStrip";
 import ShowroomShowcase from "./components/ShowroomShowcase";
-import OpticalsShop from "./components/OpticalsShop";
-import SolutionsSection from "./components/SolutionsSection";
-import HeritageSection from "./components/HeritageSection";
 import AboutUs from "./components/AboutUs";
 import LensLab from "./components/LensLab";
 import LocationsSection from "./components/LocationsSection";
@@ -16,12 +13,10 @@ import HomeEyeCare from "./components/HomeEyeCare";
 import FooterSection from "./components/FooterSection";
 import SmoothScroll from "./components/SmoothScroll";
 import SpiralFrameMatrix from "./components/SpiralFrameMatrix";
-// import News from "./components/news";
-import { ArrowLeft, Sparkles, ShieldCheck, Home } from "lucide-react";
-import BrandsSection from "./components/BrandsSection";
 
 export default function App() {
   const [view, setView] = useState<"home" | "booking">("home");
+  const [selectedServiceType, setSelectedServiceType] = useState<string>("Home Eye Care Check");
 
   // Setup elegant scroll progress bar across the screen top
   const { scrollYProgress } = useScroll();
@@ -31,7 +26,10 @@ export default function App() {
     restDelta: 0.001
   });
 
-  const handleOpenBooking = () => {
+  const handleOpenBooking = (service?: string) => {
+    if (service && typeof service === "string") {
+      setSelectedServiceType(service);
+    }
     setView("booking");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -42,6 +40,15 @@ export default function App() {
   };
 
   const handlePreSelectService = (serviceName: string) => {
+    if (
+      serviceName.toLowerCase().includes("transform") || 
+      serviceName.toLowerCase().includes("look") || 
+      serviceName.toLowerCase().includes("tyl")
+    ) {
+      setSelectedServiceType("Transform Look");
+    } else {
+      setSelectedServiceType("Home Eye Care Check");
+    }
     setView("booking");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -66,7 +73,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen bg-zinc-950 text-white font-sans selection:bg-brand-blue selection:text-white">
+    <div className="relative min-h-screen bg-zinc-950 text-white font-sans selection:bg-brand-blue selection:text-white flex flex-col justify-between">
       {/* Top scroll-linked elegant reading progress bar */}
       <motion.div
         id="scroll-progress-indicator"
@@ -76,12 +83,12 @@ export default function App() {
 
       {/* Primary Sticky Header navigation */}
       <Navbar
-        onBookClick={handleOpenBooking}
+        onBookClick={() => handleOpenBooking("Home Eye Care Check")}
         onNavigate={scrollToSection}
       />
 
       {/* Main Container */}
-      <main className="relative pt-[88px]">
+      <main className="relative pt-[74px] sm:pt-[78px] flex-1 flex flex-col">
         <AnimatePresence mode="wait">
           {view === "home" ? (
             <motion.div
@@ -94,24 +101,19 @@ export default function App() {
               {/* HERO HEADER */}
               <HeroSection onScrollDown={() => scrollToSection("showroom-showcase")} />
 
-              {/* AUTOPLAY BRAND TICKER CAROUSEL */}
+              {/* AUTOPLAY BRAND TICKER CAROUSEL (RIGHT UNDER HERO) */}
               <BrandTicker />
 
               <SmoothScroll />
 
-               <SpiralFrameMatrix onPreSelectService={handlePreSelectService} />
-
-              {/* SOLUTIONS PORTFOLIO GRID */}
-              {/* <SolutionsSection onPreSelectService={handlePreSelectService} /> */}
+              <SpiralFrameMatrix onPreSelectService={handlePreSelectService} />
 
               <LensLab />
             
-              {/* ABOUT US & HERITAGE HISTORICAL STORY (Section 06 of wireframe) */}
+              {/* ABOUT US & HERITAGE HISTORICAL STORY */}
               <AboutUs />
 
-              {/* <News /> */}
-
-              {/* TRUST STRIP (Section 03 of wireframe) */}
+              {/* TRUST STRIP */}
               <TrustStrip />
 
               {/* PHYSICAL ATELIER MAPS/GRID */}
@@ -119,7 +121,7 @@ export default function App() {
 
               <ShowroomShowcase />
 
-              {/* BLOG SECTIONS & DIGITAL EYE CARE TIPS (Section 07 of wireframe) */}
+              {/* BLOG SECTIONS & DIGITAL EYE CARE TIPS */}
               <BlogSection />
             </motion.div>
           ) : (
@@ -129,11 +131,13 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.5 }}
-              className="space-y-4"
+              className="flex-1 flex flex-col justify-start px-3 sm:px-6 md:px-8 pt-1 pb-3"
             >
-
               {/* Dedicated Home Eye Care Portal View */}
-              <HomeEyeCare onClose={handleCloseBooking} />
+              <HomeEyeCare 
+                onClose={handleCloseBooking} 
+                initialType={selectedServiceType}
+              />
             </motion.div>
           )}
         </AnimatePresence>
@@ -141,7 +145,7 @@ export default function App() {
 
       {/* FOOTER & ACTIONS */}
       <FooterSection
-        onBookClick={handleOpenBooking}
+        onBookClick={() => handleOpenBooking("Home Eye Care Check")}
         onNavigate={scrollToSection}
       />
     </div>

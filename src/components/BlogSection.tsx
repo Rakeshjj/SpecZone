@@ -77,7 +77,7 @@ export default function BlogSection() {
             <span className="font-mono text-xs tracking-[0.3em] text-brand-blue block">
               [ THE VIJAYA CHRONICLES & HEALTH INSIGHTS ]
             </span>
-            <h2 className="font-serif text-5xl md:text-7xl font-black text-white uppercase leading-[0.85] tracking-tighter">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase leading-[0.9] tracking-tight">
               EYE CARE <br />
               <span className="text-zinc-500 italic font-black">CHRONICLES</span>
             </h2>
