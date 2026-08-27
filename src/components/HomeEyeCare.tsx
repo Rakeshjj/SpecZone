@@ -1,18 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "motion/react";
 import confetti from "canvas-confetti";
 import { 
   Sparkles, 
   ChevronDown, 
-  UserCheck, 
-  Play, 
-  ShieldCheck, 
+  User, 
+  Mail,
+  Phone,
+  MapPin,
   ArrowLeft,
+  ArrowRight,
   CheckCircle2,
-  ChevronRight,
+  ShieldCheck, 
   Eye,
   Layers,
-  Sparkle
+  Sparkle,
+  ChevronRight,
+  ChevronLeft
 } from "lucide-react";
 
 interface HomeEyeCareProps {
@@ -20,6 +24,31 @@ interface HomeEyeCareProps {
   initialNotes?: string;
   initialType?: string;
 }
+
+export type ServiceOption = "Home Eye Care Check" | "Transform Look";
+
+export const SERVICE_CONFIG: Record<
+  ServiceOption,
+  {
+    track: "HEC" | "TYL";
+    heading: string;
+    description: string;
+    buttonText: string;
+  }
+> = {
+  "Home Eye Care Check": {
+    track: "HEC",
+    heading: "Book Home Eye Care",
+    description: "Enter your details below for doorstep eye checkup & free trials.",
+    buttonText: "Book Home Eye Care Visit",
+  },
+  "Transform Look": {
+    track: "TYL",
+    heading: "Transform Your Look",
+    description: "Enter your details below to begin your personalized style transformation.",
+    buttonText: "Book Transform Look",
+  },
+};
 
 export interface ShowcaseItem {
   id: number;
@@ -92,38 +121,48 @@ export const SHOWCASE_DATA: Record<"HEC" | "TYL", ShowcaseItem[]> = {
   ]
 };
 
-// Premium slide animation variants (Right -> Left on scroll forward, Left -> Right on scroll backward)
+// Slide animation variants
 const slideVariants = {
   enter: (direction: number) => ({
     x: direction > 0 ? "100%" : "-100%",
     opacity: 0,
-    scale: 0.96,
+    scale: 0.97,
   }),
   center: {
     x: "0%",
     opacity: 1,
     scale: 1,
     transition: {
-      duration: 0.6,
+      duration: 0.45,
       ease: [0.16, 1, 0.3, 1],
     },
   },
   exit: (direction: number) => ({
     x: direction > 0 ? "-100%" : "100%",
     opacity: 0,
-    scale: 0.96,
+    scale: 0.97,
     transition: {
-      duration: 0.6,
+      duration: 0.45,
       ease: [0.16, 1, 0.3, 1],
     },
   }),
 };
 
-export default function HomeEyeCare({ onClose, initialType = "HEC" }: HomeEyeCareProps) {
-  const [selectedTrack, setSelectedTrack] = useState<"HEC" | "TYL">(
-    initialType?.toLowerCase().includes("transform") || initialType === "TYL" ? "TYL" : "HEC"
-  );
-  const [custRefId, setCustRefId] = useState("CUST-98420");
+export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Check" }: HomeEyeCareProps) {
+  const [selectedService, setSelectedService] = useState<ServiceOption>(() => {
+    if (initialType?.toLowerCase().includes("transform") || initialType === "TYL" || initialType === "Transform Look") {
+      return "Transform Look";
+    }
+    return "Home Eye Care Check";
+  });
+
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    address: ""
+  });
+
   const [stepState, setStepState] = useState<{ step: number; direction: number }>({
     step: 1,
     direction: 1,
@@ -134,58 +173,55 @@ export default function HomeEyeCare({ onClose, initialType = "HEC" }: HomeEyeCar
   const activeStep = stepState.step;
   const direction = stepState.direction;
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const stepTriggerRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const experiencePanelRef = useRef<HTMLElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const activeStepRef = useRef<number>(activeStep);
+
+  // Keep activeStepRef in sync with state
+  useEffect(() => {
+    activeStepRef.current = activeStep;
+  }, [activeStep]);
+
+  // Synchronize stages with natural page scroll progress
+  const { scrollYProgress } = useScroll({
+    target: wrapperRef,
+    offset: ["start start", "end end"]
+  });
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (isAutoPlaying) return;
+    let targetStep = 1;
+    if (latest >= 0.66) {
+      targetStep = 3;
+    } else if (latest >= 0.33) {
+      targetStep = 2;
+    } else {
+      targetStep = 1;
+    }
+
+    setStepState((prev) => {
+      if (prev.step === targetStep) return prev;
+      return {
+        step: targetStep,
+        direction: targetStep > prev.step ? 1 : -1,
+      };
+    });
+  });
 
   // Sync initial type prop
   useEffect(() => {
-    if (initialType?.toLowerCase().includes("transform") || initialType === "TYL") {
-      setSelectedTrack("TYL");
+    if (initialType?.toLowerCase().includes("transform") || initialType === "TYL" || initialType === "Transform Look") {
+      setSelectedService("Transform Look");
+    } else if (initialType?.toLowerCase().includes("home") || initialType === "HEC") {
+      setSelectedService("Home Eye Care Check");
     }
   }, [initialType]);
 
+  const selectedTrack = SERVICE_CONFIG[selectedService].track;
   const items = SHOWCASE_DATA[selectedTrack];
 
-  // Scroll detection with Intersection Observer
-  useEffect(() => {
-    const observers: IntersectionObserver[] = [];
-
-    stepTriggerRefs.current.forEach((el, index) => {
-      if (!el) return;
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting && !isAutoPlaying) {
-              const newStep = index + 1;
-              setStepState((prev) => {
-                if (prev.step === newStep) return prev;
-                return {
-                  step: newStep,
-                  direction: newStep > prev.step ? 1 : -1,
-                };
-              });
-            }
-          });
-        },
-        {
-          root: null,
-          rootMargin: "-25% 0px -40% 0px",
-          threshold: 0.2
-        }
-      );
-
-      observer.observe(el);
-      observers.push(observer);
-    });
-
-    return () => {
-      observers.forEach((obs) => obs.disconnect());
-    };
-  }, [selectedTrack, isAutoPlaying]);
-
-  // Handle auto playback when Re-animate Timeline or Submit is pressed
+  // Handle auto playback when submitted or timeline re-animated
   const runSequence = () => {
     if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
     setIsAutoPlaying(true);
@@ -199,11 +235,6 @@ export default function HomeEyeCare({ onClose, initialType = "HEC" }: HomeEyeCar
         setIsAutoPlaying(false);
       } else {
         setStepState({ step, direction: 1 });
-        // Scroll the trigger into view smoothly if applicable
-        const targetEl = stepTriggerRefs.current[step - 1];
-        if (targetEl) {
-          targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
       }
     }, 1400);
   };
@@ -214,10 +245,19 @@ export default function HomeEyeCare({ onClose, initialType = "HEC" }: HomeEyeCar
     };
   }, []);
 
-  const handleTrackChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const val = e.target.value as "HEC" | "TYL";
-    setSelectedTrack(val);
+  const handleServiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newService = e.target.value as ServiceOption;
+    setSelectedService(newService);
     setStepState({ step: 1, direction: 1 });
+    setIsSuccess(false);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -240,286 +280,395 @@ export default function HomeEyeCare({ onClose, initialType = "HEC" }: HomeEyeCar
   const handleSelectStepManually = (stepNum: number) => {
     setIsAutoPlaying(false);
     if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
-    setStepState((prev) => ({
+    const current = activeStepRef.current;
+    if (current === stepNum) return;
+    
+    setStepState({
       step: stepNum,
-      direction: stepNum >= prev.step ? 1 : -1,
-    }));
-    const targetEl = stepTriggerRefs.current[stepNum - 1];
-    if (targetEl) {
-      targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      direction: stepNum >= current ? 1 : -1,
+    });
+
+    if (wrapperRef.current) {
+      const rect = wrapperRef.current.getBoundingClientRect();
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const start = scrollTop + rect.top;
+      const totalScrollable = rect.height - window.innerHeight;
+      if (totalScrollable > 0) {
+        const fraction = stepNum === 1 ? 0.05 : stepNum === 2 ? 0.48 : 0.85;
+        window.scrollTo({
+          top: start + totalScrollable * fraction,
+          behavior: "smooth"
+        });
+      }
     }
   };
 
   const activeItem = items[activeStep - 1] || items[0];
+  const activeConfig = SERVICE_CONFIG[selectedService];
 
   return (
-    <section 
-      id="home-eye-care"
-      ref={containerRef}
-      className="text-slate-100 font-sans min-h-screen py-10 px-4 md:px-8 relative antialiased selection:bg-indigo-500 selection:text-white"
+    <div 
+      ref={wrapperRef}
+      id="home-eye-care-scroll-wrapper"
+      className="relative w-full h-[280vh] selection:bg-indigo-500 selection:text-white"
     >
-      {/* BACKGROUND GLOW EFFECTS */}
-      <div className="fixed top-1/4 left-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="fixed bottom-1/4 right-1/4 w-96 h-96 bg-violet-600/10 rounded-full blur-[140px] pointer-events-none -z-10" />
-
-      {/* MAIN CONTAINER: TWO COLUMN LAYOUT */}
-      <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
-
-        {/* LEFT COLUMN: SERVICE REQUEST FORM (STICKY ON DESKTOP - DO NOT CHANGE) */}
-        <div className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-28 z-20">
-          <div className="bg-slate-900/80 backdrop-blur-2xl border border-slate-800/90 rounded-3xl p-6 sm:p-8 shadow-2xl shadow-indigo-950/30 flex flex-col justify-between">
+      <div className="sticky top-[86px] sm:top-[92px] w-full flex flex-col justify-start pt-2 pb-6">
+        {/* SINGLE UNIFIED CONTAINER CONNECTING FORM + EXPERIENCE */}
+        <main className="w-full max-w-7xl mx-auto bg-slate-900/90 backdrop-blur-2xl border border-slate-800/90 rounded-2xl sm:rounded-3xl shadow-2xl shadow-indigo-950/40 overflow-hidden flex flex-col lg:flex-row gap-0 p-0 m-0 min-h-[540px] lg:h-[calc(100vh-175px)] lg:max-h-[740px]">
+        
+        {/* =========================================================================
+            LEFT PANEL — STATIONARY FORM (NO SCROLLBAR, OVERFLOW HIDDEN, RESPONSIVELY COMPACT)
+           ========================================================================= */}
+        <section 
+          id="booking-form-panel"
+          className="w-full lg:w-[35%] xl:w-[32%] shrink-0 h-full border-b lg:border-b-0 lg:border-r border-slate-800/90 bg-slate-950/60 p-4 sm:p-5 flex flex-col justify-between overflow-hidden relative z-20 m-0"
+        >
+          <div className="flex-1 flex flex-col justify-between overflow-hidden">
             <div>
-              {/* Header & Back Action */}
-              <div className="flex items-center justify-between mb-5">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold uppercase tracking-wider shadow-sm">
-                  <Sparkles className="w-3.5 h-3.5" /> Workflow Manager
-                </div>
+              {/* Dynamic Centered Heading & Full Subtitle */}
+              <motion.div
+                key={selectedService}
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25 }}
+                className="mb-3 text-center"
+              >
+                <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-1 leading-snug">
+                  {activeConfig.heading}
+                </h1>
+                <p className="text-slate-400 text-xs sm:text-[13px] leading-relaxed max-w-sm mx-auto">
+                  {activeConfig.description}
+                </p>
+              </motion.div>
 
-                {onClose && (
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    className="flex items-center gap-1.5 text-slate-400 hover:text-indigo-400 text-xs font-medium transition-colors cursor-pointer"
+              {/* Single Unified Form with Compact Dynamic Fields */}
+              <form onSubmit={handleSubmit} className="space-y-2">
+                {/* 1. SELECT SERVICE DROPDOWN */}
+                <div className="space-y-0.5">
+                  <label 
+                    htmlFor="service-select" 
+                    className="block text-[10px] font-bold text-slate-300 uppercase tracking-wider"
                   >
-                    <ArrowLeft className="w-3.5 h-3.5" />
-                    <span>Back</span>
-                  </button>
-                )}
-              </div>
-
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">Service Request</h1>
-              <p className="text-slate-400 text-sm leading-relaxed mb-8">
-                Select your service package to initiate the 5-stage sequential roadmap.
-              </p>
-
-              <form onSubmit={handleSubmit}>
-                {/* Dropdown Field */}
-                <div className="space-y-2 mb-6">
-                  <label htmlFor="track-select" className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
-                    Select Service Process
+                    SELECT SERVICE
                   </label>
                   <div className="relative">
                     <select
-                      id="track-select"
-                      value={selectedTrack}
-                      onChange={handleTrackChange}
-                      className="w-full appearance-none bg-slate-950/80 border border-slate-700/80 text-slate-200 text-sm rounded-xl px-4 py-3.5 pr-10 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all cursor-pointer font-medium"
+                      id="service-select"
+                      value={selectedService}
+                      onChange={handleServiceChange}
+                      className="w-full appearance-none bg-slate-950/90 border border-slate-700/80 text-slate-100 text-xs rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all cursor-pointer font-medium"
                     >
-                      <option value="HEC">Health Evaluation Checkup (HEC)</option>
-                      <option value="TYL">Try Your Look (TYL)</option>
+                      <option value="Home Eye Care Check">Home Eye Care Check</option>
+                      <option value="Transform Look">Transform Look</option>
                     </select>
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-3.5 pointer-events-none text-slate-400">
-                      <ChevronDown className="w-4 h-4" />
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                      <ChevronDown className="w-3.5 h-3.5" />
                     </div>
                   </div>
                 </div>
 
-                {/* Input Field */}
-                <div className="space-y-2 mb-8">
-                  <label htmlFor="cust-ref-input" className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
-                    Customer Reference ID
+                {/* 2. FULL NAME */}
+                <div className="space-y-0.5">
+                  <label 
+                    htmlFor="fullName" 
+                    className="block text-[10px] font-bold text-slate-300 uppercase tracking-wider"
+                  >
+                    FULL NAME *
                   </label>
                   <div className="relative">
                     <input
-                      id="cust-ref-input"
+                      id="fullName"
+                      name="fullName"
                       type="text"
-                      value={custRefId}
-                      onChange={(e) => setCustRefId(e.target.value)}
-                      placeholder="e.g., CUST-98420"
-                      className="w-full bg-slate-950/80 border border-slate-700/80 text-slate-200 text-sm rounded-xl px-4 py-3.5 pr-10 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-600 font-medium"
+                      required
+                      value={formData.fullName}
+                      onChange={handleInputChange}
+                      placeholder="e.g. Rahul Sharma"
+                      className="w-full bg-slate-950/90 border border-slate-700/80 text-slate-100 text-xs rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-600 font-medium"
                     />
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-3.5 pointer-events-none text-slate-500">
-                      <UserCheck className="w-4 h-4" />
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-500">
+                      <User className="w-3.5 h-3.5" />
                     </div>
                   </div>
                 </div>
 
-                {/* Submit Button */}
+                {/* 3. EMAIL ADDRESS */}
+                <div className="space-y-0.5">
+                  <label 
+                    htmlFor="email" 
+                    className="block text-[10px] font-bold text-slate-300 uppercase tracking-wider"
+                  >
+                    EMAIL ADDRESS *
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="e.g. rahul@example.com"
+                      className="w-full bg-slate-950/90 border border-slate-700/80 text-slate-100 text-xs rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-600 font-medium"
+                    />
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-500">
+                      <Mail className="w-3.5 h-3.5" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 4. PHONE NUMBER */}
+                <div className="space-y-0.5">
+                  <label 
+                    htmlFor="phone" 
+                    className="block text-[10px] font-bold text-slate-300 uppercase tracking-wider"
+                  >
+                    PHONE NUMBER *
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      required
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="e.g. +91 98404 00561"
+                      className="w-full bg-slate-950/90 border border-slate-700/80 text-slate-100 text-xs rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-600 font-medium"
+                    />
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-500">
+                      <Phone className="w-3.5 h-3.5" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 5. DOORSTEP ADDRESS */}
+                <div className="space-y-0.5">
+                  <label 
+                    htmlFor="address" 
+                    className="block text-[10px] font-bold text-slate-300 uppercase tracking-wider"
+                  >
+                    DOORSTEP ADDRESS *
+                  </label>
+                  <div className="relative">
+                    <textarea
+                      id="address"
+                      name="address"
+                      required
+                      rows={2}
+                      value={formData.address}
+                      onChange={handleInputChange}
+                      placeholder="e.g. Flat 302, Green Avenue, Avadi, Chennai - 600054"
+                      className="w-full bg-slate-950/90 border border-slate-700/80 text-slate-100 text-xs rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-600 font-medium resize-none"
+                    />
+                    <div className="absolute top-2 right-2.5 pointer-events-none text-slate-500">
+                      <MapPin className="w-3.5 h-3.5" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dynamic Submit Button */}
                 <button
                   type="submit"
-                  id="trigger-btn"
-                  className="w-full bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 hover:from-indigo-600 hover:to-violet-700 text-white font-semibold py-3.5 px-6 rounded-xl shadow-lg shadow-indigo-600/30 transition-all duration-200 flex items-center justify-center gap-2 group active:scale-[0.99] cursor-pointer"
+                  id="booking-submit-btn"
+                  className="w-full mt-1 bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 hover:from-indigo-600 hover:to-violet-700 text-white font-semibold py-2 px-3.5 rounded-lg shadow-md shadow-indigo-600/30 transition-all duration-200 flex items-center justify-center gap-1.5 group active:scale-[0.99] cursor-pointer text-xs"
                 >
-                  <span>Re-animate Timeline</span>
-                  <Play className="w-4 h-4 transition-transform group-hover:translate-x-0.5 fill-white" />
+                  <span>{activeConfig.buttonText}</span>
+                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
                 </button>
               </form>
 
+              {/* Dynamic Success Card */}
               {isSuccess && (
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 p-3.5 rounded-xl bg-emerald-950/50 border border-emerald-500/30 text-emerald-400 text-xs flex items-center gap-2.5 shadow-sm"
+                  className="mt-2 p-2 rounded-lg bg-emerald-950/70 border border-emerald-500/30 text-emerald-300 text-[11px] flex items-start gap-2 shadow-sm"
                 >
-                  <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  <span>Workflow request for <strong>{custRefId}</strong> initialized successfully!</span>
+                  <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-emerald-400 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-emerald-200 text-[11px]">
+                      Confirmed for {formData.fullName || "Guest"}!
+                    </p>
+                    <p className="text-emerald-400/90 text-[10px]">
+                      {selectedService} registered.
+                    </p>
+                  </div>
                 </motion.div>
               )}
             </div>
 
             {/* Footer Info */}
-            <div className="pt-6 border-t border-slate-800/80 flex items-center justify-between text-slate-400 text-xs mt-8">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>Dynamic real-time execution</span>
+            <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-slate-400 text-[11px] mt-2">
+              <div className="flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-[10px]">Real-time execution</span>
               </div>
-              <div className="flex items-center gap-1.5 font-mono text-[11px] text-indigo-400 bg-indigo-950/40 px-2.5 py-1 rounded-md border border-indigo-500/20">
+              <div className="flex items-center gap-1 font-mono text-[10px] text-indigo-400 bg-indigo-950/50 px-1.5 py-0.5 rounded border border-indigo-500/20">
                 <span>STAGE 0{activeStep}/03</span>
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* RIGHT COLUMN: SCROLL-BASED STICKY 3-IMAGE SHOWCASE */}
-        <div className="lg:col-span-7 xl:col-span-8 relative">
-
-          {/* STICKY IMAGE VIEWER CARD */}
-          <div className="lg:sticky lg:top-28 z-10 w-full mb-8 lg:mb-0">
-            <div className="bg-slate-900/80 backdrop-blur-2xl border border-slate-800/90 rounded-3xl overflow-hidden shadow-2xl shadow-indigo-950/30">
-              
-              {/* STAGE HEADER WITH ACTIVE STEP CHIPS */}
-              <div className="p-4 sm:p-6 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-4 bg-slate-950/40">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
-                    <Eye className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h2 className="text-sm font-bold text-white tracking-wide uppercase flex items-center gap-2">
-                      Experience Preview
-                      <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    </h2>
-                    <p className="text-slate-400 text-xs">Scroll to navigate through stages</p>
-                  </div>
-                </div>
-
-                {/* 3 Step Selectors */}
-                <div className="flex items-center gap-1.5 bg-slate-950/80 p-1 rounded-2xl border border-slate-800">
-                  {items.map((it, idx) => {
-                    const stepNum = idx + 1;
-                    const isActive = activeStep === stepNum;
-                    return (
-                      <button
-                        key={it.id}
-                        type="button"
-                        onClick={() => handleSelectStepManually(stepNum)}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-300 flex items-center gap-1.5 cursor-pointer ${
-                          isActive 
-                            ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/40 scale-105" 
-                            : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
-                        }`}
-                      >
-                        <span>0{stepNum}</span>
-                        {isActive && <span className="hidden sm:inline text-[11px] opacity-90">Active</span>}
-                      </button>
-                    );
-                  })}
-                </div>
+        {/* =========================================================================
+            RIGHT PANEL — EXISTING ANIMATED EXPERIENCE (APPROX 65-68% WIDTH)
+           ========================================================================= */}
+        <section 
+          id="experience-panel"
+          className="w-full lg:w-[65%] xl:w-[68%] flex-1 h-full flex flex-col justify-between relative bg-slate-950/30 overflow-hidden m-0 p-0 select-none"
+        >
+          {/* TOP BAR / STAGE SELECTOR HEADER */}
+          <div className="p-3 sm:p-3.5 md:p-4 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-2 bg-slate-950/60 shrink-0 m-0">
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 shadow-sm">
+                <Eye className="w-3.5 h-3.5" />
               </div>
-
-              {/* ACTIVE IMAGE & CONTENT PRESENTATION */}
-              <div className="p-6 sm:p-8">
-                <div className="relative h-[320px] sm:h-[380px] md:h-[420px] rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80 shadow-inner group">
-                  <AnimatePresence custom={direction} initial={false} mode="popLayout">
-                    <motion.div
-                      key={`${selectedTrack}-${activeItem.id}`}
-                      custom={direction}
-                      variants={slideVariants}
-                      initial="enter"
-                      animate="center"
-                      exit="exit"
-                      className="absolute inset-0 w-full h-full flex flex-col justify-end"
-                    >
-                      {/* Background Image */}
-                      <img
-                        src={activeItem.image}
-                        alt={activeItem.title}
-                        className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.85] contrast-[1.05] transition-transform duration-700 ease-out group-hover:scale-105"
-                      />
-
-                      {/* Multi-gradient Backdrop Overlays for High Legibility */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
-                      <div className="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-transparent to-slate-950/30" />
-                      <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-slate-950/60 to-transparent" />
-
-                      {/* Top Badges */}
-                      <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
-                        <span className="px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-md border border-indigo-500/30 text-indigo-300 text-xs font-semibold shadow-lg">
-                          {activeItem.badge}
-                        </span>
-
-                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md border border-slate-700 text-slate-300 text-xs">
-                          <Layers className="w-3.5 h-3.5 text-indigo-400" />
-                          <span>0{activeStep} of 03</span>
-                        </div>
-                      </div>
-
-                      {/* Bottom Content Information Overlay */}
-                      <div className="relative z-10 p-5 sm:p-7">
-                        <div className="flex items-center gap-2 mb-1.5 text-indigo-400 text-xs font-semibold tracking-wider uppercase">
-                          <Sparkle className="w-3.5 h-3.5" />
-                          <span>{activeItem.subtitle}</span>
-                        </div>
-
-                        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight mb-2 sm:mb-3 leading-tight">
-                          {activeItem.title}
-                        </h3>
-
-                        <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-2xl mb-4 line-clamp-3 sm:line-clamp-none">
-                          {activeItem.description}
-                        </p>
-
-                        {/* Interactive Feature Tags */}
-                        <div className="flex flex-wrap gap-2 pt-1">
-                          {activeItem.features.map((feat, idx) => (
-                            <span 
-                              key={idx}
-                              className="px-2.5 py-1 rounded-lg bg-indigo-950/60 border border-indigo-500/20 text-indigo-200 text-[11px] font-medium backdrop-blur-sm"
-                            >
-                              {feat}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
-
-                {/* BOTTOM PROGRESS TRACKER BAR */}
-                <div className="mt-5 flex items-center gap-3">
-                  <div className="flex-1 h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                    <motion.div 
-                      className="h-full bg-gradient-to-r from-indigo-500 via-indigo-400 to-violet-500 rounded-full shadow-[0_0_10px_rgba(99,102,241,0.8)]"
-                      initial={false}
-                      animate={{ width: `${(activeStep / 3) * 100}%` }}
-                      transition={{ duration: 0.4, ease: "easeOut" }}
-                    />
-                  </div>
-
-                  <div className="flex items-center gap-1.5 text-xs text-slate-400 font-mono">
-                    <span className="text-white font-bold">0{activeStep}</span>
-                    <span>/</span>
-                    <span>03</span>
-                  </div>
-                </div>
+              <div>
+                <h2 className="text-xs font-bold text-white tracking-wide uppercase flex items-center gap-1.5">
+                  Experience Preview
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                </h2>
+                <p className="text-slate-400 text-[10px]">Scroll or select stages to inspect details</p>
               </div>
+            </div>
 
+            {/* 3 Step Selectors */}
+            <div className="flex items-center gap-1 bg-slate-950/90 p-0.5 rounded-xl border border-slate-800 shadow-inner">
+              {items.map((it, idx) => {
+                const stepNum = idx + 1;
+                const isActive = activeStep === stepNum;
+                return (
+                  <button
+                    key={it.id}
+                    type="button"
+                    onClick={() => handleSelectStepManually(stepNum)}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all duration-300 flex items-center gap-1 cursor-pointer ${
+                      isActive 
+                        ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/40 scale-105" 
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
+                    }`}
+                  >
+                    <span>0{stepNum}</span>
+                    {isActive && <span className="hidden sm:inline text-[10px] opacity-90">Active</span>}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          {/* INVISIBLE SCROLL TRIGGER OBSERVER TRACKS (DRIVES VERTICAL SCROLL TRANSITIONS WITHOUT DUPLICATE CARDS) */}
-          <div className="relative w-full pointer-events-none" aria-hidden="true">
-            {items.map((_, idx) => (
-              <div
-                key={`scroll-trigger-${idx}`}
-                ref={(el) => { stepTriggerRefs.current[idx] = el; }}
-                className="h-[75vh] w-full"
-              />
-            ))}
+          {/* MAIN INTERACTIVE VISUAL DISPLAY AREA */}
+          <div className="flex-1 relative w-full h-full min-h-[260px] overflow-hidden bg-slate-950 flex flex-col justify-end group m-0 p-0">
+            <AnimatePresence custom={direction} initial={false} mode="popLayout">
+              <motion.div
+                key={`${selectedTrack}-${activeItem.id}`}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                className="absolute inset-0 w-full h-full flex flex-col justify-end"
+              >
+                {/* Background Image */}
+                <img
+                  src={activeItem.image}
+                  alt={activeItem.title}
+                  className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.85] contrast-[1.05] transition-transform duration-700 ease-out group-hover:scale-105"
+                />
+
+                {/* Multi-gradient Backdrop Overlays for Maximum Legibility */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-transparent to-slate-950/30" />
+                <div className="absolute top-0 inset-x-0 h-20 bg-gradient-to-b from-slate-950/60 to-transparent" />
+
+                {/* Top Badges */}
+                <div className="absolute top-3 left-4 right-4 flex items-center justify-between z-10">
+                  <span className="px-2.5 py-0.5 rounded-full bg-slate-950/85 backdrop-blur-md border border-indigo-500/30 text-indigo-300 text-[11px] font-semibold shadow-lg">
+                    {activeItem.badge}
+                  </span>
+
+                  <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-950/85 backdrop-blur-md border border-slate-700 text-slate-300 text-[10px]">
+                    <Layers className="w-3 h-3 text-indigo-400" />
+                    <span>0{activeStep} of 03</span>
+                  </div>
+                </div>
+
+                {/* Bottom Content Information Overlay */}
+                <div className="relative z-10 p-4 sm:p-5 md:p-6">
+                  <div className="flex items-center gap-1.5 mb-1 text-indigo-400 text-[11px] font-semibold tracking-wider uppercase">
+                    <Sparkle className="w-3 h-3" />
+                    <span>{activeItem.subtitle}</span>
+                  </div>
+
+                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-white tracking-tight mb-1.5 leading-tight">
+                    {activeItem.title}
+                  </h3>
+
+                  <p className="text-slate-300 text-xs leading-relaxed max-w-2xl mb-2.5 line-clamp-2 sm:line-clamp-3">
+                    {activeItem.description}
+                  </p>
+
+                  {/* Interactive Feature Tags */}
+                  <div className="flex flex-wrap gap-1.5 pt-0.5">
+                    {activeItem.features.map((feat, idx) => (
+                      <span 
+                        key={idx}
+                        className="px-2 py-0.5 rounded-md bg-indigo-950/70 border border-indigo-500/25 text-indigo-200 text-[10px] font-medium backdrop-blur-sm shadow-sm"
+                      >
+                        {feat}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-        </div>
+          {/* BOTTOM PROGRESS BAR & STAGE STEPPING BAR */}
+          <div className="p-2.5 sm:p-3 border-t border-slate-800/80 bg-slate-950/60 flex items-center justify-between gap-3 shrink-0 m-0">
+            <div className="flex-1 flex items-center gap-2.5">
+              <div className="flex-1 h-1.5 bg-slate-800/90 rounded-full overflow-hidden">
+                <motion.div 
+                  className="h-full bg-gradient-to-r from-indigo-500 via-indigo-400 to-violet-500 rounded-full shadow-[0_0_10px_rgba(99,102,241,0.8)]"
+                  initial={false}
+                  animate={{ width: `${(activeStep / 3) * 100}%` }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                />
+              </div>
 
+              <div className="flex items-center gap-1 text-[11px] text-slate-400 font-mono">
+                <span className="text-white font-bold">0{activeStep}</span>
+                <span>/</span>
+                <span>03</span>
+              </div>
+            </div>
+
+            {/* Quick Next/Prev Step Controls */}
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                disabled={activeStep <= 1}
+                onClick={() => handleSelectStepManually(activeStep - 1)}
+                className="px-2 py-1 text-[11px] font-semibold rounded-md bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors flex items-center gap-0.5"
+              >
+                <ChevronLeft className="w-3 h-3" />
+                <span>Prev</span>
+              </button>
+              <button
+                type="button"
+                disabled={activeStep >= 3}
+                onClick={() => handleSelectStepManually(activeStep + 1)}
+                className="px-2 py-1 text-[11px] font-semibold rounded-md bg-indigo-600/30 border border-indigo-500/40 text-indigo-200 hover:bg-indigo-600/50 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors flex items-center gap-0.5"
+              >
+                <span>Next</span>
+                <ChevronRight className="w-3 h-3" />
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </main>
       </div>
-    </section>
+    </div>
   );
 }

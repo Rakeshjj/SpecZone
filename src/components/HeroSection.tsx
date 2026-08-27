@@ -160,12 +160,12 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
     <div
       ref={containerRef}
       id="hero"
-      className="relative bg-[#09090b] text-white h-[220vh] w-full"
+      className="relative bg-[#09090b] text-white h-[200vh] w-full"
     >
-      {/* Sticky Fullscreen Stage */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between z-10 [perspective:1200px]">
+      {/* Sticky Viewport Stage (Properly bounded to viewport below navbar) */}
+      <div className="sticky top-[74px] sm:top-[78px] h-[calc(100dvh-74px)] sm:h-[calc(100dvh-78px)] w-full overflow-hidden flex flex-col justify-between z-10 [perspective:1200px]">
 
-        {/* Luxury Background Canvas (Replaced video with static dark aesthetics & glowing radial aura) */}
+        {/* Luxury Background Canvas */}
         <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
           {/* Deep dark canvas gradient */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#06080e] via-[#09090b] to-[#040508]" />
@@ -179,8 +179,8 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
 
           {/* Vignette Gradients */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.7)_100%)] pointer-events-none" />
-          <div className="absolute top-0 inset-x-0 h-28 bg-gradient-to-b from-[#09090b] to-transparent pointer-events-none" />
-          <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-[#09090b] to-transparent pointer-events-none" />
+          <div className="absolute top-0 inset-x-0 h-20 bg-gradient-to-b from-[#09090b] to-transparent pointer-events-none" />
+          <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-[#09090b] to-transparent pointer-events-none" />
         </div>
 
         {/* Decorative Concentric Circular Optics Guide on the top-left */}
@@ -200,16 +200,16 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
         </div>
 
         {/* HUD Top Bar */}
-        <div className="relative z-20 px-6 md:px-12 pt-8 flex justify-between items-center max-w-7xl mx-auto w-full">
-          <div className="flex items-center gap-3">
+        <div className="relative z-20 px-4 sm:px-8 md:px-12 pt-3 sm:pt-4 flex justify-between items-center max-w-7xl mx-auto w-full shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3">
             <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
-            <span className="font-mono text-[9px] text-zinc-400 tracking-[0.25em] uppercase font-bold">
+            <span className="font-mono text-[9px] sm:text-[10px] text-zinc-400 tracking-[0.25em] uppercase font-bold">
               OCULAR SYSTEM // AURA SERIES 01
             </span>
           </div>
 
           {/* Live Scroll Phase Telemetry */}
-          <div className="flex items-center gap-4 bg-zinc-900/60 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10 shadow-lg">
+          <div className="flex items-center gap-3 sm:gap-4 bg-zinc-900/70 backdrop-blur-md px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-white/10 shadow-lg">
             <span className="font-mono text-[9px] text-brand-blue font-bold tracking-widest uppercase flex items-center gap-1.5">
               <Compass size={11} /> SCROLL SYNC
             </span>
@@ -223,9 +223,9 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
         {/* ========================================================================= */}
         {/* CENTER VIEWPORT: HERO TEXT (LEFT) + FLOATING 3D GLASSES & BADGES (RIGHT) */}
         {/* ========================================================================= */}
-        <div className="relative z-10 my-auto flex-1 max-w-7xl mx-auto w-full px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center h-full min-h-[560px]">
+        <div className="relative z-10 my-auto flex-1 max-w-7xl mx-auto w-full px-4 sm:px-8 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8 items-center py-2 min-h-0">
 
-          {/* LEFT COLUMN: HERO INFORMATION (Fixed minimum height container so slide changes don't shift layout) */}
+          {/* LEFT COLUMN: HERO INFORMATION */}
           <motion.div
             style={{
               opacity: heroTextOpacity,
@@ -233,7 +233,7 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
               scale: heroTextScale,
               pointerEvents: heroPointerEvents as any
             }}
-            className="lg:col-span-6 relative z-20 flex flex-col justify-center text-left py-4 min-h-[460px]"
+            className="lg:col-span-6 relative z-20 flex flex-col justify-center text-left py-1"
           >
             <AnimatePresence mode="wait">
               {slidesData.map((slide) => {
@@ -241,70 +241,70 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
                 return (
                   <motion.div
                     key={slide.id}
-                    initial={{ opacity: 0, y: 16 }}
+                    initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -16 }}
-                    transition={{ duration: 0.35, ease: "easeOut" }}
-                    className="space-y-6"
+                    exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="space-y-3 sm:space-y-4"
                   >
                     {/* Badge */}
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-blue/10 border border-brand-blue/30 backdrop-blur-sm">
-                      <Sparkles size={11} className="text-brand-blue" />
-                      <span className="font-mono text-[9px] tracking-[0.25em] text-brand-blue uppercase font-bold">
+                    <div className="inline-flex items-center gap-2 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-brand-blue/10 border border-brand-blue/30 backdrop-blur-sm">
+                      <Sparkles size={10} className="text-brand-blue" />
+                      <span className="font-mono text-[8px] sm:text-[9px] tracking-[0.2em] text-brand-blue uppercase font-bold">
                         {slide.badge}
                       </span>
                     </div>
 
                     {/* Headline */}
-                    <div className="space-y-1">
-                      <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-black text-white leading-[0.9] uppercase tracking-tighter">
+                    <div className="space-y-0.5">
+                      <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[0.95] uppercase tracking-tight">
                         {slide.title_line1} <br />
                         <span className="text-zinc-400 italic font-black">{slide.title_line2}</span>
                       </h1>
                     </div>
 
                     {/* Description */}
-                    <p className="font-sans text-sm md:text-base text-zinc-300 leading-relaxed font-light max-w-lg min-h-[48px]">
+                    <p className="font-sans text-xs sm:text-sm text-zinc-300 leading-relaxed font-light max-w-lg">
                       {slide.description}
                     </p>
 
                     {/* CTAs or Lead Capture */}
                     {slide.id !== 2 ? (
-                      <div className="flex flex-wrap gap-4 pt-2">
+                      <div className="flex flex-wrap gap-3 pt-1">
                         <button
                           onClick={slide.ctaPrimaryAction}
-                          className="px-8 py-4 bg-brand-blue text-white hover:bg-white hover:text-black font-display text-[11px] font-black tracking-widest uppercase rounded-xl transition-all duration-300 shadow-xl shadow-brand-blue/20 cursor-pointer flex items-center gap-2 group"
+                          className="px-6 sm:px-8 py-3 sm:py-3.5 bg-brand-blue text-white hover:bg-white hover:text-black font-display text-[10px] sm:text-[11px] font-black tracking-widest uppercase rounded-xl transition-all duration-300 shadow-xl shadow-brand-blue/20 cursor-pointer flex items-center gap-2 group"
                         >
                           <span>{slide.ctaPrimary}</span>
-                          <ArrowDown size={13} className="group-hover:translate-y-0.5 transition-transform" />
+                          <ArrowDown size={12} className="group-hover:translate-y-0.5 transition-transform" />
                         </button>
                         <button
                           onClick={slide.ctaSecondaryAction}
-                          className="px-8 py-4 bg-zinc-900/60 hover:bg-white/[0.06] text-zinc-200 font-mono text-[10px] tracking-wider uppercase border border-white/10 backdrop-blur-sm rounded-xl transition-all cursor-pointer"
+                          className="px-6 sm:px-8 py-3 sm:py-3.5 bg-zinc-900/60 hover:bg-white/[0.06] text-zinc-200 font-mono text-[9px] sm:text-[10px] tracking-wider uppercase border border-white/10 backdrop-blur-sm rounded-xl transition-all cursor-pointer"
                         >
                           {slide.ctaSecondary}
                         </button>
                       </div>
                     ) : (
                       /* Minimal Concierge Form on Slide 3 */
-                      <div className="pt-2 max-w-md w-full">
+                      <div className="pt-1 max-w-md w-full">
                         <AnimatePresence mode="wait">
                           {!isSlideSubmitted ? (
                             <form
                               onSubmit={handleSlideFormSubmit}
-                              className="bg-zinc-900/80 border border-white/10 backdrop-blur-md shadow-2xl rounded-2xl p-5 space-y-3.5"
+                              className="bg-zinc-900/90 border border-white/10 backdrop-blur-md shadow-2xl rounded-xl p-3.5 sm:p-4 space-y-2.5"
                             >
-                              <div className="flex gap-2 items-center border-b border-white/5 pb-2">
-                                <Sparkles size={12} className="text-brand-blue animate-spin" style={{ animationDuration: "6s" }} />
-                                <span className="font-mono text-[9px] text-zinc-300 tracking-widest uppercase font-bold">
+                              <div className="flex gap-2 items-center border-b border-white/5 pb-1.5">
+                                <Sparkles size={11} className="text-brand-blue animate-spin" style={{ animationDuration: "6s" }} />
+                                <span className="font-mono text-[8px] sm:text-[9px] text-zinc-300 tracking-wider uppercase font-bold">
                                   REQUEST DOORSTEP CLINICAL ATELIER
                                 </span>
                               </div>
 
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                 <div className="relative">
-                                  <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-zinc-500 pointer-events-none">
-                                    <User size={12} />
+                                  <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center text-zinc-500 pointer-events-none">
+                                    <User size={11} />
                                   </span>
                                   <input
                                     type="text"
@@ -312,13 +312,13 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
                                     placeholder="Full Name"
                                     value={slideLeadName}
                                     onChange={(e) => setSlideLeadName(e.target.value)}
-                                    className="w-full bg-zinc-950/60 border border-white/10 rounded-xl py-2.5 pl-9 pr-3 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-brand-blue transition-all"
+                                    className="w-full bg-zinc-950/70 border border-white/10 rounded-lg py-2 pl-8 pr-2.5 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-brand-blue transition-all"
                                   />
                                 </div>
 
                                 <div className="relative">
-                                  <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-zinc-500 pointer-events-none">
-                                    <Phone size={12} />
+                                  <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center text-zinc-500 pointer-events-none">
+                                    <Phone size={11} />
                                   </span>
                                   <input
                                     type="tel"
@@ -326,25 +326,25 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
                                     placeholder="Mobile Contact"
                                     value={slideLeadPhone}
                                     onChange={(e) => setSlideLeadPhone(e.target.value)}
-                                    className="w-full bg-zinc-950/60 border border-white/10 rounded-xl py-2.5 pl-9 pr-3 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-brand-blue transition-all"
+                                    className="w-full bg-zinc-950/70 border border-white/10 rounded-lg py-2 pl-8 pr-2.5 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-brand-blue transition-all"
                                   />
                                 </div>
                               </div>
 
                               <button
                                 type="submit"
-                                className="w-full py-3 rounded-xl bg-brand-blue hover:bg-white hover:text-black text-white font-display text-[10px] font-black tracking-widest uppercase transition-all cursor-pointer"
+                                className="w-full py-2.5 rounded-lg bg-brand-blue hover:bg-white hover:text-black text-white font-display text-[9px] sm:text-[10px] font-black tracking-widest uppercase transition-all cursor-pointer"
                               >
                                 CONFIRM APPOINTMENT VIA WHATSAPP →
                               </button>
                             </form>
                           ) : (
-                            <div className="bg-green-950/30 border border-green-500/30 rounded-2xl p-5 text-center space-y-2.5">
-                              <div className="w-8 h-8 rounded-full bg-green-950/80 flex items-center justify-center mx-auto text-green-400 border border-green-800">
-                                <CheckCircle size={16} />
+                            <div className="bg-green-950/30 border border-green-500/30 rounded-xl p-3.5 text-center space-y-1.5">
+                              <div className="w-7 h-7 rounded-full bg-green-950/80 flex items-center justify-center mx-auto text-green-400 border border-green-800">
+                                <CheckCircle size={14} />
                               </div>
-                              <h4 className="font-serif text-base font-bold text-white uppercase tracking-tight">VISITATION SCHEDULED</h4>
-                              <p className="font-sans text-[11px] text-zinc-300 font-light">
+                              <h4 className="font-serif text-sm font-bold text-white uppercase tracking-tight">VISITATION SCHEDULED</h4>
+                              <p className="font-sans text-[10px] sm:text-[11px] text-zinc-300 font-light">
                                 Thank you, {slideLeadName}. Initiating wavefront trial preparation...
                               </p>
                             </div>
@@ -354,12 +354,12 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
                     )}
 
                     {/* Carousel Dots */}
-                    <div className="flex gap-2.5 pt-2">
+                    <div className="flex gap-2 pt-1">
                       {[0, 1, 2].map((dotIndex) => (
                         <button
                           key={dotIndex}
                           onClick={() => setCurrentSlide(dotIndex)}
-                          className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${currentSlide === dotIndex ? "w-7 bg-brand-blue" : "w-2 bg-white/20 hover:bg-white/40"
+                          className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 cursor-pointer ${currentSlide === dotIndex ? "w-6 sm:w-7 bg-brand-blue" : "w-1.5 sm:w-2 bg-white/20 hover:bg-white/40"
                             }`}
                           aria-label={`Slide ${dotIndex + 1}`}
                         />
@@ -372,9 +372,9 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
           </motion.div>
 
           {/* RIGHT COLUMN: ENLARGED, PERFECTLY CENTERED & ELEVATED 3D PRODUCT VIEWPORT */}
-          <div className="lg:col-span-6 relative flex items-center justify-center h-full min-h-[500px] select-none pointer-events-none -translate-y-16 lg:-translate-y-24">
+          <div className="lg:col-span-6 relative flex items-center justify-center h-full min-h-[360px] sm:min-h-[420px] select-none pointer-events-none">
 
-            {/* FLOATING SPECIFICATION BADGES AROUND THE GLASSES (Restored around the enlarged frame) */}
+            {/* FLOATING SPECIFICATION BADGES AROUND THE GLASSES */}
             <motion.div
               style={{
                 opacity: badgesOpacity,
@@ -383,52 +383,52 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
               className="absolute inset-0 z-30 pointer-events-none"
             >
               {/* Badge 1: Top Left - ZEISS Polarized HD */}
-              <div className="absolute top-[4%] left-[-4%] md:left-[-1%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 shadow-2xl">
+              <div className="absolute top-[6%] left-[0%] md:left-[2%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-2xl">
                 <div className="w-2 h-2 rounded-full bg-brand-blue animate-ping" />
                 <div>
-                  <span className="block font-mono text-[8px] text-zinc-400 uppercase tracking-wider">OPTICAL MATRIX</span>
-                  <span className="block font-mono text-[10px] text-white font-bold tracking-widest uppercase">ZEISS POLARIZED HD</span>
+                  <span className="block font-mono text-[7px] text-zinc-400 uppercase tracking-wider">OPTICAL MATRIX</span>
+                  <span className="block font-mono text-[9px] text-white font-bold tracking-widest uppercase">ZEISS POLARIZED HD</span>
                 </div>
               </div>
 
               {/* Badge 2: Top Right - UV400 Shield */}
-              <div className="absolute top-[6%] right-[-4%] md:right-[-1%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 shadow-2xl">
-                <Shield size={13} className="text-brand-blue" />
+              <div className="absolute top-[8%] right-[0%] md:right-[2%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-2xl">
+                <Shield size={12} className="text-brand-blue" />
                 <div>
-                  <span className="block font-mono text-[8px] text-zinc-400 uppercase tracking-wider">SOLAR RADIATION</span>
-                  <span className="block font-mono text-[10px] text-white font-bold tracking-widest uppercase">UV400 SCATTER CUT</span>
+                  <span className="block font-mono text-[7px] text-zinc-400 uppercase tracking-wider">SOLAR RADIATION</span>
+                  <span className="block font-mono text-[9px] text-white font-bold tracking-widest uppercase">UV400 SCATTER CUT</span>
                 </div>
               </div>
 
               {/* Badge 3: Middle Right - Japanese Beta-Titanium */}
-              <div className="absolute top-[52%] right-[-8%] md:right-[-3%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 shadow-2xl">
-                <Cpu size={13} className="text-brand-blue" />
+              <div className="absolute top-[48%] right-[-2%] md:right-[0%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-2xl">
+                <Cpu size={12} className="text-brand-blue" />
                 <div>
-                  <span className="block font-mono text-[8px] text-zinc-400 uppercase tracking-wider">MATERIAL GRADE</span>
-                  <span className="block font-mono text-[10px] text-white font-bold tracking-widest uppercase">BETA-TITANIUM</span>
+                  <span className="block font-mono text-[7px] text-zinc-400 uppercase tracking-wider">MATERIAL GRADE</span>
+                  <span className="block font-mono text-[9px] text-white font-bold tracking-widest uppercase">BETA-TITANIUM</span>
                 </div>
               </div>
 
               {/* Badge 4: Bottom Left - 11.2g Aero-Light Weight */}
-              <div className="absolute bottom-[4%] left-[-4%] md:left-[0%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 shadow-2xl">
-                <Zap size={13} className="text-brand-blue" />
+              <div className="absolute bottom-[6%] left-[0%] md:left-[2%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-2xl">
+                <Zap size={12} className="text-brand-blue" />
                 <div>
-                  <span className="block font-mono text-[8px] text-zinc-400 uppercase tracking-wider">TOTAL MASS</span>
-                  <span className="block font-mono text-[10px] text-white font-bold tracking-widest uppercase">11.2G AERO-LIGHT</span>
+                  <span className="block font-mono text-[7px] text-zinc-400 uppercase tracking-wider">TOTAL MASS</span>
+                  <span className="block font-mono text-[9px] text-white font-bold tracking-widest uppercase">11.2G AERO-LIGHT</span>
                 </div>
               </div>
 
               {/* Badge 5: Bottom Right - 18mm Keyhole Bridge */}
-              <div className="absolute bottom-[2%] right-[-2%] md:right-[3%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 shadow-2xl">
-                <Layers size={13} className="text-brand-blue" />
+              <div className="absolute bottom-[6%] right-[0%] md:right-[2%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-2xl">
+                <Layers size={12} className="text-brand-blue" />
                 <div>
-                  <span className="block font-mono text-[8px] text-zinc-400 uppercase tracking-wider">ANATOMICAL FIT</span>
-                  <span className="block font-mono text-[10px] text-white font-bold tracking-widest uppercase">18MM KEYHOLE BRIDGE</span>
+                  <span className="block font-mono text-[7px] text-zinc-400 uppercase tracking-wider">ANATOMICAL FIT</span>
+                  <span className="block font-mono text-[9px] text-white font-bold tracking-widest uppercase">18MM KEYHOLE BRIDGE</span>
                 </div>
               </div>
             </motion.div>
 
-            {/* FLOATING 3D GLASSES PRODUCT HERO (Enlarged, Centered, 100% Transparent Cutout) */}
+            {/* FLOATING 3D GLASSES PRODUCT HERO */}
             <motion.div
               style={{
                 scale: productScale,
@@ -442,9 +442,9 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
                 transformStyle: "preserve-3d",
                 willChange: "transform, opacity, filter"
               }}
-              className="relative w-full max-w-[760px] flex items-center justify-center z-20"
+              className="relative w-full max-w-[700px] flex items-center justify-center z-20"
             >
-              {/* High-Resolution Luxury Specs 100% Pure Transparent Cutout */}
+              {/* High-Resolution Luxury Specs Cutout */}
               <motion.img
                 style={{
                   x: glassesMouseX,
@@ -453,7 +453,7 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
                 src={auraSpecsTransparent}
                 alt="AURA Luxury Geometric Titanium Eyeglasses"
                 referrerPolicy="no-referrer"
-                className="w-full h-auto object-contain max-h-[500px] drop-shadow-[0_25px_45px_rgba(0,0,0,0.85)] transition-all duration-75"
+                className="w-full h-auto object-contain max-h-[420px] drop-shadow-[0_25px_45px_rgba(0,0,0,0.85)] transition-all duration-75"
               />
             </motion.div>
 
@@ -471,26 +471,21 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
             y: cadY,
             pointerEvents: cadPointerEvents as any
           }}
-  className="absolute inset-0 z-30 flex flex-col justify-center items-center px-6 md:px-12 py-16"
+          className="absolute inset-0 z-30 flex flex-col justify-center items-center px-6 md:px-12 py-16"
         >
 
         </motion.div>
 
         {/* HUD Bottom Scroll Prompt */}
-        <div className="relative z-20 px-6 md:px-12 pb-6 flex justify-between items-center max-w-7xl mx-auto w-full">
-          <div className="flex items-center gap-2 text-zinc-400 font-mono text-[9px] uppercase tracking-widest">
-            <span className="w-1.5 h-1.5 rounded-full bg-brand-blue" />
-            <span>SCROLL TO DIVE INTO CAD SPECIFICATIONS</span>
-          </div>
-
+        <div className="relative z-20 px-4 sm:px-8 md:px-12 pb-3 sm:pb-4 flex justify-end items-center max-w-7xl mx-auto w-full shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-24 h-1 bg-zinc-900 rounded-full overflow-hidden border border-white/10">
+            <div className="w-20 sm:w-24 h-1 bg-zinc-900 rounded-full overflow-hidden border border-white/10">
               <motion.div
                 style={{ width: useTransform(hudProgress, (v) => `${v}%`) }}
                 className="h-full bg-brand-blue"
               />
             </div>
-            <span className="font-mono text-[9px] text-zinc-400 font-bold">
+            <span className="font-mono text-[8px] sm:text-[9px] text-zinc-400 font-bold">
               {Math.round(hudProgress.get())}%
             </span>
           </div>

@@ -5,9 +5,32 @@ import logo from "/assets/logo.png";
 interface FooterSectionProps {
   onBookClick: () => void;
   onNavigate: (sectionId: string) => void;
+  compact?: boolean;
 }
 
-export default function FooterSection({ onBookClick, onNavigate }: FooterSectionProps) {
+export default function FooterSection({ onBookClick, onNavigate, compact = false }: FooterSectionProps) {
+  if (compact) {
+    return (
+      <footer id="footer-compact" className="bg-zinc-950/80 text-white py-2 px-6 border-t border-white/5 relative overflow-hidden backdrop-blur-md shrink-0 z-30">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] tracking-widest text-zinc-500 uppercase font-display font-semibold">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => onNavigate("hero")}
+              className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
+            >
+              SPECSZONE
+            </button>
+            <span>© 2026 SPECSZONE. ALL RIGHTS RESERVED.</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <span>By</span>
+            <span className="text-zinc-400 font-bold">TheDotStudios</span>
+          </div>
+        </div>
+      </footer>
+    );
+  }
+
   return (
     <footer id="footer" className="bg-zinc-950/60 text-white py-16 px-6 md:px-12 border-t border-white/5 relative overflow-hidden backdrop-blur-md">
       {/* Absolute floating graphics background */}

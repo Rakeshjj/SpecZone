@@ -346,7 +346,7 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
         </div>
 
         {/* CENTER 3D SPIRAL STAGE */}
-        <div className="relative z-20 my-auto w-full h-[520px] sm:h-[580px] flex items-center justify-center [perspective:1200px] select-none">
+        <div className="relative z-20 my-auto w-full h-[520px] sm:h-[580px] flex items-center justify-center [perspective:1200px] select-none translate-y-20 sm:translate-y-24">
           
           {/* 3D CONTAINER WITH SIDE TILT */}
           <motion.div

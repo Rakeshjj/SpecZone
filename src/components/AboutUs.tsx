@@ -62,14 +62,14 @@ export default function AboutUs() {
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(0,102,204,0.01)_0%,transparent_50%)] pointer-events-none" />
       
-      <div className="max-w-7xl mx-auto w-full z-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+      <div className="max-w-7xl mx-auto w-full z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
         {/* Left Column: Visuals & Stats */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="lg:col-span-5 space-y-8 flex flex-col justify-between h-full"
+          className="lg:col-span-5 space-y-8 flex flex-col"
         >
           {/* Aesthetic Luxury Image Card with Auto-Play Gallery */}
           <motion.div
@@ -162,7 +162,7 @@ export default function AboutUs() {
             <span className="font-mono text-xs tracking-[0.3em] text-brand-blue block animate-pulse">
               [ SIX DECADES OF PRECISION ]
             </span>
-            <h2 className="font-serif text-5xl md:text-7xl font-black text-white uppercase leading-[0.85] tracking-tighter">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase leading-[0.9] tracking-tight">
               SCULPTORS OF <br />
               <span className="text-zinc-500 italic font-black">PRECISION VISION</span>
             </h2>
