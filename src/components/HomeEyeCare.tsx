@@ -343,31 +343,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
 
               {/* Single Unified Form with Compact Dynamic Fields */}
               <form onSubmit={handleSubmit} className="space-y-2">
-                {/* 1. SELECT SERVICE DROPDOWN */}
-                <div className="space-y-0.5">
-                  <label 
-                    htmlFor="service-select" 
-                    className="block text-[10px] font-bold text-slate-300 uppercase tracking-wider"
-                  >
-                    SELECT SERVICE
-                  </label>
-                  <div className="relative">
-                    <select
-                      id="service-select"
-                      value={selectedService}
-                      onChange={handleServiceChange}
-                      className="w-full appearance-none bg-slate-950/90 border border-slate-700/80 text-slate-100 text-xs rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all cursor-pointer font-medium"
-                    >
-                      <option value="Home Eye Care Check">Home Eye Care Check</option>
-                      <option value="Transform Look">Transform Look</option>
-                    </select>
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
-                      <ChevronDown className="w-3.5 h-3.5" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* 2. FULL NAME */}
+                {/* 1. FULL NAME */}
                 <div className="space-y-0.5">
                   <label 
                     htmlFor="fullName" 
@@ -392,7 +368,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                   </div>
                 </div>
 
-                {/* 3. EMAIL ADDRESS */}
+                {/* 2. EMAIL ADDRESS */}
                 <div className="space-y-0.5">
                   <label 
                     htmlFor="email" 
@@ -417,7 +393,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                   </div>
                 </div>
 
-                {/* 4. PHONE NUMBER */}
+                {/* 3. PHONE NUMBER */}
                 <div className="space-y-0.5">
                   <label 
                     htmlFor="phone" 
@@ -442,7 +418,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                   </div>
                 </div>
 
-                {/* 5. DOORSTEP ADDRESS */}
+                {/* 4. DOORSTEP ADDRESS */}
                 <div className="space-y-0.5">
                   <label 
                     htmlFor="address" 
@@ -463,6 +439,30 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                     />
                     <div className="absolute top-2 right-2.5 pointer-events-none text-slate-500">
                       <MapPin className="w-3.5 h-3.5" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 5. SELECT SERVICE DROPDOWN */}
+                <div className="space-y-0.5">
+                  <label 
+                    htmlFor="service-select" 
+                    className="block text-[10px] font-bold text-slate-300 uppercase tracking-wider"
+                  >
+                    SELECT SERVICE
+                  </label>
+                  <div className="relative">
+                    <select
+                      id="service-select"
+                      value={selectedService}
+                      onChange={handleServiceChange}
+                      className="w-full appearance-none bg-slate-950/90 border border-slate-700/80 text-slate-100 text-xs rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all cursor-pointer font-medium"
+                    >
+                      <option value="Home Eye Care Check">Home Eye Care Check</option>
+                      <option value="Transform Look">Transform Look</option>
+                    </select>
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                      <ChevronDown className="w-3.5 h-3.5" />
                     </div>
                   </div>
                 </div>
@@ -533,28 +533,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
               </div>
             </div>
 
-            {/* 3 Step Selectors */}
-            <div className="flex items-center gap-1 bg-slate-950/90 p-0.5 rounded-xl border border-slate-800 shadow-inner">
-              {items.map((it, idx) => {
-                const stepNum = idx + 1;
-                const isActive = activeStep === stepNum;
-                return (
-                  <button
-                    key={it.id}
-                    type="button"
-                    onClick={() => handleSelectStepManually(stepNum)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all duration-300 flex items-center gap-1 cursor-pointer ${
-                      isActive 
-                        ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/40 scale-105" 
-                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
-                    }`}
-                  >
-                    <span>0{stepNum}</span>
-                    {isActive && <span className="hidden sm:inline text-[10px] opacity-90">Active</span>}
-                  </button>
-                );
-              })}
-            </div>
+
           </div>
 
           {/* MAIN INTERACTIVE VISUAL DISPLAY AREA */}

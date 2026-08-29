@@ -399,33 +399,6 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
                   <span className="block font-mono text-[9px] text-white font-bold tracking-widest uppercase">UV400 SCATTER CUT</span>
                 </div>
               </div>
-
-              {/* Badge 3: Middle Right - Japanese Beta-Titanium */}
-              <div className="absolute top-[48%] right-[-2%] md:right-[0%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-2xl">
-                <Cpu size={12} className="text-brand-blue" />
-                <div>
-                  <span className="block font-mono text-[7px] text-zinc-400 uppercase tracking-wider">MATERIAL GRADE</span>
-                  <span className="block font-mono text-[9px] text-white font-bold tracking-widest uppercase">BETA-TITANIUM</span>
-                </div>
-              </div>
-
-              {/* Badge 4: Left - 11.2g Aero-Light Weight */}
-              <div className="absolute bottom-[20%] md:bottom-[22%] left-[0%] md:left-[2%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-2xl">
-                <Zap size={12} className="text-brand-blue" />
-                <div>
-                  <span className="block font-mono text-[7px] text-zinc-400 uppercase tracking-wider">TOTAL MASS</span>
-                  <span className="block font-mono text-[9px] text-white font-bold tracking-widest uppercase">11.2G AERO-LIGHT</span>
-                </div>
-              </div>
-
-              {/* Badge 5: Right - 18mm Keyhole Bridge */}
-              <div className="absolute bottom-[20%] md:bottom-[22%] right-[0%] md:right-[2%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-2xl">
-                <Layers size={12} className="text-brand-blue" />
-                <div>
-                  <span className="block font-mono text-[7px] text-zinc-400 uppercase tracking-wider">ANATOMICAL FIT</span>
-                  <span className="block font-mono text-[9px] text-white font-bold tracking-widest uppercase">18MM KEYHOLE BRIDGE</span>
-                </div>
-              </div>
             </motion.div>
 
             {/* FLOATING 3D GLASSES PRODUCT HERO */}
@@ -478,17 +451,6 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
 
         {/* HUD Bottom Scroll Prompt */}
         <div className="relative z-20 px-4 sm:px-8 md:px-12 pb-3 sm:pb-4 flex justify-end items-center max-w-7xl mx-auto w-full shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-20 sm:w-24 h-1 bg-zinc-900 rounded-full overflow-hidden border border-white/10">
-              <motion.div
-                style={{ width: useTransform(hudProgress, (v) => `${v}%`) }}
-                className="h-full bg-brand-blue"
-              />
-            </div>
-            <span className="font-mono text-[8px] sm:text-[9px] text-zinc-400 font-bold">
-              {Math.round(hudProgress.get())}%
-            </span>
-          </div>
         </div>
 
       </div>
