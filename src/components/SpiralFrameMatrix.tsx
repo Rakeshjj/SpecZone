@@ -194,7 +194,7 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     material: "Optyl Ultra-Light Polymer",
     origin: "Padova, Italy",
     weight: "17.1g",
-    image: "/assets/img/lens2.jpg"
+    image: "/assets/img/lens.jpg"
   }
 ];
 
