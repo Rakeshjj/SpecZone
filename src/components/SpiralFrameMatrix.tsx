@@ -6,9 +6,7 @@ import {
   X, 
   Grid, 
   CheckCircle2, 
-  ChevronDown, 
   Sliders,
-  RotateCw,
   Eye,
   Zap
 } from "lucide-react";
@@ -314,7 +312,7 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
   return (
     <section 
       ref={containerRef}
-      className="relative bg-zinc-950 text-white h-[400vh] border-t border-white/10"
+      className="relative -top-[10px] bg-zinc-950 text-white h-[400vh] border-t border-white/10"
     >
       {/* STICKY FULLSCREEN VIEWPORT */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between p-6 sm:p-10 bg-zinc-950">
@@ -346,7 +344,7 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
         </div>
 
         {/* CENTER 3D SPIRAL STAGE */}
-        <div className="relative z-20 my-auto w-full h-[520px] sm:h-[580px] flex items-center justify-center [perspective:1200px] select-none translate-y-20 sm:translate-y-24">
+        <div className="relative z-20 my-auto w-full h-[520px] sm:h-[580px] flex items-center justify-center [perspective:1200px] select-none translate-y-12 sm:translate-y-16">
           
           {/* 3D CONTAINER WITH SIDE TILT */}
           <motion.div
@@ -378,7 +376,7 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
               scale: viewAllScale,
               pointerEvents: viewAllPointerEvents
             }}
-            className="absolute z-40 flex flex-col items-center justify-center space-y-3"
+            className="absolute z-40 flex flex-col items-center justify-center -translate-y-8 sm:-translate-y-12"
           >
             <div className="relative group">
               <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-brand-blue via-cyan-400 to-indigo-600 opacity-80 blur-xl group-hover:opacity-100 transition-opacity animate-pulse" />
@@ -392,25 +390,8 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
                 <ArrowRight size={20} />
               </button>
             </div>
-
-            <span className="font-mono text-[10px] text-zinc-400 uppercase tracking-widest bg-black/80 px-4 py-1 rounded-full border border-white/10 backdrop-blur-md">
-              [ COMPLETE 3D ORBIT SEARCH READY ]
-            </span>
           </motion.div>
 
-        </div>
-
-        {/* BOTTOM SCROLL INDICATOR */}
-        <div className="relative z-30 flex items-center justify-between font-mono text-[10px] text-zinc-500 uppercase">
-          <div className="flex items-center gap-2">
-            <RotateCw size={12} className="text-brand-blue animate-spin" />
-            <span>SCROLL VERTICALLY TO ROTATE 3D SPIRAL</span>
-          </div>
-
-          <div className="flex items-center gap-2 text-zinc-300">
-            <span>SCROLL TO UNLOCK CENTER VIEW ALL</span>
-            <ChevronDown size={14} className="animate-bounce" />
-          </div>
         </div>
 
       </div>

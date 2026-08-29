@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "motion/react";
-import { Sparkles, CheckCircle, User, Phone, ArrowDown, Shield, Eye, Cpu, Compass, Layers, Zap, Sliders } from "lucide-react";
+import { Sparkles, CheckCircle, User, Phone, ArrowDown, Shield, Eye, Cpu, Layers, Zap, Sliders } from "lucide-react";
 import auraSpecsTransparent from "../assets/images/download.png";
 
 interface HeroSectionProps {
@@ -199,30 +199,7 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
           </svg>
         </div>
 
-        {/* HUD Top Bar */}
-        <div className="relative z-20 px-4 sm:px-8 md:px-12 pt-3 sm:pt-4 flex justify-between items-center max-w-7xl mx-auto w-full shrink-0">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
-            <span className="font-mono text-[9px] sm:text-[10px] text-zinc-400 tracking-[0.25em] uppercase font-bold">
-              OCULAR SYSTEM // AURA SERIES 01
-            </span>
-          </div>
-
-          {/* Live Scroll Phase Telemetry */}
-          <div className="flex items-center gap-3 sm:gap-4 bg-zinc-900/70 backdrop-blur-md px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-white/10 shadow-lg">
-            <span className="font-mono text-[9px] text-brand-blue font-bold tracking-widest uppercase flex items-center gap-1.5">
-              <Compass size={11} /> SCROLL SYNC
-            </span>
-            <span className="w-px h-3 bg-white/10" />
-            <span className="font-mono text-[9px] text-zinc-300">
-              CAD TRANSITION
-            </span>
-          </div>
-        </div>
-
-        {/* ========================================================================= */}
         {/* CENTER VIEWPORT: HERO TEXT (LEFT) + FLOATING 3D GLASSES & BADGES (RIGHT) */}
-        {/* ========================================================================= */}
         <div className="relative z-10 my-auto flex-1 max-w-7xl mx-auto w-full px-4 sm:px-8 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8 items-center py-2 min-h-0">
 
           {/* LEFT COLUMN: HERO INFORMATION */}
@@ -383,7 +360,7 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
               className="absolute inset-0 z-30 pointer-events-none"
             >
               {/* Badge 1: Top Left - ZEISS Polarized HD */}
-              <div className="absolute top-[6%] left-[0%] md:left-[2%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-2xl">
+              <div className="absolute top-[4%] sm:top-[6%] left-[2%] sm:left-[6%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-2xl">
                 <div className="w-2 h-2 rounded-full bg-brand-blue animate-ping" />
                 <div>
                   <span className="block font-mono text-[7px] text-zinc-400 uppercase tracking-wider">OPTICAL MATRIX</span>
@@ -392,7 +369,7 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
               </div>
 
               {/* Badge 2: Top Right - UV400 Shield */}
-              <div className="absolute top-[8%] right-[0%] md:right-[2%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-2xl">
+              <div className="absolute top-[4%] sm:top-[6%] right-[2%] sm:right-[6%] flex items-center gap-2 bg-zinc-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 shadow-2xl">
                 <Shield size={12} className="text-brand-blue" />
                 <div>
                   <span className="block font-mono text-[7px] text-zinc-400 uppercase tracking-wider">SOLAR RADIATION</span>
@@ -415,7 +392,7 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
                 transformStyle: "preserve-3d",
                 willChange: "transform, opacity, filter"
               }}
-              className="relative w-full max-w-[700px] flex items-center justify-center z-20"
+              className="relative w-full max-w-[620px] lg:max-w-[680px] flex items-center justify-center z-20"
             >
               {/* High-Resolution Luxury Specs Cutout */}
               <motion.img
@@ -426,7 +403,7 @@ export default function HeroSection({ onScrollDown }: HeroSectionProps) {
                 src={auraSpecsTransparent}
                 alt="AURA Luxury Geometric Titanium Eyeglasses"
                 referrerPolicy="no-referrer"
-                className="w-full h-auto object-contain max-h-[420px] drop-shadow-[0_25px_45px_rgba(0,0,0,0.85)] transition-all duration-75"
+                className="w-full h-auto object-contain max-h-[460px] drop-shadow-[0_30px_60px_rgba(0,0,0,0.9)] scale-110 sm:scale-115 lg:scale-120 origin-center transition-all duration-75"
               />
             </motion.div>
 

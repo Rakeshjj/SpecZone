@@ -5,7 +5,7 @@ import { X, BookOpen, Clock, Calendar, ChevronRight, Share2, Sparkles } from "lu
 interface Article {
   id: number;
   title: string;
-  category: "Ocular Health" | "Style Styling" | "Audiology Tech";
+  category: string;
   readTime: string;
   date: string;
   thumbnail: string;
@@ -57,6 +57,48 @@ const ARTICLES_DATA: Article[] = [
       "Today's hearing aids are designed with near-invisible profiles that nestle comfortably within the ear canal. Behind this miniature form factor is high-fidelity sound processing powered by artificial intelligence and custom neural networks.",
       "These modern chips perform real-time acoustic scene analysis—sampling environmental background noise up to 500 times per second to selectively isolate and amplify human conversation while suppressing screeching winds or traffic rumble.",
       "Furthermore, direct Bluetooth connectivity allows you to stream telephone calls, podcast episodes, and televisions directly into your auditory instruments. Visit our dedicated audiology rooms in Chennai and Coimbatore to receive a professional hearing calibration and discover invisible audio refinement."
+    ]
+  },
+  {
+    id: 4,
+    title: "Premium Frames & Bespoke Luxury Eyewear Craftsmanship",
+    category: "Eyewear Collection",
+    readTime: "5 min read",
+    date: "June 02, 2026",
+    thumbnail: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&q=80&w=600",
+    summary: "Explore the architectural craftsmanship, Japanese titanium hinges, and hand-polished Italian acetates behind our curated luxury designer frames.",
+    content: [
+      "True luxury eyewear transcends seasonal fashion; it represents a synthesis of precision micro-engineering and artisanal heritage. Our premium frames collection brings together the world's most prestigious optical houses, from Maybach and Cartier to Lindberg and Chrome Hearts.",
+      "Each frame begins with carefully sourced raw materials: aerospace-grade beta-titanium from Sabae, Japan, and aged organic cotton-based Mazzucchelli acetate from Varese, Italy. These materials ensure extraordinary lightness, hypoallergenic comfort, and lasting structural integrity.",
+      "Our bespoke fitting process takes precise measurements of pantoscopic tilt, vertex distance, and facial symmetry, ensuring your frames rest with weightless perfection while expressing uncompromising elegance and distinctive style."
+    ]
+  },
+  {
+    id: 5,
+    title: "Advanced Eye Care & Comprehensive Clinical Diagnostics",
+    category: "Vision Care",
+    readTime: "6 min read",
+    date: "May 21, 2026",
+    thumbnail: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=600",
+    summary: "From high-definition digital retinal topography to automated corneal wave analysis, discover how comprehensive diagnostic evaluations preserve lifelong ocular vitality.",
+    content: [
+      "Preventive ocular healthcare begins with clinical diagnostic precision. Our flagship eye care centers are equipped with hospital-grade ophthalmic equipment that goes far beyond standard visual acuity charts.",
+      "Using non-mydriatic ultra-widefield retinal imaging, automated corneal topography, and optical coherence tomography (OCT), our optometrists can detect subtle early indicators of glaucoma, macular degeneration, and diabetic retinopathy long before physical symptoms appear.",
+      "We believe regular ocular wellness checks are an essential pillar of total well-being. Experience a comprehensive 21-point ocular diagnostic examination tailored to your lifestyle and visual demands."
+    ]
+  },
+  {
+    id: 6,
+    title: "Smart Lens Solutions: High-Index, Transitions & Anti-Glare Optics",
+    category: "Lens Technology",
+    readTime: "4 min read",
+    date: "May 10, 2026",
+    thumbnail: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=800",
+    summary: "Discover the newest generation of transition photochromics, ultra-thin high-index materials, and anti-smudge hydrophobic molecular coatings.",
+    content: [
+      "Optical science continues to break boundaries in clarity, thinness, and environmental adaptability. Smart lens solutions integrate multi-spectrum nano-coatings directly into high-refractive-index polymers.",
+      "Whether you require digital free-form progressive lenses with ultra-wide reading corridors, rapid-response photochromic transitions that darken instantly in sunlight, or oleophobic anti-smudge finishes that repel rain and fingerprints, our optical lab crafts lenses custom-cut to the millimeter.",
+      "Experience crystalline edge-to-edge optical resolution, 100% UVA/UVB protection, and zero distortion, no matter how complex or high your optical prescription may be."
     ]
   }
 ];
@@ -121,6 +163,9 @@ export default function BlogSection() {
                     src={article.thumbnail}
                     alt={article.title}
                     referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1577803645773-f96470509666?auto=format&fit=crop&q=80&w=800";
+                    }}
                     className="w-full h-full object-cover opacity-80 group-hover:opacity-95 group-hover:scale-105 transition-all duration-700"
                   />
                   <span className="absolute top-4 left-4 bg-zinc-950/60 backdrop-blur-md text-zinc-100 font-mono text-[9px] tracking-widest uppercase px-3 py-1 rounded-full border border-white/10">
@@ -182,6 +227,9 @@ export default function BlogSection() {
                   src={selectedArticle.thumbnail}
                   alt={selectedArticle.title}
                   referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1577803645773-f96470509666?auto=format&fit=crop&q=80&w=800";
+                  }}
                   className="w-full h-full object-cover opacity-80"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/40 to-transparent pointer-events-none" />

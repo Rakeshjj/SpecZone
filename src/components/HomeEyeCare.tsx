@@ -121,15 +121,15 @@ export const SHOWCASE_DATA: Record<"HEC" | "TYL", ShowcaseItem[]> = {
   ]
 };
 
-// Slide animation variants
+// Slide animation variants (Vertical Y-axis transitions)
 const slideVariants = {
   enter: (direction: number) => ({
-    x: direction > 0 ? "100%" : "-100%",
+    y: direction > 0 ? "100%" : "-100%",
     opacity: 0,
-    scale: 0.97,
+    scale: 0.98,
   }),
   center: {
-    x: "0%",
+    y: "0%",
     opacity: 1,
     scale: 1,
     transition: {
@@ -138,9 +138,9 @@ const slideVariants = {
     },
   },
   exit: (direction: number) => ({
-    x: direction > 0 ? "-100%" : "100%",
+    y: direction > 0 ? "-100%" : "100%",
     opacity: 0,
-    scale: 0.97,
+    scale: 0.98,
     transition: {
       duration: 0.45,
       ease: [0.16, 1, 0.3, 1],

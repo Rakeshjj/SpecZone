@@ -92,7 +92,7 @@ export default function LensLab() {
   return (
     <section
       id="lens-lab"
-      className="relative min-h-screen bg-zinc-950 py-24 px-6 md:px-12 flex flex-col justify-center overflow-hidden border-b border-white/5 text-white"
+      className="relative pt-16 sm:pt-20 pb-20 px-6 md:px-12 flex flex-col justify-center overflow-hidden border-b border-white/5 text-white"
     >
       {/* Background ambient lighting */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(0,102,204,0.04)_0%,transparent_50%)] pointer-events-none" />
