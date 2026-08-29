@@ -28,7 +28,7 @@ const LENS_SCENARIOS: LensScenario[] = [
     badge: "ULTRA SUN SECURITY",
     beforeLabel: "Standard Lens (Blinded by Reflective Glare)",
     afterLabel: "Oculis Polarized (Zero-Reflection Contrast)",
-    bgImage: "../assets/img/lens2.jpg",
+    bgImage: "../assets/img/lenslab1.jpg",
     beforeClasses: "brightness-[1.3] saturate-[0.6] blur-[2px] contrast-[0.9]", // washed out & glaring
     afterClasses: "brightness-100 saturate-100 blur-0 contrast-105"
   },

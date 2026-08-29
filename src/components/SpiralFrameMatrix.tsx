@@ -61,7 +61,7 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     material: "TR90 Ultra-Flex Polymer",
     origin: "Innsbruck, Austria",
     weight: "14.5g",
-    image: "/assets/img/chrono.jpg"
+    image: "/assets/img/lens4.jpg"
 
   },
 
@@ -89,7 +89,7 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     material: "24k Plated Beta Titanium",
     origin: "Paris Atelier",
     weight: "13.8g",
-    image: "/assets/img/atelier.jpg"
+    image: "/assets/img/lens1.jpg"
 
   },
   {
@@ -102,7 +102,7 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     material: "Memory Flex Nitinol",
     origin: "Zurich, Switzerland",
     weight: "8.5g",
-    image: "/assets/img/Rayban.png"
+    image: "/assets/img/lens5.jpg"
 
   },
 
@@ -130,7 +130,7 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     material: "3K Carbon Fiber Weave",
     origin: "Stuttgart, Germany",
     weight: "12.6g",
-    image: "/assets/img/Stealth.jpg"
+    image: "/assets/img/lens3.jpg"
 
   },
   {
@@ -143,7 +143,7 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     material: "Cellulose Bio-Acetate",
     origin: "Kyoto, Japan",
     weight: "20.1g",
-    image: "/assets/img/Tortoise.jpg"
+    image: "/assets/img/lens11.jpg"
 
   },
 
@@ -170,7 +170,7 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     material: "Unobtainium & O-Matter",
     origin: "Foothill Ranch, USA",
     weight: "24.0g",
-    image: "/assets/img/Oakley.jpg"
+    image: "/assets/img/lens12.jpg"
   },
   {
     id: "sp-12",
@@ -194,7 +194,7 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     material: "Optyl Ultra-Light Polymer",
     origin: "Padova, Italy",
     weight: "17.1g",
-    image: "/assets/img/carrera.jpg"
+    image: "/assets/img/lens2.jpg"
   }
 ];
 
@@ -376,18 +376,18 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
               scale: viewAllScale,
               pointerEvents: viewAllPointerEvents
             }}
-            className="absolute z-40 flex flex-col items-center justify-center -translate-y-8 sm:-translate-y-12"
+            className="absolute z-40 flex flex-col items-center justify-center mt-70 -translate-y-2 sm:-translate-y-2"
           >
             <div className="relative group">
               <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-brand-blue via-cyan-400 to-indigo-600 opacity-80 blur-xl group-hover:opacity-100 transition-opacity animate-pulse" />
               
               <button
                 onClick={() => setViewAllModal(true)}
-                className="relative px-8 py-5 rounded-full bg-white text-zinc-950 hover:bg-brand-blue hover:text-white font-mono text-sm sm:text-base font-black uppercase tracking-widest shadow-2xl transition-all duration-300 flex items-center gap-3 cursor-pointer hover:scale-105 active:scale-95"
+                className="relative px-6 py-3 rounded-full bg-white text-zinc-950 hover:bg-brand-blue hover:text-white font-mono text-sm sm:text-base font-black uppercase tracking-widest shadow-2xl transition-all duration-300 flex items-center gap-3 cursor-pointer hover:scale-105 active:scale-95"
               >
-                <Sparkles size={20} className="text-brand-blue group-hover:text-white" />
-                <span>VIEW ALL GLASSES & PRICES</span>
-                <ArrowRight size={20} />
+                <Sparkles size={15} className="text-brand-blue group-hover:text-white" />
+                <span>VIEW ALL GLASSES</span>
+                <ArrowRight size={15} />
               </button>
             </div>
           </motion.div>
