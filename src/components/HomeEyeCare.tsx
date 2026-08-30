@@ -336,15 +336,12 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                 <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight mb-1 leading-snug">
                   {activeConfig.heading}
                 </h1>
-                <p className="text-slate-400 text-xs sm:text-[13px] leading-relaxed max-w-sm mx-auto">
-                  {activeConfig.description}
-                </p>
               </motion.div>
 
               {/* Single Unified Form with Compact Dynamic Fields */}
-              <form onSubmit={handleSubmit} className="space-y-2">
+              <form onSubmit={handleSubmit} className="space-y-3.5">
                 {/* 1. FULL NAME */}
-                <div className="space-y-0.5">
+                <div className="space-y-1">
                   <label 
                     htmlFor="fullName" 
                     className="block text-[10px] font-bold text-slate-300 uppercase tracking-wider"
@@ -360,7 +357,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                       value={formData.fullName}
                       onChange={handleInputChange}
                       placeholder="e.g. Rahul Sharma"
-                      className="w-full bg-slate-950/90 border border-slate-700/80 text-slate-100 text-xs rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-600 font-medium"
+                      className="w-full bg-slate-950/90 border border-slate-700/80 text-slate-100 text-xs rounded-lg px-3 py-2 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-600 font-medium"
                     />
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-500">
                       <User className="w-3.5 h-3.5" />
@@ -369,7 +366,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                 </div>
 
                 {/* 2. EMAIL ADDRESS */}
-                <div className="space-y-0.5">
+                <div className="space-y-1">
                   <label 
                     htmlFor="email" 
                     className="block text-[10px] font-bold text-slate-300 uppercase tracking-wider"
@@ -385,7 +382,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                       value={formData.email}
                       onChange={handleInputChange}
                       placeholder="e.g. rahul@example.com"
-                      className="w-full bg-slate-950/90 border border-slate-700/80 text-slate-100 text-xs rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-600 font-medium"
+                      className="w-full bg-slate-950/90 border border-slate-700/80 text-slate-100 text-xs rounded-lg px-3 py-2 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-600 font-medium"
                     />
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-500">
                       <Mail className="w-3.5 h-3.5" />
@@ -394,7 +391,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                 </div>
 
                 {/* 3. PHONE NUMBER */}
-                <div className="space-y-0.5">
+                <div className="space-y-1">
                   <label 
                     htmlFor="phone" 
                     className="block text-[10px] font-bold text-slate-300 uppercase tracking-wider"
@@ -410,7 +407,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                       value={formData.phone}
                       onChange={handleInputChange}
                       placeholder="e.g. +91 98404 00561"
-                      className="w-full bg-slate-950/90 border border-slate-700/80 text-slate-100 text-xs rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-600 font-medium"
+                      className="w-full bg-slate-950/90 border border-slate-700/80 text-slate-100 text-xs rounded-lg px-3 py-2 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-600 font-medium"
                     />
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-500">
                       <Phone className="w-3.5 h-3.5" />
@@ -419,7 +416,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                 </div>
 
                 {/* 4. DOORSTEP ADDRESS */}
-                <div className="space-y-0.5">
+                <div className="space-y-1">
                   <label 
                     htmlFor="address" 
                     className="block text-[10px] font-bold text-slate-300 uppercase tracking-wider"
@@ -427,24 +424,24 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                     DOORSTEP ADDRESS *
                   </label>
                   <div className="relative">
-                    <textarea
+                    <input
                       id="address"
                       name="address"
+                      type="text"
                       required
-                      rows={2}
                       value={formData.address}
                       onChange={handleInputChange}
-                      placeholder="e.g. Flat 302, Green Avenue, Avadi, Chennai - 600054"
-                      className="w-full bg-slate-950/90 border border-slate-700/80 text-slate-100 text-xs rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-600 font-medium resize-none"
+                      placeholder="e.g. Flat 302, Green Avenue, Avadi, Chennai"
+                      className="w-full bg-slate-950/90 border border-slate-700/80 text-slate-100 text-xs rounded-lg px-3 py-2 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-600 font-medium"
                     />
-                    <div className="absolute top-2 right-2.5 pointer-events-none text-slate-500">
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-500">
                       <MapPin className="w-3.5 h-3.5" />
                     </div>
                   </div>
                 </div>
 
                 {/* 5. SELECT SERVICE DROPDOWN */}
-                <div className="space-y-0.5">
+                <div className="space-y-1">
                   <label 
                     htmlFor="service-select" 
                     className="block text-[10px] font-bold text-slate-300 uppercase tracking-wider"
@@ -456,7 +453,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                       id="service-select"
                       value={selectedService}
                       onChange={handleServiceChange}
-                      className="w-full appearance-none bg-slate-950/90 border border-slate-700/80 text-slate-100 text-xs rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all cursor-pointer font-medium"
+                      className="w-full appearance-none bg-slate-950/90 border border-slate-700/80 text-slate-100 text-xs rounded-lg px-3 py-2 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all cursor-pointer font-medium"
                     >
                       <option value="Home Eye Care Check">Home Eye Care Check</option>
                       <option value="Transform Look">Transform Look</option>
@@ -471,7 +468,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                 <button
                   type="submit"
                   id="booking-submit-btn"
-                  className="w-full mt-1 bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 hover:from-indigo-600 hover:to-violet-700 text-white font-semibold py-2 px-3.5 rounded-lg shadow-md shadow-indigo-600/30 transition-all duration-200 flex items-center justify-center gap-1.5 group active:scale-[0.99] cursor-pointer text-xs"
+                  className="w-full mt-1.5 bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 hover:from-indigo-600 hover:to-violet-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow-md shadow-indigo-600/30 transition-all duration-200 flex items-center justify-center gap-1.5 group active:scale-[0.99] cursor-pointer text-xs sm:text-sm"
                 >
                   <span>{activeConfig.buttonText}</span>
                   <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
