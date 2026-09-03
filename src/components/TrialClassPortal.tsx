@@ -121,6 +121,94 @@ const STATS = [
   { value: "19,870+", label: "Happy Customers Served Across India" }
 ];
 
+const SHOWCASE_SLIDES = [
+  {
+    left: {
+      src: "/assets/img/Ray-Ban.jpg",
+      alt: "Premium Designer Spectacles",
+      fallback: "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=500&q=80"
+    },
+    center: {
+      src: "/assets/img/bluelens.jpg",
+      alt: "Blue Cut Anti-Glare Precision Lens",
+      fallback: "/assets/img/lens.jpg"
+    },
+    right: {
+      src: "/assets/img/Oakley.jpg",
+      alt: "Aero Titanium Optical Specs",
+      fallback: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=500&q=80"
+    }
+  },
+  {
+    left: {
+      src: "/assets/img/Stealth.jpg",
+      alt: "Stealth Aviator Luxury Specs",
+      fallback: "https://images.unsplash.com/photo-1508296695146-257a814070b4?auto=format&fit=crop&w=500&q=80"
+    },
+    center: {
+      src: "/assets/img/aero-titanium.jpg",
+      alt: "Ultralight Aero-Titanium Frame",
+      fallback: "/assets/img/lens1.jpg"
+    },
+    right: {
+      src: "/assets/img/carrera.jpg",
+      alt: "Carrera Sartorial Eyewear",
+      fallback: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=500&q=80"
+    }
+  },
+  {
+    left: {
+      src: "/assets/img/Tortoise.jpg",
+      alt: "Vintage Tortoise Classic Eyewear",
+      fallback: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=500&q=80"
+    },
+    center: {
+      src: "/assets/img/anti-reflections.jpg",
+      alt: "Anti-Reflection High Index Lens",
+      fallback: "/assets/img/lens3.jpg"
+    },
+    right: {
+      src: "/assets/img/vogue.jpeg",
+      alt: "Vogue Contemporary Eyewear",
+      fallback: "https://images.unsplash.com/photo-1509695503492-413bc5d0fee6?auto=format&fit=crop&w=500&q=80"
+    }
+  },
+  {
+    left: {
+      src: "/assets/img/Emporio armani.jpg",
+      alt: "Emporio Armani Designer Frames",
+      fallback: "https://images.unsplash.com/photo-1577803645773-f96470509666?auto=format&fit=crop&w=500&q=80"
+    },
+    center: {
+      src: "/assets/img/chrono.jpg",
+      alt: "Chrono Precision Optometry Focus",
+      fallback: "/assets/img/lens4.jpg"
+    },
+    right: {
+      src: "/assets/img/tommy hilfiger.jpeg",
+      alt: "Tommy Hilfiger Classic Acetate",
+      fallback: "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?auto=format&fit=crop&w=500&q=80"
+    }
+  },
+  {
+    left: {
+      src: "/assets/img/Rayban meta.png",
+      alt: "Ray-Ban Meta Smart Glasses",
+      fallback: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=500&q=80"
+    },
+    center: {
+      src: "/assets/img/hyper.jpg",
+      alt: "Hyper HD Digital Progressive Lens",
+      fallback: "/assets/img/lens2.jpg"
+    },
+    right: {
+      src: "/assets/img/oakley meta.jpeg",
+      alt: "Oakley Performance Meta Eyewear",
+      fallback: "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=500&q=80"
+    }
+  }
+];
+
 interface TestimonialItem {
   id: number | string;
   type: "image" | "video";
@@ -240,6 +328,30 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
   const [testimonialSlideIndex, setTestimonialSlideIndex] = useState(totalTestimonials); // Starts at middle cloned set (index 6)
   const [activeTestimonialDot, setActiveTestimonialDot] = useState(0);
   const [isTestimonialTransitioning, setIsTestimonialTransitioning] = useState(true);
+
+  // Optical Showcase Triptych Carousel State
+  const [showcaseSlideIndex, setShowcaseSlideIndex] = useState(0);
+  const [showcaseDirection, setShowcaseDirection] = useState(1);
+  const [isShowcasePaused, setIsShowcasePaused] = useState(false);
+
+  useEffect(() => {
+    if (isShowcasePaused) return;
+    const timer = setInterval(() => {
+      setShowcaseDirection(1);
+      setShowcaseSlideIndex((prev) => (prev + 1) % SHOWCASE_SLIDES.length);
+    }, 3800);
+    return () => clearInterval(timer);
+  }, [isShowcasePaused]);
+
+  const handlePrevShowcase = () => {
+    setShowcaseDirection(-1);
+    setShowcaseSlideIndex((prev) => (prev - 1 + SHOWCASE_SLIDES.length) % SHOWCASE_SLIDES.length);
+  };
+
+  const handleNextShowcase = () => {
+    setShowcaseDirection(1);
+    setShowcaseSlideIndex((prev) => (prev + 1) % SHOWCASE_SLIDES.length);
+  };
 
   const handleNextTestimonial = () => {
     setIsTestimonialTransitioning(true);
@@ -745,54 +857,119 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
                 Hospital-grade 14-step eye evaluation, precise pupil distance measurement & bespoke frame styling
               </p>
 
-              {/* 3 Specs & Lens Group Composition with bottom fade */}
-              <div className="relative max-w-[340px] sm:max-w-[420px] mx-auto mt-6">
-                <div className="relative flex items-end justify-center">
-                  {/* Left Specs / Optical Frame */}
-                  <div className="w-[120px] sm:w-[145px] -mr-5 z-10 transition-transform duration-300 hover:scale-105 hover:z-30">
-                    <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-md border border-purple-200/80 bg-zinc-100">
-                      <img
-                        src="/assets/img/Ray-Ban.jpg"
-                        alt="Premium Designer Spectacles"
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.src = "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=500&q=80";
-                        }}
-                      />
-                    </div>
-                  </div>
+              {/* 3 Specs & Lens Group Composition with bottom fade - Interactive Carousel */}
+              <div 
+                className="relative w-full max-w-[480px] sm:max-w-[560px] mx-auto mt-6 flex items-center justify-between gap-2 sm:gap-4 select-none"
+                onMouseEnter={() => setIsShowcasePaused(true)}
+                onMouseLeave={() => setIsShowcasePaused(false)}
+              >
+                {/* Carousel Left Navigation Arrow (At outer left end) */}
+                <button
+                  type="button"
+                  onClick={handlePrevShowcase}
+                  aria-label="Previous optical frames"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-zinc-200 bg-white text-zinc-700 hover:text-zinc-950 flex items-center justify-center hover:bg-zinc-50 shadow-xs transition-all hover:scale-105 active:scale-95 cursor-pointer shrink-0 z-20"
+                >
+                  <ChevronLeft size={18} />
+                </button>
 
-                  {/* Center Optical Precision Lens / Specs (Standing in front) */}
-                  <div className="w-[140px] sm:w-[170px] z-20 transition-transform duration-300 hover:scale-105">
-                    <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-xl border-2 border-purple-300 bg-white">
-                      <img
-                        src="/assets/img/bluelens.jpg"
-                        alt="Blue Cut Anti-Glare Precision Lens"
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.src = "/assets/img/lens.jpg";
-                        }}
-                      />
-                    </div>
-                  </div>
+                {/* Center Triptych Frame Showcase */}
+                <div className="relative flex-1 max-w-[340px] sm:max-w-[420px] mx-auto">
+                  <AnimatePresence mode="wait" custom={showcaseDirection}>
+                    <motion.div
+                      key={showcaseSlideIndex}
+                      custom={showcaseDirection}
+                      initial={{ opacity: 0, x: showcaseDirection > 0 ? 25 : -25 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: showcaseDirection > 0 ? -25 : 25 }}
+                      transition={{ duration: 0.35, ease: "easeOut" }}
+                      className="relative flex items-end justify-center"
+                    >
+                      {/* Left Specs / Optical Frame */}
+                      <div 
+                        onClick={handlePrevShowcase}
+                        title="Click to view previous pair"
+                        className="w-[120px] sm:w-[145px] -mr-5 z-10 transition-transform duration-300 hover:scale-105 hover:z-30 cursor-pointer"
+                      >
+                        <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-md border border-purple-200/80 bg-zinc-100">
+                          <img
+                            src={SHOWCASE_SLIDES[showcaseSlideIndex].left.src}
+                            alt={SHOWCASE_SLIDES[showcaseSlideIndex].left.alt}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = SHOWCASE_SLIDES[showcaseSlideIndex].left.fallback;
+                            }}
+                          />
+                        </div>
+                      </div>
 
-                  {/* Right Luxury Frame / Specs */}
-                  <div className="w-[120px] sm:w-[145px] -ml-5 z-10 transition-transform duration-300 hover:scale-105 hover:z-30">
-                    <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-md border border-purple-200/80 bg-zinc-100">
-                      <img
-                        src="/assets/img/Oakley.jpg"
-                        alt="Aero Titanium Optical Specs"
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.src = "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=500&q=80";
+                      {/* Center Optical Precision Lens / Specs (Standing in front) */}
+                      <div className="w-[140px] sm:w-[170px] z-20 transition-transform duration-300 hover:scale-105">
+                        <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-xl border-2 border-purple-300 bg-white">
+                          <img
+                            src={SHOWCASE_SLIDES[showcaseSlideIndex].center.src}
+                            alt={SHOWCASE_SLIDES[showcaseSlideIndex].center.alt}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = SHOWCASE_SLIDES[showcaseSlideIndex].center.fallback;
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Right Luxury Frame / Specs */}
+                      <div 
+                        onClick={handleNextShowcase}
+                        title="Click to view next pair"
+                        className="w-[120px] sm:w-[145px] -ml-5 z-10 transition-transform duration-300 hover:scale-105 hover:z-30 cursor-pointer"
+                      >
+                        <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-md border border-purple-200/80 bg-zinc-100">
+                          <img
+                            src={SHOWCASE_SLIDES[showcaseSlideIndex].right.src}
+                            alt={SHOWCASE_SLIDES[showcaseSlideIndex].right.alt}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = SHOWCASE_SLIDES[showcaseSlideIndex].right.fallback;
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
+
+                  {/* Bottom White Gradient Fade */}
+                  <div className="absolute bottom-4 left-0 right-0 h-10 bg-gradient-to-t from-white via-white/70 to-transparent pointer-events-none z-10" />
+
+                  {/* Subtle Carousel Dots */}
+                  <div className="flex items-center justify-center gap-1.5 mt-2.5 relative z-20">
+                    {SHOWCASE_SLIDES.map((_, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => {
+                          setShowcaseDirection(idx > showcaseSlideIndex ? 1 : -1);
+                          setShowcaseSlideIndex(idx);
                         }}
+                        aria-label={`View frame group ${idx + 1}`}
+                        className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                          idx === showcaseSlideIndex
+                            ? "w-5 bg-[#ff1375]"
+                            : "w-1.5 bg-purple-200 hover:bg-purple-300"
+                        }`}
                       />
-                    </div>
+                    ))}
                   </div>
                 </div>
 
-                {/* Bottom White Gradient Fade */}
-                <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-white via-white/70 to-transparent pointer-events-none" />
+                {/* Carousel Right Navigation Arrow (At outer right end) */}
+                <button
+                  type="button"
+                  onClick={handleNextShowcase}
+                  aria-label="Next optical frames"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-zinc-200 bg-white text-zinc-700 hover:text-zinc-950 flex items-center justify-center hover:bg-zinc-50 shadow-xs transition-all hover:scale-105 active:scale-95 cursor-pointer shrink-0 z-20"
+                >
+                  <ChevronRight size={18} />
+                </button>
               </div>
             </section>
 
@@ -802,17 +979,23 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
             <section id="section-statistics" className="w-full">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
               {STATS.map((st) => (
-                <div
+                <motion.div
                   key={st.value}
-                  className="bg-[#F8F6FD] border border-[#EDE8F8] rounded-lg p-3 sm:p-3.5 flex flex-col items-center justify-center text-center h-[76px] sm:h-[82px] shadow-2xs hover:shadow-xs transition-shadow"
+                  whileHover={{
+                    scale: 1.06,
+                    y: -4,
+                    transition: { type: "spring", stiffness: 450, damping: 18 }
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-[#F8F6FD] border border-[#EDE8F8] hover:border-[#FF1375]/40 rounded-xl p-3 sm:p-3.5 flex flex-col items-center justify-center text-center h-[76px] sm:h-[82px] shadow-2xs hover:shadow-xl hover:shadow-[#FF1375]/15 transition-colors cursor-pointer select-none group"
                 >
-                  <span className="text-[20px] sm:text-[22px] font-bold text-[#FF1375] leading-none mb-1">
+                  <span className="text-[20px] sm:text-[22px] font-bold text-[#FF1375] leading-none mb-1 transition-transform duration-200 group-hover:scale-110 origin-center inline-block">
                     {st.value}
                   </span>
                   <span className="text-[11px] sm:text-[12px] font-medium text-zinc-800 leading-tight">
                     {st.label}
                   </span>
-                </div>
+                </motion.div>
               ))}
             </div>
           </section>
