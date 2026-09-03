@@ -341,7 +341,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
               {/* Single Unified Form with Compact Dynamic Fields */}
               <form onSubmit={handleSubmit} className="space-y-3.5">
                 {/* 1. FULL NAME */}
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <label 
                     htmlFor="fullName" 
                     className="block text-[10px] font-bold text-slate-300 uppercase tracking-wider"
@@ -366,7 +366,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                 </div>
 
                 {/* 2. EMAIL ADDRESS */}
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <label 
                     htmlFor="email" 
                     className="block text-[10px] font-bold text-slate-300 uppercase tracking-wider"
@@ -391,7 +391,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                 </div>
 
                 {/* 3. PHONE NUMBER */}
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <label 
                     htmlFor="phone" 
                     className="block text-[10px] font-bold text-slate-300 uppercase tracking-wider"
@@ -416,7 +416,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                 </div>
 
                 {/* 4. DOORSTEP ADDRESS */}
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <label 
                     htmlFor="address" 
                     className="block text-[10px] font-bold text-slate-300 uppercase tracking-wider"
@@ -441,7 +441,7 @@ export default function HomeEyeCare({ onClose, initialType = "Home Eye Care Chec
                 </div>
 
                 {/* 5. SELECT SERVICE DROPDOWN */}
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <label 
                     htmlFor="service-select" 
                     className="block text-[10px] font-bold text-slate-300 uppercase tracking-wider"

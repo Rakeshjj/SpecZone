@@ -356,7 +356,7 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
         {/* ========================================================================= */}
         <aside
           id="left-form-sidebar"
-          className="sidebar-panel w-full lg:w-[28%] lg:max-w-[28%] lg:h-full lg:max-h-full overflow-y-auto lg:overflow-hidden overflow-x-hidden shrink-0 min-h-0 sidebar-dark-scroll bg-gradient-to-b from-[#0A0E17] via-[#080B12] to-[#04060A] text-white relative flex flex-col justify-between border-r border-[#1E293B] shadow-2xl z-30 font-sans"
+          className="sidebar-panel w-full lg:w-[28%] lg:max-w-[28%] lg:h-full lg:max-h-full overflow-y-auto overflow-x-hidden shrink-0 min-h-0 sidebar-dark-scroll bg-gradient-to-b from-[#0A0E17] via-[#080B12] to-[#04060A] text-white relative flex flex-col justify-between border-r border-[#1E293B] shadow-2xl z-30 font-sans"
         >
           {/* Technical Optics Glow & Precision Matrix Background */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -377,11 +377,11 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
             </div>
           </div>
 
-          <div className="relative px-3.5 sm:px-5 lg:px-4 py-2 sm:py-2.5 flex flex-col flex-1 justify-between z-10 h-full overflow-hidden">
+          <div className="relative px-3.5 sm:px-5 lg:px-4 py-2.5 sm:py-3 flex flex-col flex-1 justify-between z-10 min-h-full">
             {/* Top Bar with Optional Back Link */}
             <div>
               {onBackToMain && (
-                <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center justify-start mb-1.5">
                   <button
                     type="button"
                     onClick={onBackToMain}
@@ -390,12 +390,11 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
                     <ChevronLeft size={14} />
                     <span>Back to Site</span>
                   </button>
-                  <span className="text-[10px] text-blue-400 font-medium tracking-wider uppercase">Precision Eyecare Portal</span>
                 </div>
               )}
 
               {/* Booking Headline */}
-              <div className="text-center mb-1.5 sm:mb-2">
+              <div className="text-center mb-2 sm:mb-2.5">
                 <h1 className="text-[20px] sm:text-[22px] lg:text-[24px] font-bold text-white leading-tight tracking-tight">
                   Book Home Eyecare
                 </h1>
@@ -404,175 +403,178 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
 
             {/* Form */}
             {!isSubmitted ? (
-              <form onSubmit={handleFormSubmit} className="space-y-1.5 lg:space-y-2 flex-1 flex flex-col justify-between mt-1">
-                {/* Full Name */}
-                <div>
-                  <label className="block text-[11px] sm:text-xs font-semibold text-slate-200 mb-0.5 text-left">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={studentName}
-                    onChange={(e) => setStudentName(e.target.value)}
-                    placeholder="Enter your full name"
-                    className="w-full h-8.5 sm:h-9 px-3 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-white placeholder-slate-500 text-xs focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all"
-                  />
-                </div>
+              <form onSubmit={handleFormSubmit} className="flex-1 flex flex-col justify-between pt-1">
+                {/* 5 Input Fields with Strict Equal Vertical Spacing */}
+                <div className="space-y-3 sm:space-y-3.5">
+                  {/* Full Name */}
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-200 mb-2 text-left">
+                      Full Name
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={studentName}
+                      onChange={(e) => setStudentName(e.target.value)}
+                      placeholder="Enter your full name"
+                      className="w-full h-8.5 sm:h-9 px-3 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-white placeholder-slate-500 text-xs focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all"
+                    />
+                  </div>
 
-                {/* Phone Number */}
-                <div>
-                  <label className="block text-[11px] sm:text-xs font-semibold text-slate-200 mb-0.5 text-left">
-                    Phone Number
-                  </label>
-                  <div className="flex gap-1.5">
-                    <div className="relative w-20 shrink-0">
+                  {/* Phone Number */}
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-200 mb-2 text-left">
+                      Phone Number
+                    </label>
+                    <div className="flex gap-1.5">
+                      <div className="relative w-20 shrink-0">
+                        <select
+                          value={countryCode}
+                          onChange={(e) => setCountryCode(e.target.value)}
+                          className="w-full h-8.5 sm:h-9 px-2 pr-6 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-slate-200 text-xs font-medium focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all appearance-none cursor-pointer"
+                        >
+                          {COUNTRY_CODES.map((c) => (
+                            <option key={c.code} value={c.code} className="bg-[#0C111C] text-white">
+                              {c.code}
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDown
+                          size={12}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                        />
+                      </div>
+                      <input
+                        type="tel"
+                        required
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        placeholder="Enter WhatsApp number"
+                        className="flex-1 h-8.5 sm:h-9 px-3 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-white placeholder-slate-500 text-xs focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Email (optional) */}
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-200 mb-2 text-left">
+                      <span>Email</span>{" "}
+                      <span className="font-normal text-slate-400 text-[11px] ml-0.5">(optional)</span>
+                    </label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email"
+                      className="w-full h-8.5 sm:h-9 px-3 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-white placeholder-slate-500 text-xs focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all"
+                    />
+                  </div>
+
+                  {/* Select Age Group */}
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-200 mb-2 text-left">
+                      Select Age Group
+                    </label>
+                    <div className="flex items-center justify-between gap-1 w-full">
+                      {AGE_GROUPS.map((age) => (
+                        <button
+                          key={age}
+                          type="button"
+                          onClick={() => setSelectedAge(age)}
+                          className={`h-7 sm:h-7.5 flex-1 rounded-md text-[11px] font-semibold transition-all flex items-center justify-center cursor-pointer border ${
+                            selectedAge === age
+                              ? "bg-gradient-to-r from-[#0052D4] to-[#0099FF] text-white border-cyan-400/80 shadow-md shadow-[#0052D4]/35 font-bold"
+                              : "bg-[#0C111C]/90 text-slate-300 border-[#1E293B] hover:border-slate-600 hover:text-white"
+                          }`}
+                        >
+                          {age}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Select Specs / Eyecare Service */}
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-200 mb-2 text-left">
+                      Select Specs / Eyecare Service
+                    </label>
+                    <div className="relative">
                       <select
-                        value={countryCode}
-                        onChange={(e) => setCountryCode(e.target.value)}
-                        className="w-full h-8.5 sm:h-9 px-2 pr-6 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-slate-200 text-xs font-medium focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all appearance-none cursor-pointer"
+                        value={selectedCourseId}
+                        onChange={(e) => {
+                          setSelectedCourseId(e.target.value);
+                          setActiveTabId(e.target.value);
+                        }}
+                        className="w-full h-8.5 sm:h-9 px-3 pr-7 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-slate-200 text-xs font-medium focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all appearance-none cursor-pointer truncate"
                       >
-                        {COUNTRY_CODES.map((c) => (
-                          <option key={c.code} value={c.code} className="bg-[#0C111C] text-white">
-                            {c.code}
+                        {CATEGORIES.map((cat) => (
+                          <option key={cat.id} value={cat.id} className="bg-[#0C111C] text-white">
+                            {cat.name}
                           </option>
                         ))}
                       </select>
                       <ChevronDown
-                        size={12}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                        size={13}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
                       />
                     </div>
-                    <input
-                      type="tel"
-                      required
-                      value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                      placeholder="Enter WhatsApp number"
-                      className="flex-1 h-8.5 sm:h-9 px-3 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-white placeholder-slate-500 text-xs focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all"
-                    />
                   </div>
                 </div>
 
-                {/* Email (optional) */}
-                <div>
-                  <label className="block text-[11px] sm:text-xs mb-0.5 text-left">
-                    <span className="font-semibold text-slate-200">Email</span>{" "}
-                    <span className="font-normal text-slate-400">(optional)</span>
-                  </label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    className="w-full h-8.5 sm:h-9 px-3 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-white placeholder-slate-500 text-xs focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all"
-                  />
-                </div>
+                {/* Submit CTA Button & Trust Badge */}
+                <div className="pt-2.5 sm:pt-3 space-y-2">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full h-9.5 sm:h-10 rounded-full bg-gradient-to-r from-[#0052D4] via-[#2A6DF5] to-[#00C2FF] hover:from-[#0041B8] hover:via-[#1D5AD8] hover:to-[#00A8E0] text-white font-bold text-xs sm:text-sm tracking-wide transition-all flex items-center justify-center cursor-pointer shadow-lg shadow-[#0052D4]/40 hover:shadow-cyan-500/25 active:scale-[0.99] border border-cyan-300/40"
+                  >
+                    {isSubmitting ? (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <span className="flex items-center gap-1.5 font-bold drop-shadow-sm">
+                        <span>Book Home Eyecare</span>
+                        <span className="text-xs">→</span>
+                      </span>
+                    )}
+                  </button>
 
-                {/* Select Age Group */}
-                <div>
-                  <label className="block text-[11px] sm:text-xs font-semibold text-slate-200 mb-0.5 text-left">
-                    Select Age Group
-                  </label>
-                  <div className="flex items-center justify-between gap-1 w-full">
-                    {AGE_GROUPS.map((age) => (
-                      <button
-                        key={age}
-                        type="button"
-                        onClick={() => setSelectedAge(age)}
-                        className={`h-7 sm:h-7.5 flex-1 rounded-md text-[11px] font-semibold transition-all flex items-center justify-center cursor-pointer border ${
-                          selectedAge === age
-                            ? "bg-gradient-to-r from-[#0052D4] to-[#0099FF] text-white border-cyan-400/80 shadow-md shadow-[#0052D4]/35 font-bold"
-                            : "bg-[#0C111C]/90 text-slate-300 border-[#1E293B] hover:border-slate-600 hover:text-white"
-                        }`}
-                      >
-                        {age}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                  {/* Trust Ratings & Frames Served - Combined Single Line Badge */}
+                  <div className="text-center">
+                    <div className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-[#0B1324] border border-blue-500/30 text-white text-[10px] sm:text-[10.5px] font-medium tracking-tight shadow-xs whitespace-nowrap">
+                      {/* Google Rating */}
+                      <div className="inline-flex items-center gap-1 shrink-0">
+                        <svg className="w-3 h-3" viewBox="0 0 24 24">
+                          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                        </svg>
+                        <span className="font-bold text-white">4.8</span>
+                        <span className="text-[#FBBC05] text-[9.5px] leading-none">★</span>
+                      </div>
 
-                {/* Select Specs / Eyecare Service */}
-                <div>
-                  <label className="block text-[11px] sm:text-xs font-semibold text-slate-200 mb-0.5 text-left">
-                    Select Specs / Eyecare Service
-                  </label>
-                  <div className="relative">
-                    <select
-                      value={selectedCourseId}
-                      onChange={(e) => {
-                        setSelectedCourseId(e.target.value);
-                        setActiveTabId(e.target.value);
-                      }}
-                      className="w-full h-8.5 sm:h-9 px-3 pr-7 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-slate-200 text-xs font-medium focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all appearance-none cursor-pointer truncate"
-                    >
-                      {CATEGORIES.map((cat) => (
-                        <option key={cat.id} value={cat.id} className="bg-[#0C111C] text-white">
-                          {cat.name}
-                        </option>
-                      ))}
-                    </select>
-                    <ChevronDown
-                      size={13}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
-                    />
-                  </div>
-                </div>
+                      <span className="text-slate-600 font-light">•</span>
 
-                {/* Submit CTA Button */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full h-9.5 sm:h-10 rounded-full bg-gradient-to-r from-[#0052D4] via-[#2A6DF5] to-[#00C2FF] hover:from-[#0041B8] hover:via-[#1D5AD8] hover:to-[#00A8E0] text-white font-bold text-xs sm:text-sm tracking-wide transition-all flex items-center justify-center cursor-pointer shadow-lg shadow-[#0052D4]/40 hover:shadow-cyan-500/25 active:scale-[0.99] border border-cyan-300/40 mt-1"
-                >
-                  {isSubmitting ? (
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    <span className="flex items-center gap-1.5 font-bold drop-shadow-sm">
-                      <span>Book Home Eyecare</span>
-                      <span className="text-xs">→</span>
-                    </span>
-                  )}
-                </button>
+                      {/* Trustpilot Rating */}
+                      <div className="inline-flex items-center gap-1 shrink-0">
+                        <svg className="w-3 h-3 fill-[#00E676]" viewBox="0 0 24 24">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                        <span className="text-slate-300 hidden xs:inline text-[9.5px]">Trustpilot:</span>
+                        <span className="font-bold text-white">4.7</span>
+                      </div>
 
-                {/* Trust Ratings & Frames Served - Combined Single Line Badge */}
-                <div className="text-center pt-1">
-                  <div className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-[#0B1324] border border-blue-500/30 text-white text-[10px] sm:text-[10.5px] font-medium tracking-tight shadow-xs whitespace-nowrap">
-                    {/* Google Rating */}
-                    <div className="inline-flex items-center gap-1 shrink-0">
-                      <svg className="w-3 h-3" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                      </svg>
-                      <span className="font-bold text-white">4.8</span>
-                      <span className="text-[#FBBC05] text-[9.5px] leading-none">★</span>
-                    </div>
+                      <span className="text-slate-600 font-light">•</span>
 
-                    <span className="text-slate-600 font-light">•</span>
-
-                    {/* Trustpilot Rating */}
-                    <div className="inline-flex items-center gap-1 shrink-0">
-                      <svg className="w-3 h-3 fill-[#00E676]" viewBox="0 0 24 24">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                      </svg>
-                      <span className="text-slate-300 hidden xs:inline text-[9.5px]">Trustpilot:</span>
-                      <span className="font-bold text-white">4.7</span>
-                    </div>
-
-                    <span className="text-slate-600 font-light">•</span>
-
-                    {/* 19870+ frames and glasses served */}
-                    <div className="inline-flex items-center gap-1 shrink-0">
-                      <Glasses size={12} className="text-[#0066FF] shrink-0" />
-                      <span className="text-emerald-400 font-bold">19870+</span>
-                      <span className="text-slate-300">frames served</span>
+                      {/* 19870+ frames and glasses served */}
+                      <div className="inline-flex items-center gap-1 shrink-0">
+                        <Glasses size={12} className="text-[#0066FF] shrink-0" />
+                        <span className="text-emerald-400 font-bold">19870+</span>
+                        <span className="text-slate-300">frames served</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-
-
               </form>
             ) : (
               <motion.div
