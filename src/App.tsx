@@ -16,8 +16,20 @@ import SpiralFrameMatrix from "./components/SpiralFrameMatrix";
 import TrialClassPortal from "./components/TrialClassPortal";
 
 export default function App() {
-  const [view, setView] = useState<"home" | "booking" | "trial-form">("trial-form");
+  const [view, setView] = useState<"home" | "booking" | "trial-form">("home");
   const [selectedServiceType, setSelectedServiceType] = useState<string>("Home Eye Care Check");
+
+  // Prevent background scrolling when full-screen trial-form portal is open
+  useEffect(() => {
+    if (view === "trial-form") {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [view]);
 
   // Setup elegant scroll progress bar across the screen top
   const { scrollYProgress } = useScroll();

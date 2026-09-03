@@ -68,14 +68,6 @@ html {
 
 /* Dual Panel Application Layout */
 @media (min-width: 1024px) {
-  html,
-  body,
-  #root {
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
-  }
-
   .app-dual-layout {
     display: flex;
     width: 100%;
