@@ -43,7 +43,7 @@ export default function App() {
     if (service && typeof service === "string") {
       setSelectedServiceType(service);
     }
-    setView("booking");
+    setView("trial-form");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -67,7 +67,7 @@ export default function App() {
     } else {
       setSelectedServiceType("Home Eye Care Check");
     }
-    setView("booking");
+    setView("trial-form");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -119,7 +119,6 @@ export default function App() {
       {/* Primary Sticky Header navigation */}
       <Navbar
         onBookClick={() => handleOpenBooking("Home Eye Care Check")}
-        onTrialClassClick={handleOpenTrialForm}
         onNavigate={scrollToSection}
       />
 

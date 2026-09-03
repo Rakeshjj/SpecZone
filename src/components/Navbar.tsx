@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Menu, X, Calendar, MapPin, Phone, Glasses, Music } from "lucide-react";
+import { Menu, X, Calendar, MapPin, Phone, Glasses } from "lucide-react";
 import logo from "/assets/logo.png";
 
 interface NavbarProps {
   onBookClick: () => void;
-  onTrialClassClick: () => void;
   onNavigate: (sectionId: string) => void;
 }
 
-export default function Navbar({ onBookClick, onTrialClassClick, onNavigate }: NavbarProps) {
+export default function Navbar({ onBookClick, onNavigate }: NavbarProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -94,42 +93,18 @@ export default function Navbar({ onBookClick, onTrialClassClick, onNavigate }: N
                 {item.name.toUpperCase()}
               </motion.button>
             ))}
-
-            {/* Dedicated Trial Form Menu Button */}
-            <motion.button
-              id="nav-item-trial-class-link"
-              onClick={onTrialClassClick}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ff1375]/15 border border-[#ff1375]/40 text-[#ff1375] hover:bg-[#ff1375] hover:text-white font-display text-xs tracking-wider font-bold transition-all cursor-pointer"
-            >
-              <Music size={12} />
-              <span>1:1 TRIAL CLASS</span>
-            </motion.button>
           </nav>
 
           {/* Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* Trial Class Form Button */}
-            <motion.button
-              id="desktop-trial-class-btn"
-              onClick={onTrialClassClick}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              className="flex items-center gap-2 bg-gradient-to-r from-[#ff1375] to-[#f43f5e] hover:from-[#e10b65] hover:to-[#e11d48] text-white font-display text-[10px] tracking-widest font-black px-4.5 py-3 rounded-full shadow-lg shadow-[#ff1375]/25 transition-all duration-300 cursor-pointer"
-            >
-              <Music size={13} className="stroke-[2.5]" />
-              TRIAL FORM
-            </motion.button>
-
-            {/* Standard Book Appointment */}
+            {/* Book Appointment CTA */}
             <motion.button
               id="desktop-book-appointment-btn"
               onClick={onBookClick}
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
               transition={{ type: "spring", stiffness: 450, damping: 17 }}
-              className="flex items-center gap-2 bg-[#605CFF] hover:bg-white hover:text-black text-white font-display text-[10px] tracking-widest font-black px-4.5 py-3 rounded-full shadow-lg transition-all duration-300 cursor-pointer"
+              className="flex items-center gap-2 bg-gradient-to-r from-[#0052D4] via-[#2A6DF5] to-[#00C2FF] hover:from-[#0041B8] hover:via-[#1D5AD8] hover:to-[#00A8E0] text-white font-display text-[10px] tracking-widest font-black px-5 py-3 rounded-full shadow-lg shadow-[#0052D4]/40 hover:shadow-cyan-500/30 border border-cyan-300/40 transition-all duration-300 cursor-pointer"
             >
               <Calendar size={13} className="stroke-[2.5]" />
               BOOK APPOINTMENT
@@ -139,21 +114,13 @@ export default function Navbar({ onBookClick, onTrialClassClick, onNavigate }: N
           {/* Mobile Menu Button */}
           <div className="flex items-center md:hidden gap-2.5">
             <button
-              id="mobile-trial-shortcut-btn"
-              onClick={onTrialClassClick}
-              className="flex items-center gap-1 px-3 py-2 bg-[#ff1375] text-white text-[11px] font-bold rounded-full shadow-sm cursor-pointer"
-              aria-label="Trial Form"
-            >
-              <Music size={13} />
-              <span>Trial Form</span>
-            </button>
-            <button
               id="mobile-book-appointment-shortcut"
               onClick={onBookClick}
-              className="p-2.5 bg-brand-blue text-white rounded-full hover:bg-white hover:text-black transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-[#0052D4] via-[#2A6DF5] to-[#00C2FF] hover:from-[#0041B8] hover:via-[#1D5AD8] hover:to-[#00A8E0] text-white text-[11px] font-bold rounded-full shadow-md shadow-[#0052D4]/30 border border-cyan-300/30 transition-all cursor-pointer"
               aria-label="Book Appointment"
             >
-              <Calendar size={15} className="stroke-[2.5]" />
+              <Calendar size={13} className="stroke-[2.5]" />
+              <span>Book</span>
             </button>
             <button
               id="mobile-menu-toggle-btn"
@@ -190,26 +157,13 @@ export default function Navbar({ onBookClick, onTrialClassClick, onNavigate }: N
                 </button>
               ))}
 
-              {/* Mobile 1:1 Trial Class Form Button */}
-              <button
-                id="mobile-drawer-trial-btn"
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  onTrialClassClick();
-                }}
-                className="w-full max-w-xs flex items-center justify-center gap-2.5 bg-gradient-to-r from-[#ff1375] to-[#f43f5e] text-white font-display text-xs tracking-widest font-black py-3.5 rounded-full shadow-lg shadow-[#ff1375]/30 cursor-pointer"
-              >
-                <Music size={16} />
-                FREE 1:1 TRIAL CLASS FORM
-              </button>
-
               <button
                 id="mobile-book-appointment-btn"
                 onClick={() => {
                   setIsMobileMenuOpen(false);
                   onBookClick();
                 }}
-                className="w-full max-w-xs flex items-center justify-center gap-2.5 bg-brand-blue hover:bg-white hover:text-black text-white font-display text-xs tracking-widest font-black py-3.5 rounded-full shadow-lg transition-colors cursor-pointer"
+                className="w-full max-w-xs flex items-center justify-center gap-2.5 bg-gradient-to-r from-[#0052D4] via-[#2A6DF5] to-[#00C2FF] hover:from-[#0041B8] hover:via-[#1D5AD8] hover:to-[#00A8E0] text-white font-display text-xs tracking-widest font-black py-3.5 rounded-full shadow-lg shadow-[#0052D4]/40 border border-cyan-300/40 transition-all cursor-pointer"
               >
                 <Calendar size={16} className="stroke-[2.5]" />
                 BOOK APPOINTMENT
