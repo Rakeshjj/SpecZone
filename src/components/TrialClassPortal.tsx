@@ -623,8 +623,8 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
                         <option value="Home eyecare check" className="bg-[#0C111C] text-white">
                           Home eyecare check
                         </option>
-                        <option value="Transform look" className="bg-[#0C111C] text-white">
-                          Transform look
+                        <option value="Transform Your look" className="bg-[#0C111C] text-white">
+                          Transform Your look
                         </option>
                       </select>
                       <ChevronDown
@@ -646,7 +646,7 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     ) : (
                       <span className="flex items-center gap-1.5 font-bold drop-shadow-sm">
-                        <span>Book {selectedService}</span>
+                        <span>{selectedService}</span>
                         <span className="text-xs">→</span>
                       </span>
                     )}
