@@ -302,7 +302,7 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [selectedAge, setSelectedAge] = useState("13–21");
-  const [selectedCourseId, setSelectedCourseId] = useState("hindustani");
+  const [selectedService, setSelectedService] = useState("Home eyecare check");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -391,7 +391,6 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
 
     const nextCat = CATEGORIES[newIndex];
     setActiveTabId(nextCat.id);
-    setSelectedCourseId(nextCat.id);
     setIsHeroVideoPlaying(false);
 
     // Scroll active tab into view in the carousel
@@ -403,7 +402,6 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
 
   const handleTabSelect = (id: string) => {
     setActiveTabId(id);
-    setSelectedCourseId(id);
     setIsHeroVideoPlaying(false);
 
     const tabEl = document.getElementById(`tab-${id}`);
@@ -505,11 +503,17 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
                 </div>
               )}
 
-              {/* Booking Headline */}
+              {/* Booking Headline - Dynamically updates based on dropdown selection */}
               <div className="text-center mb-2 sm:mb-2.5">
-                <h1 className="text-[20px] sm:text-[22px] lg:text-[24px] font-bold text-white leading-tight tracking-tight">
-                  Book Home Eyecare
-                </h1>
+                <motion.h1
+                  key={selectedService}
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="text-[20px] sm:text-[22px] lg:text-[24px] font-bold text-white leading-tight tracking-tight capitalize"
+                >
+                  {selectedService}
+                </motion.h1>
               </div>
             </div>
 
@@ -605,25 +609,23 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
                     </div>
                   </div>
 
-                  {/* Select Specs / Eyecare Service */}
+                  {/* Select Service Dropdown */}
                   <div>
                     <label className="block text-xs font-semibold text-slate-200 mb-2 text-left">
-                      Select Specs / Eyecare Service
+                      Select Service
                     </label>
                     <div className="relative">
                       <select
-                        value={selectedCourseId}
-                        onChange={(e) => {
-                          setSelectedCourseId(e.target.value);
-                          setActiveTabId(e.target.value);
-                        }}
+                        value={selectedService}
+                        onChange={(e) => setSelectedService(e.target.value)}
                         className="w-full h-8.5 sm:h-9 px-3 pr-7 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-slate-200 text-xs font-medium focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all appearance-none cursor-pointer truncate"
                       >
-                        {CATEGORIES.map((cat) => (
-                          <option key={cat.id} value={cat.id} className="bg-[#0C111C] text-white">
-                            {cat.name}
-                          </option>
-                        ))}
+                        <option value="Home eyecare check" className="bg-[#0C111C] text-white">
+                          Home eyecare check
+                        </option>
+                        <option value="Transform look" className="bg-[#0C111C] text-white">
+                          Transform look
+                        </option>
                       </select>
                       <ChevronDown
                         size={13}
@@ -644,7 +646,7 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     ) : (
                       <span className="flex items-center gap-1.5 font-bold drop-shadow-sm">
-                        <span>Book Home Eyecare</span>
+                        <span>Book {selectedService}</span>
                         <span className="text-xs">→</span>
                       </span>
                     )}
@@ -663,17 +665,6 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
                         </svg>
                         <span className="font-bold text-white">4.8</span>
                         <span className="text-[#FBBC05] text-[9.5px] leading-none">★</span>
-                      </div>
-
-                      <span className="text-slate-600 font-light">•</span>
-
-                      {/* Trustpilot Rating */}
-                      <div className="inline-flex items-center gap-1 shrink-0">
-                        <svg className="w-3 h-3 fill-[#00E676]" viewBox="0 0 24 24">
-                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                        </svg>
-                        <span className="text-slate-300 hidden xs:inline text-[9.5px]">Trustpilot:</span>
-                        <span className="font-bold text-white">4.7</span>
                       </div>
 
                       <span className="text-slate-600 font-light">•</span>
@@ -699,8 +690,8 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
                 </div>
                 <h3 className="text-base font-bold text-white mb-2">Home Eyecare Reserved!</h3>
                 <p className="text-xs text-slate-300 leading-relaxed mb-4">
-                  Thank you <span className="font-semibold text-white">{studentName}</span>. Your Home Eyecare session for{" "}
-                  <span className="text-blue-400 font-semibold">{currentCategory.name}</span> has been confirmed. Our specialist team will share your appointment details & WhatsApp reminder shortly to {countryCode} {phoneNumber}.
+                  Thank you <span className="font-semibold text-white">{studentName}</span>. Your session for{" "}
+                  <span className="text-blue-400 font-semibold">{selectedService}</span> has been confirmed. Our specialist team will share your appointment details & WhatsApp reminder shortly to {countryCode} {phoneNumber}.
                 </p>
                 <button
                   type="button"
@@ -724,8 +715,9 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
           <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-12 flex flex-col space-y-12 sm:space-y-14 md:space-y-16">
             
             {/* ========================================================================= */}
-            {/* SECTION 1: RIGHT HERO HEADER & SHOWCASE                                   */}
+            {/* SECTION 1: RIGHT HERO HEADER & SHOWCASE (VIDEO SECTION COMMENTED OUT)     */}
             {/* ========================================================================= */}
+            {/*
             <section id="section-hero-showcase" className="w-full">
               <div className="text-center w-full max-w-4xl mx-auto mb-4 sm:mb-5">
                 <h2 className="text-[22px] sm:text-[26px] md:text-[30px] font-bold text-neutral-900 tracking-tight leading-[1.2] text-center whitespace-normal md:whitespace-nowrap">
@@ -733,118 +725,106 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
                 </h2>
               </div>
 
-            {/* ========================================================================= */}
-            {/* SECTION 4: COURSE CATEGORY CAROUSEL                                       */}
-            {/* ========================================================================= */}
-            <div className="w-full flex items-center justify-between gap-2 sm:gap-2.5 relative mb-4 sm:mb-5">
-              {/* Left Circular Arrow Button (Selects Previous Category) */}
-              <button
-                type="button"
-                id="cat-carousel-prev"
-                onClick={() => handleCategoryArrow("prev")}
-                aria-label="Previous Category"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600 shadow-2xs flex items-center justify-center shrink-0 hover:scale-105 active:scale-95 transition-all cursor-pointer"
-              >
-                <ChevronLeft size={18} />
-              </button>
+              <div className="w-full flex items-center justify-between gap-2 sm:gap-2.5 relative mb-4 sm:mb-5">
+                <button
+                  type="button"
+                  id="cat-carousel-prev"
+                  onClick={() => handleCategoryArrow("prev")}
+                  aria-label="Previous Category"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600 shadow-2xs flex items-center justify-center shrink-0 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                >
+                  <ChevronLeft size={18} />
+                </button>
 
-              {/* Horizontal Category Carousel Navigation */}
-              <div
-                ref={tabsContainerRef}
-                className="flex-1 flex items-center gap-2.5 sm:gap-3 overflow-x-auto scrollbar-none scroll-smooth py-1 px-1"
-                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-              >
-                {CATEGORIES.map((cat) => {
-                  const isActive = cat.id === activeTabId;
-                  return (
-                    <button
-                      key={cat.id}
-                      type="button"
-                      id={`tab-${cat.id}`}
-                      onClick={() => handleTabSelect(cat.id)}
-                      className={`h-10 sm:h-11 md:h-12 px-5 sm:px-6 md:px-7 rounded-full text-[14px] sm:text-[15px] font-semibold whitespace-nowrap transition-all flex items-center shrink-0 cursor-pointer ${
-                        isActive
-                          ? "bg-[#ff1375] text-white shadow-md shadow-[#ff1375]/30 border border-[#ff1375]"
-                          : "bg-white text-zinc-800 hover:text-zinc-950 border border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50"
-                      }`}
-                    >
-                      {cat.name}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Right Circular Arrow Button (Selects Next Category) */}
-              <button
-                type="button"
-                id="cat-carousel-next"
-                onClick={() => handleCategoryArrow("next")}
-                aria-label="Next Category"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600 shadow-2xs flex items-center justify-center shrink-0 hover:scale-105 active:scale-95 transition-all cursor-pointer"
-              >
-                <ChevronRight size={18} />
-              </button>
-            </div>
-
-            {/* ========================================================================= */}
-            {/* SECTION 5: MAIN HERO VIDEO CARD (Dynamic Maestro on sofa, Play Button)     */}
-            {/* ========================================================================= */}
-            <div className="relative w-full rounded-[22px] sm:rounded-[24px] overflow-hidden bg-neutral-950 shadow-xl border border-zinc-200 group">
-              <div className="relative aspect-[16/9] sm:aspect-[21/10] md:aspect-[16/8.5] w-full overflow-hidden flex items-center justify-center bg-zinc-900">
-                {isHeroVideoPlaying ? (
-                  <iframe
-                    src={`https://www.youtube.com/embed/${currentCategory.youtubeId}?autoplay=1&rel=0`}
-                    title={`${currentCategory.name} Spectacle Showcase`}
-                    className="w-full h-full border-0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : (
-                  <>
-                    {/* Hero Thumbnail for Active Category */}
-                    <img
-                      src={currentCategory.image}
-                      alt={`${currentCategory.maestro} ${currentCategory.name} Eyewear Collection`}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102"
-                    />
-
-                    {/* Realistic Optical & Spectacles Decorative Overlay */}
-                    <div 
-                      className="absolute inset-0 bg-cover bg-center"
-                      style={{
-                        backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.2) 100%), url('/assets/img/modernoptical.jpeg')`,
-                        backgroundBlendMode: "multiply",
-                        opacity: 0.12
-                      }}
-                    />
-
-                    {/* Top Badges (Category + Specs Description) */}
-                    <div className="absolute top-4 sm:top-5 left-4 sm:left-6 flex items-center gap-2">
-                      <span className="bg-[#ff1375] text-white text-xs font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md">
-                        {currentCategory.category}
-                      </span>
-                      <span className="bg-black/70 backdrop-blur-sm text-white text-xs font-medium px-3.5 py-1 rounded-full border border-white/20 flex items-center gap-1.5">
-                        <Sparkles size={12} className="text-amber-400" />
-                        {currentCategory.patron}
-                      </span>
-                    </div>
-
-                    {/* Large Center Circular Play Button */}
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div
+                  ref={tabsContainerRef}
+                  className="flex-1 flex items-center gap-2.5 sm:gap-3 overflow-x-auto scrollbar-none scroll-smooth py-1 px-1"
+                  style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                >
+                  {CATEGORIES.map((cat) => {
+                    const isActive = cat.id === activeTabId;
+                    return (
                       <button
+                        key={cat.id}
                         type="button"
-                        onClick={() => setIsHeroVideoPlaying(true)}
-                        aria-label={`Play ${currentCategory.name} Video`}
-                        className="pointer-events-auto w-16 h-16 sm:w-20 sm:h-20 rounded-full border-[2.5px] border-white/90 bg-black/35 hover:bg-[#ff1375]/90 backdrop-blur-xs flex items-center justify-center text-white shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer"
+                        id={`tab-${cat.id}`}
+                        onClick={() => handleTabSelect(cat.id)}
+                        className={`h-10 sm:h-11 md:h-12 px-5 sm:px-6 md:px-7 rounded-full text-[14px] sm:text-[15px] font-semibold whitespace-nowrap transition-all flex items-center shrink-0 cursor-pointer ${
+                          isActive
+                            ? "bg-[#ff1375] text-white shadow-md shadow-[#ff1375]/30 border border-[#ff1375]"
+                            : "bg-white text-zinc-800 hover:text-zinc-950 border border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50"
+                        }`}
                       >
-                        <Play size={28} className="fill-white text-white ml-1" />
+                        {cat.name}
                       </button>
-                    </div>
-                  </>
-                )}
+                    );
+                  })}
+                </div>
+
+                <button
+                  type="button"
+                  id="cat-carousel-next"
+                  onClick={() => handleCategoryArrow("next")}
+                  aria-label="Next Category"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600 shadow-2xs flex items-center justify-center shrink-0 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                >
+                  <ChevronRight size={18} />
+                </button>
               </div>
-            </div>
-          </section>
+
+              <div className="relative w-full rounded-[22px] sm:rounded-[24px] overflow-hidden bg-neutral-950 shadow-xl border border-zinc-200 group">
+                <div className="relative aspect-[16/9] sm:aspect-[21/10] md:aspect-[16/8.5] w-full overflow-hidden flex items-center justify-center bg-zinc-900">
+                  {isHeroVideoPlaying ? (
+                    <iframe
+                      src={`https://www.youtube.com/embed/${currentCategory.youtubeId}?autoplay=1&rel=0`}
+                      title={`${currentCategory.name} Spectacle Showcase`}
+                      className="w-full h-full border-0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <>
+                      <img
+                        src={currentCategory.image}
+                        alt={`${currentCategory.maestro} ${currentCategory.name} Eyewear Collection`}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102"
+                      />
+
+                      <div 
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{
+                          backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.2) 100%), url('/assets/img/modernoptical.jpeg')`,
+                          backgroundBlendMode: "multiply",
+                          opacity: 0.12
+                        }}
+                      />
+
+                      <div className="absolute top-4 sm:top-5 left-4 sm:left-6 flex items-center gap-2">
+                        <span className="bg-[#ff1375] text-white text-xs font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md">
+                          {currentCategory.category}
+                        </span>
+                        <span className="bg-black/70 backdrop-blur-sm text-white text-xs font-medium px-3.5 py-1 rounded-full border border-white/20 flex items-center gap-1.5">
+                          <Sparkles size={12} className="text-amber-400" />
+                          {currentCategory.patron}
+                        </span>
+                      </div>
+
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <button
+                          type="button"
+                          onClick={() => setIsHeroVideoPlaying(true)}
+                          aria-label={`Play ${currentCategory.name} Video`}
+                          className="pointer-events-auto w-16 h-16 sm:w-20 sm:h-20 rounded-full border-[2.5px] border-white/90 bg-black/35 hover:bg-[#ff1375]/90 backdrop-blur-xs flex items-center justify-center text-white shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer"
+                        >
+                          <Play size={28} className="fill-white text-white ml-1" />
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            </section>
+            */}
 
           {/* ========================================================================= */}
           {/* SECTION 2: CERTIFIED MASTER OPTOMETRISTS & STYLISTS                       */}
