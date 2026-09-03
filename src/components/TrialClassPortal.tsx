@@ -522,7 +522,7 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
                 </div>
 
                 {/* Submit CTA Button & Trust Badge */}
-                <div className="pt-2.5 sm:pt-3 space-y-2">
+                <div className="pt-5.5 sm:pt-3 space-y-5">
                   <button
                     type="submit"
                     disabled={isSubmitting}
