@@ -1,6 +1,6 @@
 {
-  "name": "Spectacal Zone",
-  "description": "Curators of Premium Eyewear \u0026 Sculptors of Customised Precision Lenses since 1959. Experts in lifestyle services, including opticals, sunglasses, and audiology.",
+  "name": "Artium Academy",
+  "description": "Book your free 1:1 trial music class. Online music courses curated by maestros with masterclass pedagogy and global certification.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

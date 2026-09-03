@@ -13,9 +13,10 @@ import HomeEyeCare from "./components/HomeEyeCare";
 import FooterSection from "./components/FooterSection";
 import SmoothScroll from "./components/SmoothScroll";
 import SpiralFrameMatrix from "./components/SpiralFrameMatrix";
+import TrialClassPortal from "./components/TrialClassPortal";
 
 export default function App() {
-  const [view, setView] = useState<"home" | "booking">("home");
+  const [view, setView] = useState<"home" | "booking" | "trial-form">("trial-form");
   const [selectedServiceType, setSelectedServiceType] = useState<string>("Home Eye Care Check");
 
   // Setup elegant scroll progress bar across the screen top
@@ -34,7 +35,12 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleCloseBooking = () => {
+  const handleOpenTrialForm = () => {
+    setView("trial-form");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleCloseToHome = () => {
     setView("home");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -72,6 +78,23 @@ export default function App() {
     }
   };
 
+  if (view === "trial-form") {
+    return (
+      <AnimatePresence mode="wait">
+        <motion.div
+          key="trial-class-portal-view"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.35 }}
+          className="w-full h-screen max-h-screen overflow-hidden"
+        >
+          <TrialClassPortal onBackToMain={handleCloseToHome} />
+        </motion.div>
+      </AnimatePresence>
+    );
+  }
+
   return (
     <div className="relative min-h-screen bg-zinc-950 text-white font-sans selection:bg-brand-blue selection:text-white flex flex-col justify-between">
       {/* Top scroll-linked elegant reading progress bar */}
@@ -84,6 +107,7 @@ export default function App() {
       {/* Primary Sticky Header navigation */}
       <Navbar
         onBookClick={() => handleOpenBooking("Home Eye Care Check")}
+        onTrialClassClick={handleOpenTrialForm}
         onNavigate={scrollToSection}
       />
 
@@ -135,7 +159,7 @@ export default function App() {
             >
               {/* Dedicated Home Eye Care Portal View */}
               <HomeEyeCare 
-                onClose={handleCloseBooking} 
+                onClose={handleCloseToHome} 
                 initialType={selectedServiceType}
               />
             </motion.div>

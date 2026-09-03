@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-serif: "Cormorant Garamond", serif;
-  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
-  --font-display: "Plus Jakarta Sans", sans-serif;
+  --font-sans: "Poppins", "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-display: "Poppins", sans-serif;
   
   --color-brand-blue: #0a64ff;
   --color-brand-dark: #050505;
@@ -36,8 +36,136 @@ html {
   background: #0a64ff;
 }
 
-/* Custom selection */
-::selection {
-  background-color: #0a64ff;
-  color: #ffffff;
+/* Custom scrollbars for Dual Scroll View matching reference */
+.sidebar-dark-scroll::-webkit-scrollbar {
+  width: 12px;
+}
+.sidebar-dark-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.sidebar-dark-scroll::-webkit-scrollbar-thumb {
+  background: #a3a3a3;
+  border-radius: 6px;
+  border: 2px solid #f1f1f1;
+}
+.sidebar-dark-scroll::-webkit-scrollbar-thumb:hover {
+  background: #737373;
+}
+
+.content-light-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.content-light-scroll::-webkit-scrollbar-track {
+  background: #f4f4f5;
+}
+.content-light-scroll::-webkit-scrollbar-thumb {
+  background: #d4d4d8;
+  border-radius: 4px;
+}
+.content-light-scroll::-webkit-scrollbar-thumb:hover {
+  background: #a1a1aa;
+}
+
+/* Dual Panel Application Layout */
+@media (min-width: 1024px) {
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .app-dual-layout {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .sidebar-panel {
+    width: 28%;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-shrink: 0;
+    min-height: 0;
+  }
+
+  .main-content-panel {
+    width: 72%;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-width: 0;
+    min-height: 0;
+  }
+}
+
+@media (max-width: 1023px) {
+  .app-dual-layout {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .sidebar-panel {
+    width: 100%;
+    height: auto;
+    overflow-y: visible;
+  }
+
+  .main-content-panel {
+    width: 100%;
+    height: auto;
+    overflow-y: visible;
+  }
+}
+
+/* Testimonial Horizontal Carousel Styles */
+.testimonial-carousel {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.testimonial-track {
+  display: flex;
+  width: 100%;
+  will-change: transform;
+}
+
+@media (max-width: 639px) {
+  .testimonial-track {
+    gap: 16px;
+    transform: translateX(calc(-1 * var(--slide-index, 0) * (100% + 16px)));
+  }
+  .testimonial-slide {
+    width: 100%;
+    flex-shrink: 0;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .testimonial-track {
+    gap: 20px;
+    transform: translateX(calc(-1 * var(--slide-index, 0) * ((100% + 20px) / 2)));
+  }
+  .testimonial-slide {
+    width: calc((100% - 20px) / 2);
+    flex-shrink: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .testimonial-track {
+    gap: 28px;
+    transform: translateX(calc(-1 * var(--slide-index, 0) * ((100% + 28px) / 3)));
+  }
+  .testimonial-slide {
+    width: calc((100% - 56px) / 3);
+    flex-shrink: 0;
+  }
 }
