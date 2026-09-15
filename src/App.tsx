@@ -14,6 +14,7 @@ import FooterSection from "./components/FooterSection";
 import SmoothScroll from "./components/SmoothScroll";
 import SpiralFrameMatrix from "./components/SpiralFrameMatrix";
 import TrialClassPortal from "./components/TrialClassPortal";
+import ConsultationBookingSection from "./components/ConsultationBookingSection";
 
 export default function App() {
   const [view, setView] = useState<"home" | "booking" | "trial-form">("home");
@@ -138,6 +139,9 @@ export default function App() {
 
               {/* AUTOPLAY BRAND TICKER CAROUSEL (RIGHT UNDER HERO) */}
               <BrandTicker />
+
+              {/* NEW INTEGRATED BOOKING + EYEWEAR VIDEO CONSULTATION SECTION */}
+              <ConsultationBookingSection onSuccessNavigate={() => scrollToSection("locations-section")} />
 
               <SmoothScroll />
 
