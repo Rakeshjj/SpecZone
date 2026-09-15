@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo, useEffect } from "react";
 import { motion, useScroll, useTransform, AnimatePresence, MotionValue } from "motion/react";
 import { 
   Sparkles, 
@@ -8,14 +8,25 @@ import {
   CheckCircle2, 
   Sliders,
   Eye,
-  Zap
+  Zap,
+  Glasses
 } from "lucide-react";
+
+export type ProductCategory = "sunglasses" | "frames" | "lenses" | "all";
+
+export const CATEGORY_OPTIONS: { id: ProductCategory; label: string }[] = [
+  { id: "sunglasses", label: "Sunglasses" },
+  { id: "frames", label: "Frames" },
+  { id: "lenses", label: "Lenses" },
+  { id: "all", label: "All" }
+];
 
 interface SpiralGlassItem {
   id: string;
   code: string;
   name: string;
   categoryLabel: string;
+  category: "sunglasses" | "frames" | "lenses";
   priceINR: number;
   image: string;
   badge?: string;
@@ -31,6 +42,7 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     code: "AT-908-JPN",
     name: "Aero-Titanium Alpha 01",
     categoryLabel: "SABAE TITANIUM",
+    category: "sunglasses",
     priceINR: 18500,
     badge: "BESTSELLER",
     material: "Surgical Beta-Titanium",
@@ -43,26 +55,26 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     code: "TK-402-ITL",
     name: "Sartorial Takiron Acetate",
     categoryLabel: "BIO ACETATE",
+    category: "frames",
     priceINR: 14900,
     badge: "HANDCRAFTED",
     material: "Organic Cotton Acetate",
     origin: "Belluno, Italy",
     weight: "22.8g",
     image: "/assets/img/sartorial-img.jpg"
-
   },
   {
     id: "sp-03",
     code: "CB-705-PRO",
     name: "Chrono-Shield HEV Pro",
     categoryLabel: "BLUE LIGHT ARMOR",
+    category: "lenses",
     priceINR: 11200,
     badge: "99.8% HEV CUT",
     material: "TR90 Ultra-Flex Polymer",
     origin: "Innsbruck, Austria",
     weight: "14.5g",
     image: "/assets/img/lens4.jpg"
-
   },
 
   // Triad 2
@@ -71,39 +83,39 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     code: "HP-300-SOL",
     name: "Hyper-Polarized Horizon X",
     categoryLabel: "POLARIZED SUN",
+    category: "sunglasses",
     priceINR: 16800,
     badge: "SOLAR SHIELD",
     material: "Forged Carbon Alloy",
     origin: "Geneva, Switzerland",
     weight: "18.2g",
     image: "/assets/img/hyper.jpg"
-
   },
   {
     id: "sp-05",
     code: "MG-990-VIP",
     name: "Atelier Monogram Executive",
     categoryLabel: "24K LUXURY GOLD",
+    category: "lenses",
     priceINR: 28500,
     badge: "LIMITED EDITION",
     material: "24k Plated Beta Titanium",
     origin: "Paris Atelier",
     weight: "13.8g",
     image: "/assets/img/lens1.jpg"
-
   },
   {
     id: "sp-06",
     code: "NM-101-MIN",
     name: "Neo-Rimless Minimalist",
     categoryLabel: "RIMLESS OPTICS",
+    category: "frames",
     priceINR: 13500,
     badge: "ZERO WEIGHT",
     material: "Memory Flex Nitinol",
     origin: "Zurich, Switzerland",
     weight: "8.5g",
     image: "/assets/img/lens5.jpg"
-
   },
 
   // Triad 3
@@ -112,39 +124,39 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     code: "AV-880-GLD",
     name: "Heritage Aviator Gold",
     categoryLabel: "CLASSIC AVIATOR",
+    category: "sunglasses",
     priceINR: 19200,
     badge: "NEW ARRIVAL",
     material: "Plated Stainless Steel",
     origin: "Milan, Italy",
     weight: "16.4g",
     image: "/assets/img/Heritage.jpg"
-
   },
   {
     id: "sp-08",
     code: "SC-505-BLK",
     name: "Stealth Carbon Matrix",
     categoryLabel: "3K CARBON FIBER",
+    category: "lenses",
     priceINR: 21000,
     badge: "ULTRA DURABLE",
     material: "3K Carbon Fiber Weave",
     origin: "Stuttgart, Germany",
     weight: "12.6g",
     image: "/assets/img/lens3.jpg"
-
   },
   {
     id: "sp-09",
     code: "TR-202-RET",
     name: "Sartorial Tortoise Vintage",
     categoryLabel: "VINTAGE ACETATE",
+    category: "lenses",
     priceINR: 12800,
     badge: "RETRO HAVANA",
     material: "Cellulose Bio-Acetate",
     origin: "Kyoto, Japan",
     weight: "20.1g",
     image: "/assets/img/lens11.jpg"
-
   },
 
   // Additional 4 Items (Total 13)
@@ -153,6 +165,7 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     code: "SM-600-MT",
     name: "Ray-Ban Meta Smart Optics",
     categoryLabel: "SMART AI EYEWEAR",
+    category: "frames",
     priceINR: 29990,
     badge: "AI CONNECTED",
     material: "Lightweight O-Matter Composite",
@@ -165,6 +178,7 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     code: "OK-900-PRZ",
     name: "Oakley Prizm Velocity",
     categoryLabel: "SPORT PERFORMANCE",
+    category: "sunglasses",
     priceINR: 17500,
     badge: "PRIZM LENS",
     material: "Unobtainium & O-Matter",
@@ -177,6 +191,7 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     code: "VG-330-CAT",
     name: "Vogue Parisienne Cat-Eye",
     categoryLabel: "HIGH FASHION",
+    category: "frames",
     priceINR: 11800,
     badge: "COUTURE",
     material: "Hand-Polished Bio Acetate",
@@ -189,6 +204,7 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     code: "CR-808-SPD",
     name: "Carrera Speedline Double-Bridge",
     categoryLabel: "MOTORSPORT EDITION",
+    category: "sunglasses",
     priceINR: 15400,
     badge: "ICONIC BRIDGE",
     material: "Optyl Ultra-Light Polymer",
@@ -281,8 +297,15 @@ function SpiralCardItem({
 }
 
 export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMatrixProps) {
+  const [selectedCategory, setSelectedCategory] = useState<ProductCategory>("all");
   const [viewAllModal, setViewAllModal] = useState<boolean>(false);
   const [selectedGlass, setSelectedGlass] = useState<SpiralGlassItem | null>(null);
+
+  // Client-side category filtering
+  const filteredGlasses = useMemo(() => {
+    if (selectedCategory === "all") return SPIRAL_GLASSES;
+    return SPIRAL_GLASSES.filter((item) => item.category === selectedCategory);
+  }, [selectedCategory]);
 
   // Scroll Container for 3D Pinned Animation
   const containerRef = useRef<HTMLDivElement>(null);
@@ -299,6 +322,38 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
   const viewAllScale = useTransform(scrollYProgress, [0.75, 0.9, 1], [0.6, 0.9, 1]);
   const viewAllPointerEvents = useTransform(scrollYProgress, (val) => val > 0.75 ? "auto" : "none");
 
+  const handleOpenViewAll = () => {
+    setSelectedCategory("all");
+    setViewAllModal(true);
+  };
+
+  // Safely manage scroll-lock and restoration for modals without trapping or freezing the page
+  useEffect(() => {
+    if (viewAllModal || selectedGlass) {
+      // Pause Lenis so wheel/touch inside modal functions natively
+      (window as any).lenis?.stop();
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          if (selectedGlass) setSelectedGlass(null);
+          else if (viewAllModal) setViewAllModal(false);
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        document.body.style.overflow = originalOverflow || "";
+        (window as any).lenis?.start();
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    } else {
+      document.body.style.overflow = "";
+      (window as any).lenis?.start();
+    }
+  }, [viewAllModal, selectedGlass]);
+
   const handleSelectGlass = (item: SpiralGlassItem) => {
     const frameDetails = `${item.name} (${item.code}) - ₹${item.priceINR.toLocaleString('en-IN')}`;
     if (onPreSelectService) {
@@ -312,10 +367,10 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
   return (
     <section 
       ref={containerRef}
-      className="relative -top-[10px] bg-zinc-950 text-white h-[400vh] border-t border-white/10"
+      className="relative bg-zinc-950 text-white h-[400vh] border-t border-white/10"
     >
       {/* STICKY FULLSCREEN VIEWPORT */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between p-6 sm:p-10 bg-zinc-950">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between p-4 sm:p-6 md:p-8 lg:p-10 bg-zinc-950">
         
         {/* ATMOSPHERIC GLOWS */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -323,28 +378,78 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:3rem_3rem]" />
         </div>
 
-        {/* TOP HEADER */}
-        <div className="relative z-30 flex items-center justify-between gap-4">
-          <div className="space-y-1">
-            <span className="font-mono text-[10px] tracking-[0.35em] text-brand-blue font-bold uppercase block">
+        {/* RESPONSIVE TOP HEADER: DESKTOP 1-ROW (LEFT, CENTER, RIGHT), TABLET 2-ROW (ROW 1: HEADING & VIEW ALL, ROW 2: TABS), MOBILE 3-ROW (HEADING, TABS, VIEW ALL) */}
+        <header 
+          id="gallery-responsive-header"
+          className="relative z-30 w-full flex flex-col md:flex-row md:flex-wrap lg:flex-nowrap items-center justify-between gap-2.5 sm:gap-3.5 lg:gap-6"
+        >
+          {/* HEADING (LEFT ON DESKTOP & TABLET, CENTERED OR LEFT ON MOBILE) */}
+          <div className="order-1 w-full sm:w-auto shrink-0 flex flex-col justify-center text-center sm:text-left">
+            <span className="font-mono text-[8.5px] sm:text-[9.5px] lg:text-[10px] tracking-[0.2em] sm:tracking-[0.25em] text-brand-blue font-bold uppercase block">
               [ 3D SPIRAL ATELIER MATRIX ]
             </span>
-            <h2 className="font-serif text-2xl sm:text-4xl font-bold uppercase tracking-tight text-white">
+            <h2 className="font-serif text-lg sm:text-2xl md:text-2xl lg:text-[26px] xl:text-3xl 2xl:text-4xl font-bold uppercase tracking-tight text-white leading-tight mt-0.5">
               ORBITAL <span className="text-brand-blue italic font-normal">GLASSES GALLERY</span>
             </h2>
           </div>
 
-          <button
-            onClick={() => setViewAllModal(true)}
-            className="px-5 py-2.5 rounded-full bg-white text-zinc-950 hover:bg-brand-blue hover:text-white font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shadow-lg hover:shadow-brand-blue/30 shrink-0"
-          >
-            <span>VIEW ALL ({SPIRAL_GLASSES.length})</span>
-            <Grid size={14} />
-          </button>
-        </div>
+          {/* CATEGORY TABS (CENTER ON DESKTOP, ROW 2 CENTERED ON TABLET, ROW 2 ON MOBILE) */}
+          <div className="order-2 md:order-3 lg:order-2 w-full md:w-full lg:w-auto lg:flex-1 flex items-center justify-center min-w-0 px-1">
+            <div 
+              id="product-category-filter"
+              className="inline-flex items-center justify-center flex-wrap sm:flex-nowrap p-1 sm:p-1.5 rounded-2xl sm:rounded-full bg-zinc-900/90 border border-white/15 backdrop-blur-xl gap-1 sm:gap-1.5 shadow-2xl select-none max-w-full"
+              role="tablist"
+              aria-label="Product Categories"
+            >
+              {CATEGORY_OPTIONS.map((cat) => {
+                const isActive = selectedCategory === cat.id;
+                const count = cat.id === "all"
+                  ? SPIRAL_GLASSES.length
+                  : SPIRAL_GLASSES.filter(g => g.category === cat.id).length;
+
+                return (
+                  <button
+                    key={cat.id}
+                    id={`cat-filter-${cat.id}`}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 lg:px-4 py-1.5 rounded-full font-mono text-[9px] sm:text-[10px] lg:text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer whitespace-nowrap select-none shrink-0 ${
+                      isActive
+                        ? "bg-brand-blue text-white shadow-lg shadow-brand-blue/35 border border-brand-blue"
+                        : "bg-transparent text-zinc-300 hover:text-white hover:bg-white/5 border border-transparent"
+                    }`}
+                  >
+                    <span className="whitespace-nowrap">{cat.label}</span>
+                    <span
+                      className={`text-[8.5px] sm:text-[9px] lg:text-[10px] px-1.5 py-0.2 rounded-full font-mono font-semibold transition-colors shrink-0 ${
+                        isActive ? "bg-white/25 text-white" : "bg-white/10 text-zinc-300"
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* VIEW ALL BUTTON (RIGHT ON DESKTOP & TABLET, ROW 3 ON MOBILE) */}
+          <div className="order-3 md:order-2 lg:order-3 w-full sm:w-auto shrink-0 flex items-center justify-center sm:justify-end">
+            <button
+              id="header-view-all-btn"
+              onClick={handleOpenViewAll}
+              className="px-3.5 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-full bg-white text-zinc-950 hover:bg-brand-blue hover:text-white font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 sm:gap-2 cursor-pointer shadow-lg hover:shadow-brand-blue/30 shrink-0 whitespace-nowrap"
+            >
+              <span>VIEW ALL ({SPIRAL_GLASSES.length})</span>
+              <Grid size={14} className="shrink-0" />
+            </button>
+          </div>
+        </header>
 
         {/* CENTER 3D SPIRAL STAGE */}
-        <div className="relative z-20 my-auto w-full h-[520px] sm:h-[580px] flex items-center justify-center [perspective:1200px] select-none translate-y-12 sm:translate-y-16">
+        <div className="relative z-20 my-auto w-full h-[360px] xs:h-[400px] sm:h-[460px] md:h-[500px] lg:h-[540px] xl:h-[580px] flex items-center justify-center [perspective:1200px] select-none translate-y-6 sm:translate-y-10 md:translate-y-14 lg:translate-y-18 xl:translate-y-20">
           
           {/* 3D CONTAINER WITH SIDE TILT */}
           <motion.div
@@ -357,12 +462,12 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
             className="relative w-full max-w-4xl h-full flex items-center justify-center [transform-style:preserve-3d]"
           >
             {/* SPIRAL ITEMS: Placed in 3D circular orbit facing the camera */}
-            {SPIRAL_GLASSES.map((item, index) => (
+            {filteredGlasses.map((item, index) => (
               <SpiralCardItem
-                key={item.id}
+                key={`${selectedCategory}-${item.id}`}
                 item={item}
                 index={index}
-                totalItems={SPIRAL_GLASSES.length}
+                totalItems={filteredGlasses.length}
                 scrollYProgress={scrollYProgress}
                 onSelect={setSelectedGlass}
               />
@@ -376,17 +481,18 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
               scale: viewAllScale,
               pointerEvents: viewAllPointerEvents
             }}
-            className="absolute z-40 flex flex-col items-center justify-center mt-70 -translate-y-2 sm:-translate-y-2"
+            className="absolute z-40 flex flex-col items-center justify-center mt-44 sm:mt-48 -translate-y-4 sm:-translate-y-6"
           >
             <div className="relative group">
               <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-brand-blue via-cyan-400 to-indigo-600 opacity-80 blur-xl group-hover:opacity-100 transition-opacity animate-pulse" />
               
               <button
-                onClick={() => setViewAllModal(true)}
+                id="stage-view-all-btn"
+                onClick={handleOpenViewAll}
                 className="relative px-6 py-3 rounded-full bg-white text-zinc-950 hover:bg-brand-blue hover:text-white font-mono text-sm sm:text-base font-black uppercase tracking-widest shadow-2xl transition-all duration-300 flex items-center gap-3 cursor-pointer hover:scale-105 active:scale-95"
               >
                 <Sparkles size={15} className="text-brand-blue group-hover:text-white" />
-                <span>VIEW ALL GLASSES</span>
+                <span>VIEW ALL ({SPIRAL_GLASSES.length})</span>
                 <ArrowRight size={15} />
               </button>
             </div>
@@ -407,9 +513,14 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
               className="relative w-full max-w-md bg-zinc-900 border border-white/20 rounded-3xl p-6 sm:p-8 space-y-5 shadow-2xl text-white overflow-hidden"
             >
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                <h3 className="font-serif text-xl sm:text-2xl font-bold uppercase tracking-tight text-white pr-4">
-                  {selectedGlass.name}
-                </h3>
+                <div>
+                  <span className="font-mono text-[9px] text-brand-blue font-bold uppercase tracking-widest block mb-1">
+                    [ {selectedGlass.category.toUpperCase()} • {selectedGlass.categoryLabel} ]
+                  </span>
+                  <h3 className="font-serif text-xl sm:text-2xl font-bold uppercase tracking-tight text-white pr-4">
+                    {selectedGlass.name}
+                  </h3>
+                </div>
 
                 <button
                   onClick={() => setSelectedGlass(null)}
@@ -440,7 +551,7 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
                 }}
                 className="w-full py-3.5 px-4 rounded-xl bg-brand-blue hover:bg-brand-blue/90 font-mono text-xs font-bold uppercase tracking-wider transition-all shadow-lg shadow-brand-blue/20 flex items-center justify-center gap-2 cursor-pointer"
               >
-                <span>SELECT FRAME</span>
+                <span>SELECT {selectedGlass.category === "lenses" ? "LENS" : "FRAME"}</span>
                 <ArrowRight size={14} />
               </button>
             </motion.div>
@@ -448,57 +559,141 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
         )}
       </AnimatePresence>
 
-      {/* VIEW ALL FULL CATALOG MODAL */}
+      {/* VIEW ALL FULL CATALOG SCROLLABLE GALLERY */}
       <AnimatePresence>
         {viewAllModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-black/90 backdrop-blur-xl overflow-y-auto">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-6xl bg-zinc-950 rounded-3xl p-6 sm:p-10 space-y-8 text-white shadow-2xl my-auto border border-white/10"
-            >
-              <div className="flex items-center justify-between border-b border-white/10 pb-6">
-                <div>
-                  <span className="font-mono text-[10px] text-brand-blue font-bold uppercase tracking-widest block">
-                    [ COMPLETE GLASSES CATALOG ]
-                  </span>
-                  <h3 className="font-serif text-3xl font-bold uppercase tracking-tight text-white mt-1">
-                    ALL GLASSES & PRICES
-                  </h3>
+          <motion.div
+            id="view-all-product-gallery"
+            data-lenis-prevent="true"
+            data-lenis-prevent-wheel="true"
+            data-lenis-prevent-touch="true"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 w-full h-full bg-zinc-950/98 backdrop-blur-2xl overflow-y-auto overscroll-contain flex flex-col text-white select-text"
+            style={{
+              WebkitOverflowScrolling: "touch",
+              touchAction: "pan-y",
+            }}
+          >
+            {/* STICKY TOP CONTROLS BAR */}
+            <header className="sticky top-0 z-40 w-full bg-zinc-950/95 backdrop-blur-xl border-b border-white/10 px-4 sm:px-8 py-3.5 sm:py-4 shadow-2xl">
+              <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
+                {/* Heading info & Mobile Close button */}
+                <div className="flex items-center justify-between w-full md:w-auto">
+                  <div>
+                    <span className="font-mono text-[9px] sm:text-[10px] text-brand-blue font-bold uppercase tracking-[0.25em] block">
+                      [ COMPLETE ATELIER COLLECTION • {filteredGlasses.length} PIECES ]
+                    </span>
+                    <h3 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold uppercase tracking-tight text-white mt-0.5">
+                      {selectedCategory === "all" ? "ALL GLASSES & LENSES" : `${selectedCategory.toUpperCase()} COLLECTION`}
+                    </h3>
+                  </div>
+
+                  <button
+                    onClick={() => setViewAllModal(false)}
+                    aria-label="Close View All Gallery"
+                    className="md:hidden p-2 rounded-full bg-zinc-900 border border-white/15 text-zinc-300 hover:text-white transition-colors cursor-pointer"
+                  >
+                    <X size={20} />
+                  </button>
                 </div>
 
-                <button
-                  onClick={() => setViewAllModal(false)}
-                  className="p-3 rounded-full bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors cursor-pointer"
-                >
-                  <X size={20} />
-                </button>
-              </div>
+                {/* Category Switcher Tabs & Desktop Close Button */}
+                <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+                  <div 
+                    className="inline-flex items-center p-1 sm:p-1.5 rounded-full bg-zinc-900/90 border border-white/15 backdrop-blur-xl gap-1 sm:gap-1.5 overflow-x-auto max-w-full select-none"
+                    role="tablist"
+                    aria-label="Filter products in gallery"
+                  >
+                    {CATEGORY_OPTIONS.map((cat) => {
+                      const count = cat.id === "all"
+                        ? SPIRAL_GLASSES.length
+                        : SPIRAL_GLASSES.filter(g => g.category === cat.id).length;
+                      const isActive = selectedCategory === cat.id;
 
-              {/* GRID */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-h-[65vh] overflow-y-auto pr-2 custom-scrollbar">
-                {SPIRAL_GLASSES.map((item) => (
+                      return (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          role="tab"
+                          aria-selected={isActive}
+                          onClick={() => setSelectedCategory(cat.id)}
+                          className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+                            isActive
+                              ? "bg-brand-blue text-white shadow-lg shadow-brand-blue/35 border border-brand-blue"
+                              : "bg-transparent text-zinc-300 hover:text-white hover:bg-white/5 border border-transparent"
+                          }`}
+                        >
+                          <span>{cat.label}</span>
+                          <span className={`text-[9px] sm:text-[10px] px-1.5 py-0.2 rounded-full font-mono font-semibold transition-colors ${
+                            isActive ? "bg-white/25 text-white" : "bg-white/10 text-zinc-400"
+                          }`}>
+                            {count}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Desktop Close Button */}
+                  <button
+                    onClick={() => setViewAllModal(false)}
+                    aria-label="Close View All Gallery"
+                    className="hidden md:flex items-center gap-2 px-4 sm:px-5 py-2 rounded-full bg-white text-zinc-950 hover:bg-brand-blue hover:text-white font-mono text-xs font-bold uppercase tracking-wider transition-all shadow-lg hover:shadow-brand-blue/30 cursor-pointer shrink-0"
+                  >
+                    <span>CLOSE</span>
+                    <X size={16} />
+                  </button>
+                </div>
+              </div>
+            </header>
+
+            {/* NATURAL FULL-HEIGHT VERTICAL PRODUCT GRID */}
+            <div className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-8 py-6 sm:py-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 pb-32">
+                {filteredGlasses.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-zinc-900/80 rounded-2xl p-4 space-y-4 flex flex-col justify-between hover:bg-zinc-900 transition-all border border-white/5 hover:border-brand-blue/40"
+                    className="bg-zinc-900/90 hover:bg-zinc-900 rounded-2xl p-4 sm:p-5 flex flex-col justify-between border border-white/10 hover:border-brand-blue/60 transition-all duration-300 shadow-xl group hover:-translate-y-1"
                   >
-                    <div className="aspect-[4/3] rounded-xl overflow-hidden bg-zinc-950 relative">
+                    <div className="aspect-[4/3] rounded-xl overflow-hidden bg-zinc-950 relative border border-white/5">
                       <img 
                         src={item.image} 
                         alt={item.name}
                         referrerPolicy="no-referrer"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
+                      <div className="absolute top-2.5 left-2.5">
+                        <span className="font-mono text-[9px] text-white font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/10">
+                          {item.badge}
+                        </span>
+                      </div>
                     </div>
 
-                    <div className="text-center space-y-1">
-                      <h4 className="font-serif text-lg font-bold uppercase tracking-tight text-white">
+                    <div className="pt-4 pb-2 text-left space-y-1.5">
+                      <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400">
+                        <span className="text-brand-blue font-bold uppercase tracking-wider">
+                          {item.categoryLabel}
+                        </span>
+                        <span>{item.weight}</span>
+                      </div>
+
+                      <h4 className="font-serif text-lg sm:text-xl font-bold uppercase tracking-tight text-white group-hover:text-brand-blue transition-colors line-clamp-1">
                         {item.name}
                       </h4>
-                      <p className="font-serif text-xl font-bold text-emerald-400">
-                        ₹{item.priceINR.toLocaleString('en-IN')}
+
+                      <p className="font-mono text-xs text-zinc-400">
+                        Origin: {item.origin} • {item.material}
                       </p>
+
+                      <div className="pt-2 flex items-baseline justify-between border-t border-white/5">
+                        <span className="font-mono text-[10px] text-zinc-500 uppercase tracking-wider">Price</span>
+                        <span className="font-serif text-xl sm:text-2xl font-bold text-emerald-400">
+                          ₹{item.priceINR.toLocaleString('en-IN')}
+                        </span>
+                      </div>
                     </div>
 
                     <button
@@ -506,17 +701,17 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
                         setViewAllModal(false);
                         handleSelectGlass(item);
                       }}
-                      className="w-full py-2.5 rounded-xl bg-white hover:bg-brand-blue text-zinc-950 hover:text-white font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer"
+                      className="w-full mt-3 py-2.5 sm:py-3 rounded-xl bg-white hover:bg-brand-blue text-zinc-950 hover:text-white font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow hover:shadow-brand-blue/30"
                     >
-                      <span>SELECT FRAME</span>
+                      <span>SELECT {item.category === "lenses" ? "LENS" : "FRAME"}</span>
                       <ArrowRight size={14} />
                     </button>
                   </div>
                 ))}
               </div>
+            </div>
 
-            </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
