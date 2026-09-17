@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
 import BrandTicker from "./components/BrandTicker";
 import TrustStrip from "./components/TrustStrip";
+import ShowroomShowcase from "./components/ShowroomShowcase";
 import AboutUs from "./components/AboutUs";
 import LensLab from "./components/LensLab";
 import LocationsSection from "./components/LocationsSection";
@@ -157,6 +158,8 @@ export default function App() {
 
               {/* PHYSICAL ATELIER MAPS/GRID */}
               <LocationsSection />
+
+              <ShowroomShowcase />
 
               {/* BLOG SECTIONS & DIGITAL EYE CARE TIPS */}
               <BlogSection />

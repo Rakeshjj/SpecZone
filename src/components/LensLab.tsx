@@ -31,7 +31,7 @@ const LENS_SCENARIOS: LensScenario[] = [
     badge: "ULTRA SUN SECURITY",
     beforeLabel: "Standard Lens (Blinded by Reflective Glare)",
     afterLabel: "Oculis Polarized (Zero-Reflection Contrast)",
-    bgImage: "../assets/img/lenslab1.jpg",
+    bgImage: "/assets/img/lenslab1.jpg",
     beforeClasses: "brightness-[1.3] saturate-[0.6] blur-[2px] contrast-[0.9]", // washed out & glaring
     afterClasses: "brightness-100 saturate-100 blur-0 contrast-105"
   },
@@ -45,7 +45,7 @@ const LENS_SCENARIOS: LensScenario[] = [
     badge: "HEV SHIELD RATED",
     beforeLabel: "Unfiltered HEV (Digital Strain & High Contrast Glare)",
     afterLabel: "Oculis Blue-Filter (Optimized Contrast Comfort)",
-    bgImage: "../assets/img/bluelens.jpg    ",
+    bgImage: "/assets/img/bluelens.jpg",
     beforeClasses: "hue-rotate-[180deg] saturate-[1.4] brightness-[1.1] blur-[1px]", // blue-shifted & raw
     afterClasses: "sepia-[0.12] brightness-[0.98] contrast-[1.02] blur-0" // warm and balanced
   },
@@ -59,7 +59,7 @@ const LENS_SCENARIOS: LensScenario[] = [
     badge: "EASY-CLEAN SHIELD",
     beforeLabel: "Untreated Lens (Water Smudging & Fog Distortion)",
     afterLabel: "Oculis Hydro-Coat (Instant Water-Repelling Clarity)",
-    bgImage: "../assets/img/anti-reflections.jpg",
+    bgImage: "/assets/img/anti-reflections.jpg",
     beforeClasses: "blur-[6px] contrast-[0.85] saturate-[0.9]", // heavily water distorted
     afterClasses: "blur-0 contrast-100 saturate-100"
   }
@@ -73,7 +73,6 @@ export default function LensLab() {
 
   const shouldReduceMotion = useReducedMotion();
   const [isMobile, setIsMobile] = useState(false);
-  const [hasEntered, setHasEntered] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -88,18 +87,18 @@ export default function LensLab() {
   const rightContainerVariants = {
     hidden: {
       opacity: 0,
-      x: shouldReduceMotion ? 0 : (isMobile ? 0 : 100),
-      y: shouldReduceMotion ? 0 : (isMobile ? 40 : 0),
+      x: shouldReduceMotion ? 0 : (isMobile ? 0 : 40),
+      y: shouldReduceMotion ? 0 : (isMobile ? 25 : 0),
     },
     visible: {
       opacity: 1,
       x: 0,
       y: 0,
       transition: {
-        duration: 1.0,
+        duration: 0.7,
         ease: EASE_PREMIUM,
-        staggerChildren: 0.14,
-        delayChildren: 0.08,
+        staggerChildren: 0.1,
+        delayChildren: 0.05,
       },
     },
   };
@@ -107,15 +106,13 @@ export default function LensLab() {
   const rightItemVariants = {
     hidden: {
       opacity: 0,
-      x: shouldReduceMotion ? 0 : (isMobile ? 0 : 25),
-      y: shouldReduceMotion ? 0 : 15,
+      y: 12,
     },
     visible: {
       opacity: 1,
-      x: 0,
       y: 0,
       transition: {
-        duration: 0.85,
+        duration: 0.5,
         ease: EASE_PREMIUM,
       },
     },
@@ -257,13 +254,13 @@ export default function LensLab() {
           
           {/* Left Panel: Dynamic Lens Slider (7 columns) */}
           <div className="lg:col-span-7 space-y-4">
-            {/* Scroll-triggered entrance: slides from left (or bottom on mobile) with subtle scale effect 0.96 -> 1 */}
+            {/* Scroll-triggered entrance: slides smoothly into place */}
             <motion.div
               initial={{
                 opacity: 0,
-                x: shouldReduceMotion ? 0 : (isMobile ? 0 : -100),
-                y: shouldReduceMotion ? 0 : (isMobile ? 45 : 0),
-                scale: shouldReduceMotion ? 1 : 0.96,
+                x: shouldReduceMotion ? 0 : (isMobile ? 0 : -35),
+                y: shouldReduceMotion ? 0 : (isMobile ? 25 : 0),
+                scale: shouldReduceMotion ? 1 : 0.98,
               }}
               whileInView={{
                 opacity: 1,
@@ -271,9 +268,9 @@ export default function LensLab() {
                 y: 0,
                 scale: 1,
               }}
-              viewport={{ once: true, amount: 0.25 }}
+              viewport={{ once: true, amount: 0.1 }}
               transition={{
-                duration: 1.1,
+                duration: 0.7,
                 ease: EASE_PREMIUM,
               }}
               style={{ perspective: 1200 }}
@@ -312,6 +309,9 @@ export default function LensLab() {
                         src={activeScenario.bgImage}
                         alt="Standard Vision Glare"
                         referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          e.currentTarget.src = "/assets/img/lenslab1.jpg";
+                        }}
                         className={`w-full h-full object-cover select-none pointer-events-none transition-all duration-300 ${activeScenario.beforeClasses}`}
                       />
                       
@@ -340,6 +340,9 @@ export default function LensLab() {
                         src={activeScenario.bgImage}
                         alt="Oculis Precision Vision"
                         referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          e.currentTarget.src = "/assets/img/lenslab1.jpg";
+                        }}
                         className={`w-full h-full object-cover select-none pointer-events-none transition-all duration-300 ${activeScenario.afterClasses}`}
                       />
                       
@@ -445,8 +448,7 @@ export default function LensLab() {
             variants={rightContainerVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.25 }}
-            onAnimationComplete={() => setHasEntered(true)}
+            viewport={{ once: true, amount: 0.1 }}
             className="lg:col-span-5 flex flex-col justify-between h-full space-y-8 min-h-[340px]"
           >
             <div className="space-y-6">
@@ -454,25 +456,19 @@ export default function LensLab() {
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeScenario.id}
-                  initial={hasEntered ? { opacity: 0, y: 12 } : undefined}
-                  animate={hasEntered ? { opacity: 1, y: 0 } : undefined}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.45, ease: EASE_PREMIUM }}
+                  transition={{ duration: 0.4, ease: EASE_PREMIUM }}
                   className="space-y-6"
                 >
-                  <motion.h3
-                    variants={rightItemVariants}
-                    className="font-serif text-3xl md:text-4xl font-normal text-white uppercase leading-tight tracking-tight"
-                  >
+                  <h3 className="font-serif text-3xl md:text-4xl font-normal text-white uppercase leading-tight tracking-tight">
                     {activeScenario.title}
-                  </motion.h3>
+                  </h3>
 
-                  <motion.p
-                    variants={rightItemVariants}
-                    className="font-sans text-sm text-zinc-300 leading-relaxed font-light"
-                  >
+                  <p className="font-sans text-sm text-zinc-300 leading-relaxed font-light">
                     {activeScenario.description}
-                  </motion.p>
+                  </p>
                 </motion.div>
               </AnimatePresence>
 
