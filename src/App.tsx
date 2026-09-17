@@ -134,14 +134,14 @@ export default function App() {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.5 }}
             >
-              {/* HERO HEADER */}
-              <HeroSection onScrollDown={() => scrollToSection("showroom-showcase")} />
+              {/* INTEGRATED HOME EYE CHECKUP PROMOTIONAL & EYEWEAR VIDEO CONSULTATION SECTION (TOP OF PAGE) */}
+              <ConsultationBookingSection onSuccessNavigate={() => scrollToSection("locations-section")} />
 
-              {/* AUTOPLAY BRAND TICKER CAROUSEL (RIGHT UNDER HERO) */}
+              {/* AUTOPLAY BRAND TICKER / LOGO MARQUEE (IMMEDIATELY AFTER HOME EYE CHECKUP) */}
               <BrandTicker />
 
-              {/* NEW INTEGRATED BOOKING + EYEWEAR VIDEO CONSULTATION SECTION */}
-              <ConsultationBookingSection onSuccessNavigate={() => scrollToSection("locations-section")} />
+              {/* HERO HEADER */}
+              <HeroSection onScrollDown={() => scrollToSection("showroom-showcase")} />
 
               <SmoothScroll />
 

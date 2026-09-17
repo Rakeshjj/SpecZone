@@ -1,13 +1,42 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-serif: "Cormorant Garamond", serif;
-  --font-sans: "Poppins", "Plus Jakarta Sans", system-ui, sans-serif;
-  --font-display: "Poppins", sans-serif;
+  --font-sans: "Host Grotesk", sans-serif;
+  --font-display: "Host Grotesk", sans-serif;
+  --font-serif: "Host Grotesk", sans-serif;
   
   --color-brand-blue: #0a64ff;
   --color-brand-dark: #050505;
+}
+
+:root {
+  font-family: "Host Grotesk", sans-serif;
+}
+
+/* Global Font Application */
+html,
+body,
+#root {
+  font-family: "Host Grotesk", sans-serif;
+}
+
+*, *::before, *::after {
+  font-family: inherit;
+}
+
+/* Ensure all typography elements use Host Grotesk */
+h1, h2, h3, h4, h5, h6,
+p, span, a, button, input, textarea, select, label, badge, div, li, ul, ol, form, blockquote, table, th, td {
+  font-family: "Host Grotesk", sans-serif;
+}
+
+/* Override existing font class declarations to enforce Host Grotesk everywhere */
+.font-sans,
+.font-serif,
+.font-display,
+.font-cormorant {
+  font-family: "Host Grotesk", sans-serif !important;
 }
 
 /* Custom styles for luxury appearance */

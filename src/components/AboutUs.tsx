@@ -159,9 +159,6 @@ export default function AboutUs() {
           className="lg:col-span-7 space-y-8"
         >
           <div className="space-y-4">
-            <span className="font-mono text-xs tracking-[0.3em] text-brand-blue block animate-pulse">
-              [ SIX DECADES OF PRECISION ]
-            </span>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-[50px] font-black text-white uppercase leading-[0.95] tracking-tight">
               SCULPTORS OF <br />
               <span className="text-zinc-500 italic font-black">PRECISION VISION</span>

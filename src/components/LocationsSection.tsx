@@ -21,9 +21,6 @@ export default function LocationsSection() {
           {/* Top Left: Typography */}
           <div className="col-span-1 lg:col-span-5 space-y-8">
             <div className="space-y-4">
-              <span className="font-mono text-xs tracking-[0.3em] text-brand-blue block">
-                [ SHOWROOMS v1959: GEOGRAPHY ]
-              </span>
               <h2 className="font-serif text-3xl sm:text-4xl md:text-[50px] font-black text-white uppercase leading-[0.95] tracking-tight">
                 OUR ATELIER <br />
                 <span className="text-zinc-500 italic font-black">LOCATIONS</span>

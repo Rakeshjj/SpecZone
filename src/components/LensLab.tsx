@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { Sparkles, Eye, ShieldCheck, Sun, Laptop, Droplets, Info, ArrowRight, CornerDownRight } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "motion/react";
+import { Eye, ShieldCheck, Sun, Laptop, Droplets } from "lucide-react";
 
 interface LensScenario {
   id: string;
@@ -66,10 +66,25 @@ export default function LensLab() {
   const [activeScenario, setActiveScenario] = useState<LensScenario>(LENS_SCENARIOS[0]);
   const [sliderPosition, setSliderPosition] = useState(50); // percentage (0 - 100)
   const [isDragging, setIsDragging] = useState(false);
-  
+  const [sweepKey, setSweepKey] = useState(0);
+
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleMove = (clientX: number) => {
+  // Parallax motion values with silky spring damping for smooth 60fps GPU transforms
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springConfig = { damping: 26, stiffness: 130, mass: 0.5 };
+  const smoothX = useSpring(mouseX, springConfig);
+  const smoothY = useSpring(mouseY, springConfig);
+
+  // Gentle 3D tilt and translation - subtle, refined, no extreme angles
+  const rotateX = useTransform(smoothY, [-0.5, 0.5], [3.5, -3.5]);
+  const rotateY = useTransform(smoothX, [-0.5, 0.5], [-3.5, 3.5]);
+  const translateX = useTransform(smoothX, [-0.5, 0.5], [-6, 6]);
+  const translateY = useTransform(smoothY, [-0.5, 0.5], [-6, 6]);
+
+  const updateSliderFromClientX = (clientX: number) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = clientX - rect.left;
@@ -77,15 +92,47 @@ export default function LensLab() {
     setSliderPosition(percentage);
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    // We allow mousemove tracking on hover as requested in user's design, 
-    // but if dragging is preferred or on touch, let's support both effortlessly.
-    handleMove(e.clientX);
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    setIsDragging(true);
+    updateSliderFromClientX(e.clientX);
+    try {
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    } catch {
+      // safe fallback
+    }
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (e.touches[0]) {
-      handleMove(e.touches[0].clientX);
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    // Parallax tracking relative to container center (-0.5 to 0.5)
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const normX = (e.clientX - rect.left) / rect.width - 0.5;
+      const normY = (e.clientY - rect.top) / rect.height - 0.5;
+      mouseX.set(Math.max(-0.5, Math.min(0.5, normX)));
+      mouseY.set(Math.max(-0.5, Math.min(0.5, normY)));
+    }
+
+    // Active drag tracking
+    if (isDragging || e.buttons === 1) {
+      updateSliderFromClientX(e.clientX);
+    }
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    setIsDragging(false);
+    try {
+      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch {
+      // safe fallback
+    }
+  };
+
+  const handlePointerLeave = () => {
+    // Return gently to neutral without jump
+    mouseX.set(0);
+    mouseY.set(0);
+    if (!isDragging) {
+      setIsDragging(false);
     }
   };
 
@@ -103,9 +150,6 @@ export default function LensLab() {
         {/* Elegant Section Title */}
         <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 pb-6 border-b border-white/5">
           <div className="space-y-4">
-            <span className="font-mono text-xs tracking-[0.35em] text-brand-blue block uppercase font-bold">
-              [ ADVANCED LENS TECHNOLOGY ]
-            </span>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-[50px] font-black text-white uppercase leading-[0.95] tracking-tight">
               INTERACTIVE <br />
               <span className="text-zinc-500 italic font-black">LENS LAB</span>
@@ -117,23 +161,41 @@ export default function LensLab() {
 
           {/* Scenario Tab Selectors */}
           <div className="flex flex-wrap gap-2 shrink-0 bg-zinc-900/60 p-1.5 rounded-xl border border-white/5 backdrop-blur-sm">
-            {LENS_SCENARIOS.map((scenario) => (
-              <button
-                key={scenario.id}
-                onClick={() => {
-                  setActiveScenario(scenario);
-                  setSliderPosition(50); // Reset slider to center
-                }}
-                className={`px-4 py-2.5 rounded-lg font-mono text-[10px] tracking-wider uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer ${
-                  activeScenario.id === scenario.id
-                    ? "bg-brand-blue text-white font-bold shadow-md shadow-brand-blue/20"
-                    : "text-zinc-400 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                {scenario.icon}
-                <span>{scenario.label}</span>
-              </button>
-            ))}
+            {LENS_SCENARIOS.map((scenario) => {
+              const isActive = activeScenario.id === scenario.id;
+              return (
+                <button
+                  key={scenario.id}
+                  onClick={() => {
+                    if (activeScenario.id !== scenario.id) {
+                      setActiveScenario(scenario);
+                      setSliderPosition(50); // Reset slider to center
+                      setSweepKey((prev) => prev + 1); // Trigger glare reduction sweep
+                    }
+                  }}
+                  className={`relative px-4 py-2.5 rounded-lg font-mono text-[10px] tracking-wider uppercase transition-colors duration-300 flex items-center gap-2 cursor-pointer ${
+                    isActive
+                      ? "text-white font-bold"
+                      : "text-zinc-400 hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeScenarioGlow"
+                      className="absolute inset-0 rounded-lg bg-brand-blue shadow-md shadow-brand-blue/30 -z-10"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10 flex items-center gap-2">
+                    {scenario.icon}
+                    <span>{scenario.label}</span>
+                    {isActive && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-white/90 animate-pulse" />
+                    )}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -142,162 +204,220 @@ export default function LensLab() {
           
           {/* Left Panel: Dynamic Lens Slider (7 columns) */}
           <div className="lg:col-span-7 space-y-4">
-            <div
-              ref={containerRef}
-              onMouseMove={handleMouseMove}
-              onTouchMove={handleTouchMove}
-              className="relative aspect-[16/10] w-full bg-zinc-900 rounded-3xl overflow-hidden border border-white/10 shadow-2xl select-none cursor-ew-resize"
+            {/* Viewport Reveal Wrapper: subtle cinematic reveal scaling from 0.96 to 1.0, fading in, and moving upward slightly */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 22 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+              style={{ perspective: 1200 }}
+              className="w-full"
             >
-              {/* Scenario Image Base (Before Layer - Left/Full) */}
-              <div className="absolute inset-0 w-full h-full">
-                <img
-                  src={activeScenario.bgImage}
-                  alt="Standard Vision Glare"
-                  referrerPolicy="no-referrer"
-                  className={`w-full h-full object-cover transition-all duration-300 ${activeScenario.beforeClasses}`}
+              {/* Parallax Container: gentle 3D tilt & smooth GPU translation based on mouse movement */}
+              <motion.div
+                ref={containerRef}
+                style={{
+                  rotateX,
+                  rotateY,
+                  x: translateX,
+                  y: translateY,
+                  transformStyle: "preserve-3d",
+                  willChange: "transform"
+                }}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerLeave={handlePointerLeave}
+                className="relative aspect-[16/10] w-full bg-zinc-900 rounded-3xl overflow-hidden border border-white/10 shadow-2xl select-none cursor-ew-resize touch-none"
+              >
+                {/* 400-600ms smooth fade/slide scenario transition for lens preview */}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeScenario.id}
+                    initial={{ opacity: 0, scale: 0.985 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.015 }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                    className="absolute inset-0 w-full h-full"
+                  >
+                    {/* Scenario Image Base (Before Layer - Left/Full) */}
+                    <div className="absolute inset-0 w-full h-full">
+                      <img
+                        src={activeScenario.bgImage}
+                        alt="Standard Vision Glare"
+                        referrerPolicy="no-referrer"
+                        className={`w-full h-full object-cover select-none pointer-events-none transition-all duration-300 ${activeScenario.beforeClasses}`}
+                      />
+                      
+                      {/* Simulated glare radial highlight for road-glare to match client's spec */}
+                      {activeScenario.id === "polarized" && (
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.7)_0%,transparent_60%)] mix-blend-overlay opacity-90 pointer-events-none" />
+                      )}
+                      {activeScenario.id === "bluelight" && (
+                        <div className="absolute inset-0 bg-blue-500/10 mix-blend-color pointer-events-none" />
+                      )}
+                      
+                      {/* HUD Glare Label Overlay */}
+                      <div className="absolute bottom-4 left-6 z-10 px-3 py-1 bg-black/60 backdrop-blur-md rounded-md border border-white/5 pointer-events-none">
+                        <span className="font-mono text-[9px] text-red-400 font-bold uppercase tracking-widest">
+                          {activeScenario.beforeLabel}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Scenario Image Revealed (After Layer - Revealed precisely up to sliderPosition%) */}
+                    <div
+                      className="absolute inset-0 w-full h-full pointer-events-none"
+                      style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+                    >
+                      <img
+                        src={activeScenario.bgImage}
+                        alt="Oculis Precision Vision"
+                        referrerPolicy="no-referrer"
+                        className={`w-full h-full object-cover select-none pointer-events-none transition-all duration-300 ${activeScenario.afterClasses}`}
+                      />
+                      
+                      {/* Glass tint shimmer effect */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 pointer-events-none" />
+
+                      {/* HUD Crisp Label Overlay */}
+                      <div className="absolute bottom-4 left-6 z-10 px-3 py-1 bg-black/60 backdrop-blur-md rounded-md border border-white/5 whitespace-nowrap pointer-events-none">
+                        <span className="font-mono text-[9px] text-brand-blue font-bold uppercase tracking-widest">
+                          {activeScenario.afterLabel}
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+
+                {/* Soft animated light/glare sweep across lens image from left to right demonstrating glare reduction */}
+                <motion.div
+                  key={`glare-sweep-${activeScenario.id}-${sweepKey}`}
+                  initial={{ x: "-150%", opacity: 0 }}
+                  animate={{
+                    x: ["-150%", "250%"],
+                    opacity: [0, 0.85, 0.85, 0]
+                  }}
+                  transition={{
+                    duration: 1.6,
+                    ease: [0.25, 1, 0.5, 1],
+                    delay: 0.35
+                  }}
+                  className="absolute inset-y-0 w-2/3 pointer-events-none z-20 -skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent mix-blend-overlay"
                 />
-                
-                {/* Simulated glare radial highlight for road-glare to match client's spec */}
-                {activeScenario.id === "polarized" && (
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.7)_0%,transparent_60%)] mix-blend-overlay opacity-90 pointer-events-none" />
-                )}
-                {activeScenario.id === "bluelight" && (
-                  <div className="absolute inset-0 bg-blue-500/10 mix-blend-color pointer-events-none" />
-                )}
-                
-                {/* HUD Glare Label Overlay */}
-                <div className="absolute bottom-4 left-6 z-10 px-3 py-1 bg-black/60 backdrop-blur-md rounded-md border border-white/5">
-                  <span className="font-mono text-[9px] text-red-400 font-bold uppercase tracking-widest">
-                    {activeScenario.beforeLabel}
+
+                {/* Luminous Sliding Divider Line & Active Control */}
+                <div
+                  className="absolute top-0 bottom-0 w-[2px] bg-brand-blue z-30 pointer-events-none"
+                  style={{ left: `${sliderPosition}%` }}
+                >
+                  {/* Subtle vertical light guide pulse */}
+                  <motion.div
+                    animate={{ opacity: [0.4, 0.75, 0.4] }}
+                    transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute inset-0 w-[4px] -left-[1px] bg-brand-blue blur-sm"
+                  />
+                  <div className="absolute inset-0 w-[2px] bg-white/70" />
+
+                  {/* Center Control Handle with subtle pulsing highlight */}
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-brand-blue border-2 border-white flex items-center justify-center shadow-lg shadow-brand-blue/40 z-40 transition-transform duration-200 hover:scale-110 active:scale-95 pointer-events-auto">
+                    {/* Concentric Pulsing Highlight Ring 1 */}
+                    <motion.div
+                      animate={{
+                        scale: isDragging ? [1.15, 1.45, 1.15] : [1, 1.35, 1],
+                        opacity: isDragging ? [0.8, 0.3, 0.8] : [0.65, 0.15, 0.65]
+                      }}
+                      transition={{
+                        duration: isDragging ? 1.4 : 2.2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                      className="absolute inset-0 rounded-full bg-brand-blue -z-10 blur-sm pointer-events-none"
+                    />
+
+                    {/* Concentric Pulsing Highlight Ring 2 */}
+                    <motion.div
+                      animate={{
+                        scale: isDragging ? [1.3, 1.75, 1.3] : [1.1, 1.6, 1.1],
+                        opacity: isDragging ? [0.5, 0, 0.5] : [0.35, 0, 0.35]
+                      }}
+                      transition={{
+                        duration: isDragging ? 1.4 : 2.2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 0.35
+                      }}
+                      className="absolute -inset-1 rounded-full border border-brand-blue/60 -z-10 pointer-events-none"
+                    />
+
+                    {/* Handle Icon */}
+                    <div className="flex gap-1 items-center justify-center text-white select-none">
+                      <span className="font-sans text-xs font-bold font-mono">↔</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* HUD Sensor Scanner indicators */}
+                <div className="absolute top-4 left-4 z-20 px-3 py-1 bg-black/60 backdrop-blur-md rounded-md border border-white/10 flex items-center gap-2 pointer-events-none">
+                  <span className="w-1.5 h-1.5 bg-brand-blue rounded-full animate-ping" />
+                  <span className="font-mono text-[9px] text-zinc-300 uppercase tracking-widest">
+                    COATING ANALYZER // ACTIVE
                   </span>
                 </div>
-              </div>
 
-              {/* Scenario Image Revealed (After Layer - Sliding Right) */}
-              <div
-                className="absolute inset-0 overflow-hidden"
-                style={{ width: `${sliderPosition}%` }}
-              >
-                <div className="absolute inset-0 w-[100cqw] h-full" style={{ width: containerRef.current?.getBoundingClientRect().width }}>
-                  <img
-                    src={activeScenario.bgImage}
-                    alt="Oculis Precision Vision"
-                    referrerPolicy="no-referrer"
-                    className={`w-full h-full object-cover transition-all duration-300 ${activeScenario.afterClasses}`}
-                  />
-                  
-                  {/* Glass tint shimmer effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 pointer-events-none" />
-
-                  {/* HUD Crisp Label Overlay */}
-                  <div className="absolute bottom-4 left-6 z-10 px-3 py-1 bg-black/60 backdrop-blur-md rounded-md border border-white/5 whitespace-nowrap">
-                    <span className="font-mono text-[9px] text-brand-blue font-bold uppercase tracking-widest">
-                      {activeScenario.afterLabel}
-                    </span>
-                  </div>
+                <div className="absolute top-4 right-4 z-20 px-3 py-1 bg-black/60 backdrop-blur-md rounded-md border border-white/10 pointer-events-none">
+                  <span className="font-mono text-[9px] text-brand-blue uppercase tracking-widest font-bold">
+                    REVEAL: {Math.round(sliderPosition)}%
+                  </span>
                 </div>
-              </div>
-
-              {/* Luminous Sliding Divider Line */}
-              <div
-                className="absolute top-0 bottom-0 w-[2px] bg-brand-blue z-20"
-                style={{ left: `${sliderPosition}%` }}
-              >
-                {/* Center Control Handle */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-brand-blue border-2 border-white flex items-center justify-center shadow-lg shadow-brand-blue/40 z-30 transition-transform hover:scale-110 active:scale-95">
-                  <div className="flex gap-1 items-center justify-center text-white">
-                    <span className="font-sans text-xs font-bold font-mono">↔</span>
-                  </div>
-                </div>
-                {/* High Tech Glowing Pulse */}
-                <div className="absolute inset-0 w-[4px] -left-[1px] bg-brand-blue blur-sm opacity-50" />
-              </div>
-
-              {/* HUD Sensor Scanner indicators */}
-              <div className="absolute top-4 left-4 z-10 px-3 py-1 bg-black/60 backdrop-blur-md rounded-md border border-white/10 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-brand-blue rounded-full animate-ping" />
-                <span className="font-mono text-[9px] text-zinc-300 uppercase tracking-widest">
-                  COATING ANALYZER // ACTIVE
-                </span>
-              </div>
-
-              <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-black/60 backdrop-blur-md rounded-md border border-white/10">
-                <span className="font-mono text-[9px] text-brand-blue uppercase tracking-widest font-bold">
-                  REVEAL: {Math.round(sliderPosition)}%
-                </span>
-              </div>
-            </div>
-            
-            <div className="flex justify-between items-center px-2">
-              <span className="font-mono text-[9px] text-zinc-500 uppercase">← STANDARD WASHED OPTIC</span>
-              <span className="font-mono text-[9px] text-zinc-500 uppercase">OCULIS BESPOKE GLASS →</span>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
 
           {/* Right Panel: Feature Info & Premium Details (5 columns) */}
-          <div className="lg:col-span-5 flex flex-col justify-between h-full space-y-8">
-            <div className="space-y-6">
-              
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-blue/10 border border-brand-blue/20">
-                <Sparkles size={11} className="text-brand-blue" />
-                <span className="font-mono text-[9px] font-bold text-brand-blue tracking-widest uppercase">
-                  {activeScenario.badge}
-                </span>
-              </div>
-
-              <h3 className="font-serif text-3xl md:text-4xl font-normal text-white uppercase leading-tight tracking-tight">
-                {activeScenario.title}
-              </h3>
-
-              <p className="font-sans text-sm text-zinc-300 leading-relaxed font-light">
-                {activeScenario.description}
-              </p>
-
-              {/* Technical Specifications list */}
-              <div className="space-y-3.5 pt-4 border-t border-white/5">
-                <div className="flex items-start gap-3">
-                  <div className="p-1 rounded bg-zinc-900 border border-white/5 text-brand-blue shrink-0 mt-0.5">
-                    <ShieldCheck size={14} />
-                  </div>
-                  <div>
-                    <h5 className="font-mono text-[10px] font-bold text-white uppercase tracking-wider">High Index Multi-Resiliency</h5>
-                    <p className="font-sans text-xs text-zinc-400 mt-0.5">Sartorial scratch-resistant and anti-reflective armor on both sides of the lenses.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <div className="p-1 rounded bg-zinc-900 border border-white/5 text-brand-blue shrink-0 mt-0.5">
-                    <Eye size={14} />
-                  </div>
-                  <div>
-                    <h5 className="font-mono text-[10px] font-bold text-white uppercase tracking-wider">Perfect Visual Neutrality</h5>
-                    <p className="font-sans text-xs text-zinc-400 mt-0.5">Zero chromatic aberrations, securing natural depth perception and premium optical alignment.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Direct Link button */}
-            <div className="pt-6 border-t border-white/5">
-              <button
-                onClick={() => {
-                  const shopSection = document.getElementById("opticals-shop");
-                  if (shopSection) {
-                    shopSection.scrollIntoView({ behavior: "smooth" });
-                  }
-                }}
-                className="relative w-full px-6 py-4 rounded-xl bg-zinc-900/60 hover:bg-zinc-900 border border-white/10 hover:border-brand-blue/30 text-zinc-300 hover:text-white backdrop-blur-sm transition-all group flex items-center justify-between cursor-pointer"
+          <div className="lg:col-span-5 flex flex-col justify-between h-full space-y-8 min-h-[340px]">
+            {/* 400-600ms smooth fade/slide scenario transition for right-side content */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeScenario.id}
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                className="space-y-6"
               >
-                <div className="flex items-center gap-3">
-                  <Info size={14} className="text-brand-blue" />
-                  <span className="font-mono text-[10px] tracking-wider uppercase font-bold text-left">
-                    Explore Compatible Premium Frames
-                  </span>
-                </div>
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
+                <h3 className="font-serif text-3xl md:text-4xl font-normal text-white uppercase leading-tight tracking-tight">
+                  {activeScenario.title}
+                </h3>
 
+                <p className="font-sans text-sm text-zinc-300 leading-relaxed font-light">
+                  {activeScenario.description}
+                </p>
+
+                {/* Technical Specifications list */}
+                <div className="space-y-3.5 pt-4 border-t border-white/5">
+                  <div className="flex items-start gap-3">
+                    <div className="p-1 rounded bg-zinc-900 border border-white/5 text-brand-blue shrink-0 mt-0.5">
+                      <ShieldCheck size={14} />
+                    </div>
+                    <div>
+                      <h5 className="font-mono text-[10px] font-bold text-white uppercase tracking-wider">High Index Multi-Resiliency</h5>
+                      <p className="font-sans text-xs text-zinc-400 mt-0.5">Sartorial scratch-resistant and anti-reflective armor on both sides of the lenses.</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="p-1 rounded bg-zinc-900 border border-white/5 text-brand-blue shrink-0 mt-0.5">
+                      <Eye size={14} />
+                    </div>
+                    <div>
+                      <h5 className="font-mono text-[10px] font-bold text-white uppercase tracking-wider">Perfect Visual Neutrality</h5>
+                      <p className="font-sans text-xs text-zinc-400 mt-0.5">Zero chromatic aberrations, securing natural depth perception and premium optical alignment.</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
         </div>

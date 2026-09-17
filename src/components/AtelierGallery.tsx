@@ -136,7 +136,7 @@ const GALLERY_IMAGES: GalleryItem[] = [
 ];
 
 export default function AtelierGallery() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const targetRef = useRef<HTMLElement | null>(null);
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
   const [likedItems, setLikedItems] = useState<number[]>([]);
 
@@ -163,7 +163,7 @@ export default function AtelierGallery() {
 
   // Hook scroll velocity and progress for beautiful dynamic parallax shifts
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: targetRef,
     offset: ["start end", "end start"],
   });
 
@@ -178,7 +178,7 @@ export default function AtelierGallery() {
 
   return (
     <section
-      ref={containerRef}
+      ref={targetRef}
       id="gallery-reveal"
       className="relative min-h-screen bg-[#fafafa]/80 py-24 flex flex-col justify-center overflow-hidden border-b border-zinc-250/20 backdrop-blur-md"
     >

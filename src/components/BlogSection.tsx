@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { X, BookOpen, Clock, Calendar, ChevronRight, Share2, Sparkles } from "lucide-react";
 
 interface Article {
@@ -105,6 +105,25 @@ const ARTICLES_DATA: Article[] = [
 
 export default function BlogSection() {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  const cardVariants = {
+    hidden: shouldReduceMotion
+      ? { opacity: 1, y: 0, scale: 1 }
+      : { opacity: 0, y: 60, scale: 0.86 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
+        mass: 0.8,
+        delay: shouldReduceMotion ? 0 : (i % 3) * 0.12,
+      },
+    }),
+  };
 
   return (
     <section
@@ -113,12 +132,15 @@ export default function BlogSection() {
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(10,100,255,0.01)_0%,transparent_60%)] pointer-events-none" />
       <div className="max-w-7xl mx-auto w-full z-10 space-y-16">
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-white/5 pb-8">
+        {/* Section Header with smooth entrance */}
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-white/5 pb-8"
+        >
           <div className="space-y-4">
-            <span className="font-mono text-xs tracking-[0.3em] text-brand-blue block">
-              [ THE VIJAYA CHRONICLES & HEALTH INSIGHTS ]
-            </span>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-[50px] font-black text-white uppercase leading-[0.95] tracking-tight">
               EYE CARE <br />
               <span className="text-zinc-500 italic font-black">CHRONICLES</span>
@@ -128,33 +150,28 @@ export default function BlogSection() {
           <span className="font-mono text-xs text-zinc-400 tracking-wider uppercase border-b border-white/10 pb-1 hover:text-brand-blue hover:border-brand-blue cursor-pointer transition-colors">
             All Articles →
           </span>
-        </div>
+        </motion.div>
 
-        {/* 3-Column Blog Grid */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.15
-              }
-            }
-          }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full"
-        >
-          {ARTICLES_DATA.map((article) => (
+        {/* 3-Column Blog Grid with Pop-Up Scroll Animation */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+          {ARTICLES_DATA.map((article, index) => (
             <motion.div
               key={article.id}
-              variants={{
-                hidden: { opacity: 0, y: 30 },
-                visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 70, damping: 14 } }
-              }}
-              whileHover={{ y: -8, scale: 1.01 }}
-              className="bg-zinc-900/40 backdrop-blur-sm border border-white/10 hover:border-brand-blue/30 rounded-2xl overflow-hidden shadow-md hover:shadow-xl flex flex-col justify-between group transition-all duration-500"
+              custom={index}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.15, margin: "0px 0px -40px 0px" }}
+              variants={cardVariants}
+              whileHover={
+                shouldReduceMotion
+                  ? undefined
+                  : {
+                      y: -8,
+                      scale: 1.025,
+                      transition: { type: "spring", stiffness: 400, damping: 25 },
+                    }
+              }
+              className="bg-zinc-900/40 backdrop-blur-sm border border-white/10 hover:border-brand-blue/40 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-brand-blue/10 flex flex-col justify-between group transition-colors duration-300"
             >
               <div>
                 {/* Thumbnail */}
@@ -166,9 +183,9 @@ export default function BlogSection() {
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1577803645773-f96470509666?auto=format&fit=crop&q=80&w=800";
                     }}
-                    className="w-full h-full object-cover opacity-80 group-hover:opacity-95 group-hover:scale-105 transition-all duration-700"
+                    className="w-full h-full object-cover opacity-80 group-hover:opacity-95 group-hover:scale-108 transition-all duration-700 ease-out"
                   />
-                  <span className="absolute top-4 left-4 bg-zinc-950/60 backdrop-blur-md text-zinc-100 font-mono text-[9px] tracking-widest uppercase px-3 py-1 rounded-full border border-white/10">
+                  <span className="absolute top-4 left-4 bg-zinc-950/60 backdrop-blur-md text-zinc-100 font-mono text-[9px] tracking-widest uppercase px-3 py-1 rounded-full border border-white/10 group-hover:border-brand-blue/30 transition-colors">
                     {article.category}
                   </span>
                 </div>
@@ -202,7 +219,7 @@ export default function BlogSection() {
               </div>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
 
       {/* Full formatted Article Reader Modal */}
