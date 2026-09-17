@@ -527,37 +527,37 @@ export default function StackedCardsSection({ onBookClick }: StackedCardsSection
     }
   };
 
-  return (
-    <section
-      ref={containerRef}
-      id="stacked-cards-archive"
-      className="relative bg-[#09090b] text-white border-t border-white/10"
-      style={{ height: "350vh" }}
-    >
-      {/* Ambient background glows */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-brand-blue/10 rounded-full blur-[160px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[140px]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
-      </div>
+  // return (
+  //   <section
+  //     ref={containerRef}
+  //     id="stacked-cards-archive"
+  //     className="relative bg-[#09090b] text-white border-t border-white/10"
+  //     style={{ height: "350vh" }}
+  //   >
+  //     {/* Ambient background glows */}
+  //     <div className="absolute inset-0 pointer-events-none overflow-hidden">
+  //       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-brand-blue/10 rounded-full blur-[160px]" />
+  //       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[140px]" />
+  //       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+  //     </div>
 
-      {/* STICKY PINNED VIEWPORT */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center py-4 sm:py-6 md:py-8 px-3 sm:px-6 md:px-8 lg:px-10 z-20">
-        {/* Central Card Stacking Arena */}
-        <div className="relative w-full max-w-5xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1480px] mx-auto flex items-center justify-center min-h-[480px] sm:min-h-[510px] md:min-h-[530px]">
-          {STACKED_CARDS_DATA.map((card, index) => (
-            <StackedCardItem
-              key={card.id}
-              card={card}
-              index={index}
-              total={STACKED_CARDS_DATA.length}
-              scrollProgress={scrollYProgress}
-              isActive={isSectionInView && activeCardIndex === index}
-              onSelect={handleSelectService}
-            />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+  //     {/* STICKY PINNED VIEWPORT */}
+  //     <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center py-4 sm:py-6 md:py-8 px-3 sm:px-6 md:px-8 lg:px-10 z-20">
+  //       {/* Central Card Stacking Arena */}
+  //       <div className="relative w-full max-w-5xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1480px] mx-auto flex items-center justify-center min-h-[480px] sm:min-h-[510px] md:min-h-[530px]">
+  //         {STACKED_CARDS_DATA.map((card, index) => (
+  //           <StackedCardItem
+  //             key={card.id}
+  //             card={card}
+  //             index={index}
+  //             total={STACKED_CARDS_DATA.length}
+  //             scrollProgress={scrollYProgress}
+  //             isActive={isSectionInView && activeCardIndex === index}
+  //             onSelect={handleSelectService}
+  //           />
+  //         ))}
+  //       </div>
+  //     </div>
+  //   </section>
+  // );
 }
