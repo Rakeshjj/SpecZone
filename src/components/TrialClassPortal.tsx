@@ -9,12 +9,19 @@ import {
   CheckCircle2,
   X,
   Sparkles,
-  Glasses
+  Glasses,
+  ShieldCheck,
+  Eye,
+  Home,
+  Clock,
+  ArrowRight,
+  Check
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
 interface TrialClassPortalProps {
   onBackToMain?: () => void;
+  initialService?: string;
 }
 
 const AGE_GROUPS = ["6–12", "13–21", "22–30", "31–40", "40+"];
@@ -295,16 +302,121 @@ const FAQS = [
   }
 ];
 
-export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps) {
+const HOME_CHECK_STATS = [
+  { value: "14-Step", label: "Hospital-Grade Clinical Eye Test" },
+  { value: "0 Min", label: "Clinic Travel & Waiting Time" },
+  { value: "100+", label: "Curated Frames Brought to Home" },
+  { value: "100%", label: "Accurate Prescription Guarantee" }
+];
+
+const HOME_SHOWCASE_SLIDES = [
+  {
+    left: {
+      src: "/assets/img/modernoptical.jpeg",
+      alt: "Hospital Grade Digital Refractometer",
+      fallback: "/assets/img/lens2.jpg"
+    },
+    center: {
+      src: "/assets/img/premiumopticall.jpeg",
+      alt: "Certified Optometrist Home Eye Examination",
+      fallback: "/assets/img/prmiumoptical2.jpeg"
+    },
+    right: {
+      src: "/assets/img/opticalstore5.jpg",
+      alt: "100+ Designer Frames Doorstep Try-On Kit",
+      fallback: "/assets/img/opticalstore1.jpg"
+    }
+  },
+  {
+    left: {
+      src: "/assets/img/lens2.jpg",
+      alt: "Computerized Lens Refraction & Tuning",
+      fallback: "/assets/img/anti-reflections.jpg"
+    },
+    center: {
+      src: "/assets/img/prmiumoptical2.jpeg",
+      alt: "Comprehensive Vision & Health Assessment",
+      fallback: "/assets/img/modernoptical.jpeg"
+    },
+    right: {
+      src: "/assets/img/atelier.jpg",
+      alt: "Bespoke Prescription Optical Crafting",
+      fallback: "/assets/img/lenslab1.jpg"
+    }
+  },
+  {
+    left: {
+      src: "/assets/img/bluelens.jpg",
+      alt: "Blue-Cut Digital Protection Lenses",
+      fallback: "/assets/img/lens.jpg"
+    },
+    center: {
+      src: "/assets/img/opticalshop2.jpg",
+      alt: "Doorstep White Glove Delivery & Fitting",
+      fallback: "/assets/img/traditionaloptical.jpeg"
+    },
+    right: {
+      src: "/assets/img/Rayban meta.png",
+      alt: "Modern Smart & Designer Eyewear",
+      fallback: "/assets/img/Oakley.jpg"
+    }
+  }
+];
+
+const HOME_CHECK_FAQS = [
+  {
+    q: "How does the Professional Home Eye Check work?",
+    a: "Our certified optometrist visits your home at your scheduled time equipped with portable hospital-grade digital diagnostic gear. We conduct a thorough 14-step vision evaluation and bring a suitcase of 100+ frames for you to try on with zero pressure."
+  },
+  {
+    q: "What equipment does the optometrist bring to my home?",
+    a: "We bring computerized auto-refractometers, streak retinoscopes, illuminated digital visual acuity charts, pupillometers, and comprehensive trial lens suites to measure cylinder, sphere, and axis with clinical hospital accuracy."
+  },
+  {
+    q: "Is there any obligation to purchase spectacles after the check?",
+    a: "None at all! You receive your complete, certified optical prescription. If you fall in love with any of our 100+ try-on frames, we can craft your custom lenses with doorstep delivery and free fitting adjustments."
+  },
+  {
+    q: "Can my entire family get their eyes checked during the visit?",
+    a: "Yes! Home eye testing is ideal for families, busy professionals, and senior citizens who prefer not to travel. Simply select or note the number of family members and we will allocate enough time for everyone."
+  }
+];
+
+export default function TrialClassPortal({
+  onBackToMain,
+  initialService = "Transform Your Look"
+}: TrialClassPortalProps) {
   // Form State
   const [studentName, setStudentName] = useState("");
   const [countryCode, setCountryCode] = useState("+91");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [selectedAge, setSelectedAge] = useState("13–21");
-  const [selectedService, setSelectedService] = useState("Home eyecare check");
+  const [selectedService, setSelectedService] = useState<string>(() => {
+    if (
+      initialService &&
+      (initialService.toLowerCase().includes("home") || initialService.toLowerCase().includes("check"))
+    ) {
+      return "Home Eye Check";
+    }
+    return "Transform Your Look";
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (initialService) {
+      if (initialService.toLowerCase().includes("home") || initialService.toLowerCase().includes("check")) {
+        setSelectedService("Home Eye Check");
+      } else {
+        setSelectedService("Transform Your Look");
+      }
+    }
+  }, [initialService]);
+
+  const isHomeEyeCheck =
+    selectedService.toLowerCase().includes("home") ||
+    selectedService.toLowerCase().includes("check");
 
   // Active Category & Carousel State
   const [activeTabId, setActiveTabId] = useState("hindustani");
@@ -316,6 +428,7 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
 
   // FAQ State (1st item expanded by default)
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [openHomeFaq, setOpenHomeFaq] = useState<number | null>(0);
 
   // Read More Testimonial Modal State
   const [expandedTestimonial, setExpandedTestimonial] = useState<{
@@ -330,6 +443,7 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
   const [isTestimonialTransitioning, setIsTestimonialTransitioning] = useState(true);
 
   // Optical Showcase Triptych Carousel State
+  const activeShowcaseSlides = isHomeEyeCheck ? HOME_SHOWCASE_SLIDES : SHOWCASE_SLIDES;
   const [showcaseSlideIndex, setShowcaseSlideIndex] = useState(0);
   const [showcaseDirection, setShowcaseDirection] = useState(1);
   const [isShowcasePaused, setIsShowcasePaused] = useState(false);
@@ -338,19 +452,24 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
     if (isShowcasePaused) return;
     const timer = setInterval(() => {
       setShowcaseDirection(1);
-      setShowcaseSlideIndex((prev) => (prev + 1) % SHOWCASE_SLIDES.length);
+      setShowcaseSlideIndex((prev) => (prev + 1) % activeShowcaseSlides.length);
     }, 3800);
     return () => clearInterval(timer);
-  }, [isShowcasePaused]);
+  }, [isShowcasePaused, activeShowcaseSlides.length]);
 
   const handlePrevShowcase = () => {
     setShowcaseDirection(-1);
-    setShowcaseSlideIndex((prev) => (prev - 1 + SHOWCASE_SLIDES.length) % SHOWCASE_SLIDES.length);
+    setShowcaseSlideIndex((prev) => (prev - 1 + activeShowcaseSlides.length) % activeShowcaseSlides.length);
   };
 
   const handleNextShowcase = () => {
     setShowcaseDirection(1);
-    setShowcaseSlideIndex((prev) => (prev + 1) % SHOWCASE_SLIDES.length);
+    setShowcaseSlideIndex((prev) => (prev + 1) % activeShowcaseSlides.length);
+  };
+
+  const handleServiceChange = (newService: string) => {
+    setSelectedService(newService);
+    setShowcaseSlideIndex(0);
   };
 
   const handleNextTestimonial = () => {
@@ -617,14 +736,14 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
                     <div className="relative">
                       <select
                         value={selectedService}
-                        onChange={(e) => setSelectedService(e.target.value)}
+                        onChange={(e) => handleServiceChange(e.target.value)}
                         className="w-full h-8.5 sm:h-9 px-3 pr-7 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-slate-200 text-xs font-medium focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all appearance-none cursor-pointer truncate"
                       >
-                        <option value="Home eyecare check" className="bg-[#0C111C] text-white">
-                          Home eyecare check
+                        <option value="Transform Your Look" className="bg-[#0C111C] text-white">
+                          Transform Your Look
                         </option>
-                        <option value="Transform Your look" className="bg-[#0C111C] text-white">
-                          Transform Your look
+                        <option value="Home Eye Check" className="bg-[#0C111C] text-white">
+                          Home Eye Check
                         </option>
                       </select>
                       <ChevronDown
@@ -712,7 +831,16 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
           id="right-course-content"
           className="main-content-panel w-full lg:w-[72%] lg:flex-1 lg:h-full lg:max-h-full overflow-y-auto overflow-x-hidden min-w-0 min-h-0 overscroll-contain bg-white text-zinc-900 flex flex-col content-light-scroll"
         >
-          <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-12 flex flex-col space-y-12 sm:space-y-14 md:space-y-16">
+          <AnimatePresence mode="wait">
+            {!isHomeEyeCheck ? (
+              <motion.div
+                key="transform-your-look"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-12 flex flex-col space-y-12 sm:space-y-14 md:space-y-16"
+              >
             
             {/* ========================================================================= */}
             {/* SECTION 1: RIGHT HERO HEADER & SHOWCASE (VIDEO SECTION COMMENTED OUT)     */}
@@ -1337,8 +1465,384 @@ export default function TrialClassPortal({ onBackToMain }: TrialClassPortalProps
                 })}
               </div>
             </section>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="home-eye-check"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-12 flex flex-col space-y-12 sm:space-y-14 md:space-y-16"
+          >
+            {/* ========================================================================= */}
+            {/* SECTION 1: HOME EYE CHECK HEADER & SHOWCASE CAROUSEL                      */}
+            {/* ========================================================================= */}
+            <section id="section-home-check-hero" className="w-full text-center">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200/80 text-blue-600 text-xs font-semibold uppercase tracking-wider mb-3">
+                <Home size={13} className="text-blue-600" />
+                <span>Doorstep Ophthalmic Care</span>
+              </div>
+              <h3 className="text-[26px] sm:text-[30px] font-bold text-neutral-900 tracking-tight">
+                Professional Home Eye Check
+              </h3>
+              <p className="text-[14px] sm:text-[15px] text-zinc-600 mt-1 max-w-2xl mx-auto leading-relaxed">
+                A certified optometrist visits your home with professional eye-testing equipment for a convenient and comfortable eye examination.
+              </p>
 
-          </div>
+              {/* 3 Examination & Frames Group Composition - Interactive Carousel */}
+              <div 
+                className="relative w-full max-w-[480px] sm:max-w-[560px] mx-auto mt-6 flex items-center justify-between gap-2 sm:gap-4 select-none"
+                onMouseEnter={() => setIsShowcasePaused(true)}
+                onMouseLeave={() => setIsShowcasePaused(false)}
+              >
+                {/* Carousel Left Navigation Arrow */}
+                <button
+                  type="button"
+                  onClick={handlePrevShowcase}
+                  aria-label="Previous examination slide"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-zinc-200 bg-white text-zinc-700 hover:text-zinc-950 flex items-center justify-center hover:bg-zinc-50 shadow-xs transition-all hover:scale-105 active:scale-95 cursor-pointer shrink-0 z-20"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+
+                {/* Center Triptych Showcase */}
+                <div className="relative flex-1 max-w-[340px] sm:max-w-[420px] mx-auto">
+                  <AnimatePresence mode="wait" custom={showcaseDirection}>
+                    <motion.div
+                      key={`home-${showcaseSlideIndex}`}
+                      custom={showcaseDirection}
+                      initial={{ opacity: 0, x: showcaseDirection > 0 ? 25 : -25 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: showcaseDirection > 0 ? -25 : 25 }}
+                      transition={{ duration: 0.35, ease: "easeOut" }}
+                      className="relative flex items-end justify-center"
+                    >
+                      {/* Left Frame / Equipment */}
+                      <div 
+                        onClick={handlePrevShowcase}
+                        title="Click to view previous pair"
+                        className="w-[120px] sm:w-[145px] -mr-5 z-10 transition-transform duration-300 hover:scale-105 hover:z-30 cursor-pointer"
+                      >
+                        <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-md border border-blue-200/80 bg-zinc-100">
+                          <img
+                            src={HOME_SHOWCASE_SLIDES[showcaseSlideIndex].left.src}
+                            alt={HOME_SHOWCASE_SLIDES[showcaseSlideIndex].left.alt}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = HOME_SHOWCASE_SLIDES[showcaseSlideIndex].left.fallback;
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Center Precision Examination */}
+                      <div className="w-[140px] sm:w-[170px] z-20 transition-transform duration-300 hover:scale-105">
+                        <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-xl border-2 border-blue-300 bg-white">
+                          <img
+                            src={HOME_SHOWCASE_SLIDES[showcaseSlideIndex].center.src}
+                            alt={HOME_SHOWCASE_SLIDES[showcaseSlideIndex].center.alt}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = HOME_SHOWCASE_SLIDES[showcaseSlideIndex].center.fallback;
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Right Frame Kit */}
+                      <div 
+                        onClick={handleNextShowcase}
+                        title="Click to view next pair"
+                        className="w-[120px] sm:w-[145px] -ml-5 z-10 transition-transform duration-300 hover:scale-105 hover:z-30 cursor-pointer"
+                      >
+                        <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-md border border-blue-200/80 bg-zinc-100">
+                          <img
+                            src={HOME_SHOWCASE_SLIDES[showcaseSlideIndex].right.src}
+                            alt={HOME_SHOWCASE_SLIDES[showcaseSlideIndex].right.alt}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = HOME_SHOWCASE_SLIDES[showcaseSlideIndex].right.fallback;
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
+
+                  {/* Bottom White Gradient Fade */}
+                  <div className="absolute bottom-4 left-0 right-0 h-10 bg-gradient-to-t from-white via-white/70 to-transparent pointer-events-none z-10" />
+
+                  {/* Carousel Dots */}
+                  <div className="flex items-center justify-center gap-1.5 mt-2.5 relative z-20">
+                    {HOME_SHOWCASE_SLIDES.map((_, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => {
+                          setShowcaseDirection(idx > showcaseSlideIndex ? 1 : -1);
+                          setShowcaseSlideIndex(idx);
+                        }}
+                        aria-label={`View group ${idx + 1}`}
+                        className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                          idx === showcaseSlideIndex
+                            ? "w-5 bg-[#0066FF]"
+                            : "w-1.5 bg-blue-200 hover:bg-blue-300"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Carousel Right Navigation Arrow */}
+                <button
+                  type="button"
+                  onClick={handleNextShowcase}
+                  aria-label="Next examination slide"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-zinc-200 bg-white text-zinc-700 hover:text-zinc-950 flex items-center justify-center hover:bg-zinc-50 shadow-xs transition-all hover:scale-105 active:scale-95 cursor-pointer shrink-0 z-20"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+            </section>
+
+            {/* ========================================================================= */}
+            {/* SECTION 2: HOME CHECK STATISTICS CARDS                                    */}
+            {/* ========================================================================= */}
+            <section id="section-home-statistics" className="w-full">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
+                {HOME_CHECK_STATS.map((st) => (
+                  <motion.div
+                    key={st.value}
+                    whileHover={{
+                      scale: 1.06,
+                      y: -4,
+                      transition: { type: "spring", stiffness: 450, damping: 18 }
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                    className="bg-[#F8F6FD] border border-[#EDE8F8] hover:border-blue-400/40 rounded-xl p-3 sm:p-3.5 flex flex-col items-center justify-center text-center h-[76px] sm:h-[82px] shadow-2xs hover:shadow-xl hover:shadow-blue-500/15 transition-colors cursor-pointer select-none group"
+                  >
+                    <span className="text-[20px] sm:text-[22px] font-bold text-[#0066FF] leading-none mb-1 transition-transform duration-200 group-hover:scale-110 origin-center inline-block">
+                      {st.value}
+                    </span>
+                    <span className="text-[11px] sm:text-[12px] font-medium text-zinc-800 leading-tight">
+                      {st.label}
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+
+            {/* ========================================================================= */}
+            {/* SECTION 3: HOW HOME EYE EXAMINATION WORKS                                 */}
+            {/* ========================================================================= */}
+            <section id="section-home-process" className="w-full bg-[#39364B] rounded-2xl p-6 sm:p-8 md:p-10 text-white text-center shadow-lg">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold mb-2">
+                <Sparkles size={12} className="text-amber-400" />
+                <span>3 Simple Doorstep Steps</span>
+              </div>
+              <h3 className="text-[24px] sm:text-[28px] font-bold text-white tracking-tight">
+                How Home Eye Examination Works
+              </h3>
+              <p className="text-[13px] sm:text-[14px] text-zinc-300 mt-1 mb-8">
+                Hospital-grade diagnostics & bespoke frame curation brought right to your living room
+              </p>
+
+              {/* 3 Feature Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5 text-left">
+                {/* Card 1: Hospital-Grade 14-Step Diagnostics */}
+                <div className="bg-white rounded-xl p-5 text-zinc-900 flex flex-col items-center text-center shadow-md">
+                  <div className="w-full h-36 rounded-lg bg-zinc-50 overflow-hidden flex items-center justify-center mb-4 border border-zinc-100">
+                    <img
+                      src="/assets/img/modernoptical.jpeg"
+                      alt="Hospital Grade Eye Diagnostic Equipment"
+                      className="w-full h-full object-cover rounded-md transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
+                  <h4 className="text-[16px] font-bold text-zinc-900 leading-tight mb-2">
+                    1. 14-Step Digital Diagnostics
+                  </h4>
+                  <p className="text-[12px] text-zinc-600 leading-relaxed">
+                    Our certified optometrist brings portable computerized refractometers, retinoscopes, and digital charts for clinical refraction precision.
+                  </p>
+                </div>
+
+                {/* Card 2: 100+ Designer Frames Trial */}
+                <div className="bg-white rounded-xl p-5 text-zinc-900 flex flex-col items-center text-center shadow-md">
+                  <div className="w-full h-36 rounded-lg bg-zinc-50 overflow-hidden flex items-center justify-center mb-4 border border-zinc-100">
+                    <img
+                      src="/assets/img/opticalstore5.jpg"
+                      alt="100+ Frames Home Try-On Kit"
+                      className="w-full h-full object-cover rounded-md transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
+                  <h4 className="text-[16px] font-bold text-zinc-900 leading-tight mb-2">
+                    2. 100+ Frames Doorstep Trial
+                  </h4>
+                  <p className="text-[12px] text-zinc-600 leading-relaxed">
+                    Try over 100 titanium, acetate, and rimless frames in your home's natural light with personalized face-shape styling assistance.
+                  </p>
+                </div>
+
+                {/* Card 3: Custom Delivery & Fit */}
+                <div className="bg-white rounded-xl p-5 text-zinc-900 flex flex-col items-center text-center shadow-md">
+                  <div className="w-full h-36 rounded-lg bg-zinc-50 overflow-hidden flex items-center justify-center mb-4 border border-zinc-100">
+                    <img
+                      src="/assets/img/premiumopticall.jpeg"
+                      alt="Doorstep White Glove Delivery"
+                      className="w-full h-full object-cover rounded-md transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
+                  <h4 className="text-[16px] font-bold text-zinc-900 leading-tight mb-2">
+                    3. Custom Crafting & Fitting
+                  </h4>
+                  <p className="text-[12px] text-zinc-600 leading-relaxed">
+                    Your precision prescription glasses are delivered to your doorstep with anatomical temple alignment and 365-day warranty coverage.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            {/* ========================================================================= */}
+            {/* SECTION 4: KEY BENEFITS OF HOME EYE TESTING                               */}
+            {/* ========================================================================= */}
+            <section id="section-home-benefits" className="w-full text-center">
+              <div className="text-center max-w-2xl mx-auto mb-6">
+                <h3 className="text-[26px] sm:text-[30px] font-bold text-neutral-900 tracking-tight">
+                  Key Benefits of Home Eye Testing
+                </h3>
+                <p className="text-[13px] sm:text-[14px] text-zinc-600 mt-1">
+                  Why thousands of families choose our doorstep optical checkups over busy clinic visits
+                </p>
+              </div>
+
+              {/* 3 Edge Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                {/* Card 1 */}
+                <div className="bg-[#FAF8FF] border border-[#EDE8F8] rounded-xl overflow-hidden shadow-2xs hover:shadow-xs transition-all flex flex-col text-left">
+                  <div className="relative h-40 bg-zinc-900 group">
+                    <img
+                      src="/assets/img/atelier.jpg"
+                      alt="Comfortable Family Eye Examination"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="p-4 flex-1 flex flex-col">
+                    <h4 className="text-[16px] font-bold text-zinc-900 mb-1">Ideal for Seniors & Families</h4>
+                    <p className="text-[12px] text-zinc-600 leading-relaxed">
+                      Zero travel stress, zero clinic queues. Complete comprehensive checkup scheduled at your preferred home time slot.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Card 2 */}
+                <div className="bg-[#FAF8FF] border border-[#EDE8F8] rounded-xl overflow-hidden shadow-2xs hover:shadow-xs transition-all flex flex-col text-left">
+                  <div className="relative h-40 bg-zinc-900 group">
+                    <img
+                      src="/assets/img/bluelens.jpg"
+                      alt="Natural Lighting Eye Test"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="p-4 flex-1 flex flex-col">
+                    <h4 className="text-[16px] font-bold text-zinc-900 mb-1">Natural Lighting Accuracy</h4>
+                    <p className="text-[12px] text-zinc-600 leading-relaxed">
+                      Test reading, mobile screen, and progressive lens corridors in your actual living environment for crystal-clear focus.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Card 3 */}
+                <div className="bg-[#FAF8FF] border border-[#EDE8F8] rounded-xl overflow-hidden shadow-2xs hover:shadow-xs transition-all flex flex-col text-left">
+                  <div className="relative h-40 bg-zinc-900 group">
+                    <img
+                      src="/assets/img/anti-reflections.jpg"
+                      alt="Hospital Standard Prescription"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="p-4 flex-1 flex flex-col">
+                    <h4 className="text-[16px] font-bold text-zinc-900 mb-1">100% Prescription Guarantee</h4>
+                    <p className="text-[12px] text-zinc-600 leading-relaxed">
+                      Certified clinical eye prescription issued with zero purchase obligation, plus free lifetime frame servicing.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* ========================================================================= */}
+            {/* SECTION 5: CALL-TO-ACTION BANNER                                          */}
+            {/* ========================================================================= */}
+            <section id="section-home-cta-banner" className="w-full bg-gradient-to-r from-[#0052D4] via-[#1D63E0] to-[#0099FF] rounded-2xl p-6 sm:p-8 text-white text-center shadow-lg relative overflow-hidden">
+              <div className="relative z-10 max-w-xl mx-auto flex flex-col items-center">
+                <div className="w-10 h-10 rounded-full bg-white/15 backdrop-blur-xs flex items-center justify-center mb-3">
+                  <Glasses size={20} className="text-white" />
+                </div>
+                <h3 className="text-[20px] sm:text-[24px] font-bold text-white tracking-tight">
+                  Ready for Your Doorstep Eye Checkup?
+                </h3>
+                <p className="text-[13px] sm:text-[14px] text-cyan-100 mt-2 mb-4 leading-relaxed">
+                  Fill in your name & phone number on the left form. Our clinical care team will connect with you immediately to coordinate your visit.
+                </p>
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white text-[#0052D4] text-xs font-bold shadow-md">
+                  <span>Step 1: Enter details in the form on the left</span>
+                  <ArrowRight size={13} />
+                </div>
+              </div>
+            </section>
+
+            {/* ========================================================================= */}
+            {/* SECTION 6: FREQUENTLY ASKED QUESTIONS                                     */}
+            {/* ========================================================================= */}
+            <section id="section-home-faq" className="w-full bg-[#292637] rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+              <h3 className="text-[24px] sm:text-[28px] font-bold text-white tracking-tight text-center mb-6">
+                Frequently Asked Questions
+              </h3>
+
+              <div className="space-y-2 max-w-3xl mx-auto">
+                {HOME_CHECK_FAQS.map((faq, idx) => {
+                  const isOpen = openHomeFaq === idx;
+                  return (
+                    <div
+                      key={faq.q}
+                      className="bg-[#383449] border border-[#48425C] rounded-lg overflow-hidden transition-colors"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setOpenHomeFaq(isOpen ? null : idx)}
+                        className="w-full px-4 py-3 text-left font-medium text-[13px] sm:text-[14px] text-white flex items-center justify-between gap-3 hover:bg-[#423c56] transition-colors cursor-pointer"
+                      >
+                        <span>{faq.q}</span>
+                        <ChevronDown
+                          size={16}
+                          className={`text-zinc-400 transition-transform duration-200 shrink-0 ${
+                            isOpen ? "rotate-180 text-cyan-400" : ""
+                          }`}
+                        />
+                      </button>
+                      <AnimatePresence initial={false}>
+                        {isOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <div className="px-4 pb-3.5 pt-1 text-[12px] sm:text-[13px] text-zinc-300 leading-relaxed border-t border-[#48425C]">
+                              {faq.a}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          </motion.div>
+        )}
+      </AnimatePresence>
         </main>
       </div>
 

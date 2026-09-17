@@ -23,3 +23,25 @@ export interface Location {
   phone: string;
   hours: string;
 }
+
+export interface ClinicalSection {
+  definition: string;
+  causes: string[];
+  symptoms: string[];
+  treatments: string[];
+  note?: string;
+  example?: string;
+}
+
+export interface Article {
+  id: number;
+  title: string;
+  subtitle?: string;
+  category: string;
+  readTime: string;
+  date: string;
+  thumbnail: string;
+  summary: string;
+  content: string[];
+  clinicalDetails?: ClinicalSection;
+}

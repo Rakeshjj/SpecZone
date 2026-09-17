@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useReducedMotion } from "motion/react";
-import { Eye, ShieldCheck, Sun, Laptop, Droplets } from "lucide-react";
+import { Eye, ShieldCheck, Sun, Laptop, Droplets, Sparkles } from "lucide-react";
 
 // Apple-style cubic-bezier easing for smooth cinematic reveals
 const EASE_PREMIUM = [0.22, 1, 0.36, 1] as const;
@@ -12,6 +12,7 @@ interface LensScenario {
   icon: React.ReactNode;
   title: string;
   description: string;
+  content?: React.ReactNode;
   badge: string;
   beforeLabel: string;
   afterLabel: string;
@@ -24,10 +25,10 @@ const LENS_SCENARIOS: LensScenario[] = [
   {
     id: "polarized",
     name: "POLARIZED ANTI-REFLECTIVE",
-    label: "Antiglare ",
+    label: "Antiglare",
     icon: <Sun size={14} />,
     title: "100% Polarized Glare Elimination",
-    description: "Anti-reflective (AR) coatings are treatments that are applied to the surface of the lens of glasses that reduce glare and let in more light. By reducing reflections on both sides of the lenses, this coating can make night driving and screen use more comfortable.AR coatings work by applying very thin layers of metal oxides to the lens, increasing the amount of light transmitted. This helps support clearer vision in changing lighting conditions and reduces the visual distractions that can occur when bright light hits the lens.",
+    description: "Anti-reflective (AR) coatings are treatments that are applied to the surface of the lens of glasses that reduce glare and let in more light. By reducing reflections on both sides of the lenses, this coating can make night driving and screen use more comfortable. AR coatings work by applying very thin layers of metal oxides to the lens, increasing the amount of light transmitted. This helps support clearer vision in changing lighting conditions and reduces the visual distractions that can occur when bright light hits the lens.",
     badge: "ULTRA SUN SECURITY",
     beforeLabel: "Standard Lens (Blinded by Reflective Glare)",
     afterLabel: "Oculis Polarized (Zero-Reflection Contrast)",
@@ -36,32 +37,142 @@ const LENS_SCENARIOS: LensScenario[] = [
     afterClasses: "brightness-100 saturate-100 blur-0 contrast-105"
   },
   {
-    id: "bluelight",
-    name: "DIGITAL BLUE-LIGHT PROTECT",
+    id: "waterrepelant",
+    name: "HYDROPHOBIC WATER-REPELLENT",
     label: "Water Repelant",
-    icon: <Laptop size={14} />,
-    title: "Smart Wavefront Blue Shield",
-    description: "How they work: Features a microscopic hydrophobic top-coat that changes surface tension, forcing water to bead up and roll off instantly. ",
-    badge: "HEV SHIELD RATED",
-    beforeLabel: "Unfiltered HEV (Digital Strain & High Contrast Glare)",
-    afterLabel: "Oculis Blue-Filter (Optimized Contrast Comfort)",
-    bgImage: "/assets/img/bluelens.jpg",
-    beforeClasses: "hue-rotate-[180deg] saturate-[1.4] brightness-[1.1] blur-[1px]", // blue-shifted & raw
-    afterClasses: "sepia-[0.12] brightness-[0.98] contrast-[1.02] blur-0" // warm and balanced
+    icon: <Droplets size={14} />,
+    title: "Hydrophobic Water-Resistant Coating",
+    description: "Features a microscopic hydrophobic top-coat that changes surface tension, forcing water to bead up and roll off instantly. Prevents rain smears, reduces smudge buildup, and makes cleaning effortless.",
+    badge: "HYDROPHOBIC SHIELD",
+    beforeLabel: "Untreated Lens (Blinding Film & Rain Smears)",
+    afterLabel: "Hydrophobic Coating (Instant Water Roll-Off)",
+    bgImage: "/assets/img/anti-reflections.jpg",
+    beforeClasses: "blur-[5px] contrast-[0.85] saturate-[0.9]", // water distorted & smudged
+    afterClasses: "blur-0 contrast-100 saturate-100",
+    content: (
+      <div className="space-y-4">
+        {/* Hydrophobic Treated Section */}
+        <div className="space-y-2.5">
+          <div className="flex items-start gap-2.5 text-zinc-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 shrink-0" />
+            <p className="font-sans text-sm leading-relaxed font-light">
+              <strong className="text-white font-medium">How they work:</strong> Features a microscopic hydrophobic top-coat that changes surface tension, forcing water to bead up and roll off instantly.
+            </p>
+          </div>
+
+          <div className="flex items-start gap-2.5 text-zinc-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 shrink-0" />
+            <p className="font-sans text-sm leading-relaxed font-light">
+              <strong className="text-white font-medium">Benefits:</strong> Prevents rain smears, reduces smudge buildup, and makes cleaning easier. Options like Glasses Direct provide these multi-layer treatments for everyday frames.
+            </p>
+          </div>
+        </div>
+
+        {/* Glasses Without Water-Resistant Coatings */}
+        <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/5 space-y-2.5">
+          <h4 className="font-mono text-[11px] font-bold text-white uppercase tracking-wider">
+            Glasses Without Water-Resistant Coatings
+          </h4>
+          <div className="space-y-2 text-xs text-zinc-400">
+            <div className="flex items-start gap-2">
+              <span className="w-1 h-1 rounded-full bg-zinc-600 mt-1.5 shrink-0" />
+              <p className="leading-relaxed">
+                <strong className="text-zinc-200 font-medium">How they work:</strong> Standard untreated glass or plastic surfaces attract water via normal adhesion.
+              </p>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="w-1 h-1 rounded-full bg-zinc-600 mt-1.5 shrink-0" />
+              <p className="leading-relaxed">
+                <strong className="text-zinc-200 font-medium">Drawbacks:</strong> Rainwater flattens into a continuous, blinding film or stubborn droplets that distort sight and require constant manual wiping.
+              </p>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="w-1 h-1 rounded-full bg-zinc-600 mt-1.5 shrink-0" />
+              <p className="leading-relaxed">
+                <strong className="text-zinc-200 font-medium">Maintenance:</strong> Demands frequent drying with a microfiber cloth and higher vulnerability to grease and fingerprints.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   },
   {
-    id: "hydrophobic",
-    name: "HYDROPHOBIC & OLEOPHOBIC",
+    id: "dustrepelant",
+    name: "ANTI-STATIC DUST REPELLENT",
     label: "Dust Repelant",
-    icon: <Droplets size={14} />,
-    title: "Active Anti-Smudge Ocular Armor",
-    description: "An ultra-slick, nano-structured surface polymer that reduces liquid surface tension, causing water droplets, oil smudges, and dust particles to roll off instantly without leaving streaks.",
+    icon: <Sparkles size={14} />,
+    title: "Anti-Static Dust-Repellent Shield",
+    description: "Features a specialized microscopic anti-static coating that neutralizes charge, preventing airborne particles, lint, and grit from sticking to the lens.",
     badge: "EASY-CLEAN SHIELD",
-    beforeLabel: "Untreated Lens (Water Smudging & Fog Distortion)",
-    afterLabel: "Oculis Hydro-Coat (Instant Water-Repelling Clarity)",
-    bgImage: "/assets/img/anti-reflections.jpg",
-    beforeClasses: "blur-[6px] contrast-[0.85] saturate-[0.9]", // heavily water distorted
-    afterClasses: "blur-0 contrast-100 saturate-100"
+    beforeLabel: "Untreated Lens (Dust Attraction & Smudge Buildup)",
+    afterLabel: "Anti-Static Armor (Instant Dust-Repelling Clarity)",
+    bgImage: "/assets/img/bluelens.jpg",
+    beforeClasses: "blur-[3px] contrast-[0.9] saturate-[0.8] brightness-[0.95]",
+    afterClasses: "blur-0 contrast-100 saturate-100",
+    content: (
+      <div className="space-y-4">
+        {/* Specs With Dust Repellent */}
+        <div className="space-y-2.5">
+          <h4 className="font-mono text-[11px] font-bold text-white uppercase tracking-wider">
+            Specs With Dust Repellent
+          </h4>
+          <div className="space-y-2">
+            <div className="flex items-start gap-2.5 text-zinc-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 shrink-0" />
+              <p className="font-sans text-sm leading-relaxed font-light">
+                <strong className="text-white font-medium">Anti-Static Layer:</strong> Features a specialized microscopic coating that neutralizes static charge so particles cannot stick.
+              </p>
+            </div>
+            <div className="flex items-start gap-2.5 text-zinc-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 shrink-0" />
+              <p className="font-sans text-sm leading-relaxed font-light">
+                <strong className="text-white font-medium">Maintenance:</strong> Stays clean much longer; dust simply slides or falls off instead of adhering to the glass.
+              </p>
+            </div>
+            <div className="flex items-start gap-2.5 text-zinc-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 shrink-0" />
+              <p className="font-sans text-sm leading-relaxed font-light">
+                Reduces the need to wipe lenses constantly, lowering the risk of accidental scratch damage from dry rubbing.
+              </p>
+            </div>
+            <div className="flex items-start gap-2.5 text-zinc-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 shrink-0" />
+              <p className="font-sans text-sm leading-relaxed font-light">
+                <strong className="text-white font-medium">Combined Features:</strong> Often paired with anti-reflective, scratch-resistant, water-repellent (hydrophobic), and smudge-resistant (oleophobic) layers.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Specs Without Dust Repellent */}
+        <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/5 space-y-2.5">
+          <h4 className="font-mono text-[11px] font-bold text-white uppercase tracking-wider">
+            Specs Without Dust Repellent
+          </h4>
+          <div className="space-y-2 text-xs text-zinc-400">
+            <div className="flex items-start gap-2">
+              <span className="w-1 h-1 rounded-full bg-zinc-600 mt-1.5 shrink-0" />
+              <p className="leading-relaxed">
+                <strong className="text-zinc-200 font-medium">Static Charge:</strong> Lenses naturally build up static electricity that attracts airborne dust particles like a magnet.
+              </p>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="w-1 h-1 rounded-full bg-zinc-600 mt-1.5 shrink-0" />
+              <p className="leading-relaxed">
+                <strong className="text-zinc-200 font-medium">Maintenance:</strong> Requires frequent wiping, which can push abrasive dust grit across the glass and cause micro-scratches.
+              </p>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="w-1 h-1 rounded-full bg-zinc-600 mt-1.5 shrink-0" />
+              <p className="leading-relaxed">
+                <strong className="text-zinc-200 font-medium">Visibility:</strong> Dust, lint, and smudges cling quickly to the surface, requiring daily cleaning with water or sprays.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 ];
 
@@ -250,10 +361,10 @@ export default function LensLab() {
         </div>
 
         {/* Workspace: Split Slider & Dynamic Spec Breakdown */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
           {/* Left Panel: Dynamic Lens Slider (7 columns) */}
-          <div className="lg:col-span-7 space-y-4">
+          <div className="lg:col-span-7">
             {/* Scroll-triggered entrance: slides smoothly into place */}
             <motion.div
               initial={{
@@ -449,7 +560,7 @@ export default function LensLab() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
-            className="lg:col-span-5 flex flex-col justify-between h-full space-y-8 min-h-[340px]"
+            className="lg:col-span-5 flex flex-col space-y-6"
           >
             <div className="space-y-6">
               {/* Scenario transition handling with AnimatePresence */}
@@ -462,44 +573,19 @@ export default function LensLab() {
                   transition={{ duration: 0.4, ease: EASE_PREMIUM }}
                   className="space-y-6"
                 >
-                  <h3 className="font-serif text-3xl md:text-4xl font-normal text-white uppercase leading-tight tracking-tight">
+                  <h3 className="font-serif text-xl sm:text-2xl md:text-[26px] font-normal text-white uppercase leading-snug tracking-tight">
                     {activeScenario.title}
                   </h3>
 
-                  <p className="font-sans text-sm text-zinc-300 leading-relaxed font-light">
-                    {activeScenario.description}
-                  </p>
+                  {activeScenario.content ? (
+                    activeScenario.content
+                  ) : (
+                    <p className="font-sans text-sm text-zinc-300 leading-relaxed font-light">
+                      {activeScenario.description}
+                    </p>
+                  )}
                 </motion.div>
               </AnimatePresence>
-
-              {/* Technical Specifications list */}
-              <div className="space-y-3.5 pt-4 border-t border-white/5">
-                <motion.div
-                  variants={rightItemVariants}
-                  className="flex items-start gap-3"
-                >
-                  <div className="p-1 rounded bg-zinc-900 border border-white/5 text-brand-blue shrink-0 mt-0.5">
-                    <ShieldCheck size={14} />
-                  </div>
-                  <div>
-                    <h5 className="font-mono text-[10px] font-bold text-white uppercase tracking-wider">High Index Multi-Resiliency</h5>
-                    <p className="font-sans text-xs text-zinc-400 mt-0.5">Sartorial scratch-resistant and anti-reflective armor on both sides of the lenses.</p>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  variants={rightItemVariants}
-                  className="flex items-start gap-3"
-                >
-                  <div className="p-1 rounded bg-zinc-900 border border-white/5 text-brand-blue shrink-0 mt-0.5">
-                    <Eye size={14} />
-                  </div>
-                  <div>
-                    <h5 className="font-mono text-[10px] font-bold text-white uppercase tracking-wider">Perfect Visual Neutrality</h5>
-                    <p className="font-sans text-xs text-zinc-400 mt-0.5">Zero chromatic aberrations, securing natural depth perception and premium optical alignment.</p>
-                  </div>
-                </motion.div>
-              </div>
             </div>
           </motion.div>
 

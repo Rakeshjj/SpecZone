@@ -9,6 +9,7 @@ import AboutUs from "./components/AboutUs";
 import LensLab from "./components/LensLab";
 import LocationsSection from "./components/LocationsSection";
 import BlogSection from "./components/BlogSection";
+import ArticleDetailView from "./components/ArticleDetailView";
 import StackedCardsSection from "./components/StackedCardsSection";
 import HomeEyeCare from "./components/HomeEyeCare";
 import FooterSection from "./components/FooterSection";
@@ -16,10 +17,12 @@ import SmoothScroll from "./components/SmoothScroll";
 import SpiralFrameMatrix from "./components/SpiralFrameMatrix";
 import TrialClassPortal from "./components/TrialClassPortal";
 import ConsultationBookingSection from "./components/ConsultationBookingSection";
+import { Article } from "./types";
 
 export default function App() {
-  const [view, setView] = useState<"home" | "booking" | "trial-form">("home");
-  const [selectedServiceType, setSelectedServiceType] = useState<string>("Home Eye Care Check");
+  const [view, setView] = useState<"home" | "booking" | "trial-form" | "article">("home");
+  const [selectedServiceType, setSelectedServiceType] = useState<string>("Transform Your Look");
+  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
 
   // Prevent background scrolling when full-screen trial-form portal is open
   useEffect(() => {
@@ -54,6 +57,22 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handleOpenArticle = (article: Article) => {
+    setSelectedArticle(article);
+    setView("article");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleBackToArticles = () => {
+    setView("home");
+    setTimeout(() => {
+      const el = document.getElementById("blog");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 120);
+  };
+
   const handleCloseToHome = () => {
     setView("home");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -65,9 +84,9 @@ export default function App() {
       serviceName.toLowerCase().includes("look") || 
       serviceName.toLowerCase().includes("tyl")
     ) {
-      setSelectedServiceType("Transform Look");
+      setSelectedServiceType("Transform Your Look");
     } else {
-      setSelectedServiceType("Home Eye Care Check");
+      setSelectedServiceType("Home Eye Check");
     }
     setView("trial-form");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -103,9 +122,41 @@ export default function App() {
           transition={{ duration: 0.35 }}
           className="w-full h-screen max-h-screen overflow-hidden"
         >
-          <TrialClassPortal onBackToMain={handleCloseToHome} />
+          <TrialClassPortal onBackToMain={handleCloseToHome} initialService={selectedServiceType} />
         </motion.div>
       </AnimatePresence>
+    );
+  }
+
+  if (view === "article" && selectedArticle) {
+    return (
+      <div className="relative min-h-screen bg-zinc-950 text-white font-sans selection:bg-brand-blue selection:text-white flex flex-col justify-between">
+        <Navbar
+          onBookClick={() => handleOpenBooking("Home Eye Care Check")}
+          onNavigate={(section) => {
+            setView("home");
+            setTimeout(() => {
+              scrollToSection(section);
+            }, 100);
+          }}
+        />
+        <main className="relative pt-[74px] sm:pt-[78px] flex-1 flex flex-col">
+          <ArticleDetailView
+            article={selectedArticle}
+            onBack={handleBackToArticles}
+            onBookConsultation={(service) => handleOpenBooking(service || "Myopia Assessment & Consultation")}
+          />
+        </main>
+        <FooterSection
+          onBookClick={() => handleOpenBooking("Home Eye Care Check")}
+          onNavigate={(section) => {
+            setView("home");
+            setTimeout(() => {
+              scrollToSection(section);
+            }, 100);
+          }}
+        />
+      </div>
     );
   }
 
@@ -162,7 +213,7 @@ export default function App() {
               <ShowroomShowcase />
 
               {/* BLOG SECTIONS & DIGITAL EYE CARE TIPS */}
-              <BlogSection />
+              <BlogSection onSelectArticle={handleOpenArticle} />
 
               {/* SCROLL-DRIVEN STACKED CARD TRANSITION ARCHIVE */}
               <StackedCardsSection onBookClick={(service) => handleOpenBooking(service || "Atelier Eyewear Consultation")} />

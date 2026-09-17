@@ -1,21 +1,149 @@
 import { useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { X, BookOpen, Clock, Calendar, ChevronRight, Share2, Sparkles } from "lucide-react";
-
-interface Article {
-  id: number;
-  title: string;
-  category: string;
-  readTime: string;
-  date: string;
-  thumbnail: string;
-  summary: string;
-  content: string[];
-}
+import { Article } from "../types";
+import ArticleDetailView from "./ArticleDetailView";
 
 const ARTICLES_DATA: Article[] = [
   {
     id: 1,
+    title: "Myopia (Short-sightedness)",
+    subtitle: "Refractive Error Clinical Overview",
+    category: "Clinical Eye Care",
+    readTime: "4 min read",
+    date: "July 15, 2026",
+    thumbnail: "/assets/img/anti-reflections.jpg",
+    summary: "A person can see near objects clearly but distant objects appear blurred.",
+    clinicalDetails: {
+      definition: "A person can see near objects clearly but distant objects appear blurred.",
+      causes: [
+        "Eyeball is too long (axial myopia).",
+        "Cornea or lens has excessive refractive power."
+      ],
+      symptoms: [
+        "Blurred distance vision.",
+        "Squinting to see distant objects.",
+        "Eye strain.",
+        "Headache."
+      ],
+      treatments: [
+        "Concave (minus) lens.",
+        "Contact lenses.",
+        "Refractive surgery in suitable adults."
+      ]
+    },
+    content: [
+      "Myopia, commonly known as short-sightedness or near-sightedness, is one of the most widespread refractive conditions in the modern optical world. Individuals experiencing myopia enjoy sharp focus when observing nearby digital screens or reading literature, while distant street signs, presentation boards, or road signs appear noticeably blurred.",
+      "From an optical physics standpoint, incoming parallel light rays do not focus cleanly on the retinal photoreceptors. Instead, they converge at an early focal plane in front of the retina. This typically occurs because the eyeball's physical axial length is excessively long, or because the curvature of the cornea and crystalline lens bends incoming light with excessive refractive power.",
+      "Correction is achieved using concave (minus) lenses, which gently diverge incoming light rays prior to entering the pupil, displacing the optical focus backward directly onto the retina. Modern clinical advancements—including customized wavefront lenses, orthokeratology, and refractive laser correction in eligible adults—provide crisp, high-definition visual resolution and fatigue relief."
+    ]
+  },
+  {
+    id: 2,
+    title: "Hyperopia (Long-sightedness)",
+    subtitle: "Focusing Power Deficit Overview",
+    category: "Clinical Eye Care",
+    readTime: "4 min read",
+    date: "July 18, 2026",
+    thumbnail: "/assets/img/hyper.jpg",
+    summary: "The eye has insufficient focusing power, often making near vision difficult. Some people may have clear distance vision, especially when young.",
+    clinicalDetails: {
+      definition: "The eye has insufficient focusing power, often making near vision difficult. Some people may have clear distance vision, especially when young.",
+      causes: [
+        "Eyeball is too short.",
+        "Cornea or lens has insufficient refractive power."
+      ],
+      symptoms: [
+        "Near vision difficulty.",
+        "Eye strain.",
+        "Headache after reading.",
+        "Blurred vision, particularly at near."
+      ],
+      treatments: [
+        "Convex (plus) lens.",
+        "Contact lenses.",
+        "Refractive surgery in selected patients."
+      ]
+    },
+    content: [
+      "Hyperopia, commonly termed long-sightedness or far-sightedness, is an optical refractive state wherein the eye possesses inadequate natural focusing power. When parallel rays of light enter an unaccommodated hyperopic eye, they project toward a theoretical focal plane located behind the sensory retina instead of focusing directly upon it.",
+      "This insufficient convergence occurs either because the physical axial length of the eyeball is too short, or because the refractive curvatures of the cornea and crystalline lens lack sufficient optical power. In younger individuals, constant muscular accommodation by the ciliary body can sometimes overcome mild hyperopia for distance, but this continuous exertion leads to severe eye strain, asthenopia, and frontal headaches after prolonged reading.",
+      "Optical management focuses on convex (plus) lenses. Convex lenses converge light rays prior to their entrance into the eye, drawing the focal plane smoothly forward directly onto the retina. Corrective treatment options include precision-crafted convex spectacles, daily and monthly contact lenses, and refractive laser surgery for selected eligible adult patients."
+    ]
+  },
+  {
+    id: 3,
+    title: "Astigmatism",
+    subtitle: "Corneal & Lenticular Curvature Asymmetry",
+    category: "Clinical Eye Care",
+    readTime: "5 min read",
+    date: "July 22, 2026",
+    thumbnail: "/assets/img/bluelens.jpg",
+    summary: "The cornea or lens has different refractive powers in different meridians, causing light to focus at different points rather than one point.",
+    clinicalDetails: {
+      definition: "The cornea or lens has different refractive powers in different meridians, causing light to focus at different points rather than one point.",
+      causes: [
+        "Irregular or unequal corneal curvature.",
+        "Lenticular astigmatism.",
+        "Corneal conditions such as keratoconus."
+      ],
+      symptoms: [
+        "Blurred vision at distance and near.",
+        "Distorted vision.",
+        "Headache.",
+        "Eye strain."
+      ],
+      treatments: [
+        "Cylindrical or sphero-cylindrical spectacles.",
+        "Toric contact lenses.",
+        "Refractive surgery in suitable patients.",
+        "Specialty contact lenses for irregular astigmatism."
+      ]
+    },
+    content: [
+      "Astigmatism is an asymmetrical refractive condition where the front surface of the cornea or the intraocular crystalline lens exhibits unequal curvature across its various meridians—resembling the oblong profile of an American football or rugby ball rather than a uniform spherical soccer ball.",
+      "Because light traversing different meridians is refracted at varying degrees of steepness, incoming rays cannot focus at a single, unified focal point. Instead, multiple focal points or focal lines form either in front of, within, or behind the retina. This optical distortion causes image ghosting, shadowing, and visual blurring across both near reading tasks and long-distance horizons.",
+      "Correction requires cylindrical or sphero-cylindrical optical lenses ground with specific directional axes to equalize refractive power across all meridians. Modern management pathways include digital free-form cylindrical lenses, stabilized toric contact lenses, specialized scleral and rigid gas-permeable (RGP) lenses for keratoconus, and customized topography-guided refractive procedures."
+    ]
+  },
+  {
+    id: 4,
+    title: "Presbyopia",
+    subtitle: "Age-Related Accommodative Evolution",
+    category: "Clinical Eye Care",
+    readTime: "5 min read",
+    date: "July 25, 2026",
+    thumbnail: "/assets/img/lens1.jpg",
+    summary: "An age-related reduction in the eye’s ability to focus on near objects, usually noticeable around 40–45 years.",
+    clinicalDetails: {
+      definition: "An age-related reduction in the eye’s ability to focus on near objects.",
+      causes: [
+        "Reduced lens elasticity.",
+        "Changes in accommodation with age."
+      ],
+      note: "Usually becomes noticeable around 40–45 years, although the age varies.",
+      symptoms: [
+        "Difficulty reading small print.",
+        "Holding books farther away.",
+        "Need for brighter light.",
+        "Near vision blur."
+      ],
+      treatments: [
+        "Reading glasses.",
+        "Bifocal glasses.",
+        "Progressive addition lenses.",
+        "Multifocal contact lenses."
+      ],
+      example: "Distance prescription +1.00 DS, near addition +1.50 D."
+    },
+    content: [
+      "Presbyopia is a natural, universal physiological aging process affecting the ocular accommodation system. Beginning noticeably between ages 40 and 45, the natural crystalline lens within the eye gradually loses its innate elasticity, while the surrounding ciliary muscle mechanics experience natural alterations in accommodative amplitude.",
+      "Consequently, the crystalline lens can no longer dynamically steepen its curvature to provide sufficient focal power for close-up tasks. Individuals experience typical compensatory habits, such as pushing smartphones, newspapers, and fine print farther away toward arm's length or seeking significantly brighter ambient illumination.",
+      "Presbyopic optical correction has reached extraordinary precision. Beyond traditional reading glasses and segmented bifocals, modern digital progressive addition lenses (PALs) provide a seamless, invisible gradient of power covering distance, intermediate computer screens, and close reading zones without visual jump. Prescriptions are tailored with precision near-additions (e.g., Distance prescription +1.00 DS with a near addition of +1.50 D) and multifocal contact lenses."
+    ]
+  },
+  {
+    id: 5,
     title: "Understanding Digital Eyestrain & Wavefront Custom Lenses",
     category: "Ocular Health",
     readTime: "5 min read",
@@ -30,7 +158,7 @@ const ARTICLES_DATA: Article[] = [
     ]
   },
   {
-    id: 2,
+    id: 6,
     title: "Sartorial Eyewear: Aligning Frame Contours to Your Face Shape",
     category: "Style Styling",
     readTime: "4 min read",
@@ -45,7 +173,7 @@ const ARTICLES_DATA: Article[] = [
     ]
   },
   {
-    id: 3,
+    id: 7,
     title: "Acoustic Sophistication: The Era of Bluetooth AI Hearing Aids",
     category: "Audiology Tech",
     readTime: "6 min read",
@@ -60,7 +188,7 @@ const ARTICLES_DATA: Article[] = [
     ]
   },
   {
-    id: 4,
+    id: 8,
     title: "Premium Frames & Bespoke Luxury Eyewear Craftsmanship",
     category: "Eyewear Collection",
     readTime: "5 min read",
@@ -74,7 +202,7 @@ const ARTICLES_DATA: Article[] = [
     ]
   },
   {
-    id: 5,
+    id: 9,
     title: "Advanced Eye Care & Comprehensive Clinical Diagnostics",
     category: "Vision Care",
     readTime: "6 min read",
@@ -88,7 +216,7 @@ const ARTICLES_DATA: Article[] = [
     ]
   },
   {
-    id: 6,
+    id: 10,
     title: "Smart Lens Solutions: High-Index, Transitions & Anti-Glare Optics",
     category: "Lens Technology",
     readTime: "4 min read",
@@ -106,7 +234,11 @@ const ARTICLES_DATA: Article[] = [
 // Apple-style cubic-bezier easing for smooth cinematic reveals
 const EASE_PREMIUM = [0.22, 1, 0.36, 1] as const;
 
-export default function BlogSection() {
+interface BlogSectionProps {
+  onSelectArticle?: (article: Article) => void;
+}
+
+export default function BlogSection({ onSelectArticle }: BlogSectionProps) {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const shouldReduceMotion = useReducedMotion();
 
@@ -210,7 +342,14 @@ export default function BlogSection() {
               {/* Read button CTA */}
               <div className="p-6 pt-0">
                 <button
-                  onClick={() => setSelectedArticle(article)}
+                  type="button"
+                  onClick={() => {
+                    if (onSelectArticle) {
+                      onSelectArticle(article);
+                    } else {
+                      setSelectedArticle(article);
+                    }
+                  }}
                   className="flex items-center gap-1 font-mono text-[10px] text-brand-blue group-hover:text-white font-bold tracking-widest uppercase cursor-pointer transition-colors"
                 >
                   <span>Read Article</span>
@@ -275,6 +414,80 @@ export default function BlogSection() {
                   <span className="flex items-center gap-1 text-zinc-400"><Clock size={11} /> {selectedArticle.readTime}</span>
                   <span className="flex items-center gap-1 text-zinc-400 ml-auto cursor-pointer hover:text-brand-blue"><Share2 size={11} /> Share</span>
                 </div>
+
+                {/* Clinical Details if defined */}
+                {selectedArticle.clinicalDetails && (
+                  <div className="space-y-3.5 my-4 p-4 rounded-xl bg-white/[0.03] border border-white/10 font-sans">
+                    <div className="p-3 rounded-lg bg-white/[0.03] border border-white/10">
+                      <h5 className="font-mono text-[11px] text-brand-blue uppercase font-bold tracking-wider mb-1">
+                        Definition
+                      </h5>
+                      <p className="text-xs sm:text-sm text-zinc-200 font-medium">
+                        {selectedArticle.clinicalDetails.definition}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                      <div className="p-3 rounded-lg bg-white/[0.03] border border-white/10">
+                        <h5 className="font-mono text-[11px] text-white uppercase font-bold tracking-wider mb-1.5">
+                          Cause
+                        </h5>
+                        <ul className="text-xs text-zinc-300 space-y-1">
+                          {selectedArticle.clinicalDetails.causes.map((c, i) => (
+                            <li key={i} className="flex items-start gap-1">
+                              <span className="text-brand-blue">•</span>
+                              <span>{c}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="p-3 rounded-lg bg-white/[0.03] border border-white/10">
+                        <h5 className="font-mono text-[11px] text-white uppercase font-bold tracking-wider mb-1.5">
+                          Symptoms
+                        </h5>
+                        <ul className="text-xs text-zinc-300 space-y-1">
+                          {selectedArticle.clinicalDetails.symptoms.map((s, i) => (
+                            <li key={i} className="flex items-start gap-1">
+                              <span className="text-amber-400">•</span>
+                              <span>{s}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="p-3 rounded-lg bg-white/[0.03] border border-white/10">
+                        <h5 className="font-mono text-[11px] text-white uppercase font-bold tracking-wider mb-1.5">
+                          Treatment
+                        </h5>
+                        <ul className="text-xs text-zinc-300 space-y-1">
+                          {selectedArticle.clinicalDetails.treatments.map((t, i) => (
+                            <li key={i} className="flex items-start gap-1">
+                              <span className="text-emerald-400">•</span>
+                              <span>{t}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    {/* Note if defined */}
+                    {selectedArticle.clinicalDetails.note && (
+                      <div className="p-3 rounded-lg bg-brand-blue/[0.05] border border-brand-blue/20 text-xs text-zinc-200">
+                        <span className="font-semibold text-brand-blue">Clinical Progression Note: </span>
+                        {selectedArticle.clinicalDetails.note}
+                      </div>
+                    )}
+
+                    {/* Example if defined */}
+                    {selectedArticle.clinicalDetails.example && (
+                      <div className="p-3 rounded-lg bg-emerald-500/[0.05] border border-emerald-500/20 text-xs text-zinc-200">
+                        <span className="font-semibold text-emerald-400">Prescription Example: </span>
+                        <span className="font-mono text-emerald-300">{selectedArticle.clinicalDetails.example}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 <div className="space-y-4 font-sans text-xs md:text-sm text-zinc-300 leading-relaxed font-light">
                   {selectedArticle.content.map((paragraph, index) => (

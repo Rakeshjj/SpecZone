@@ -332,7 +332,7 @@ function StackedCardItem({
         zIndex,
         pointerEvents,
       }}
-      className="absolute inset-x-0 mx-auto w-full max-w-4xl lg:max-w-5xl rounded-2xl sm:rounded-3xl bg-[#111115]/95 border border-white/15 backdrop-blur-2xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] overflow-hidden will-change-transform"
+      className="absolute inset-x-0 mx-auto w-full max-w-5xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1480px] rounded-2xl sm:rounded-3xl bg-[#111115]/95 border border-white/15 backdrop-blur-2xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] overflow-hidden will-change-transform"
     >
       {/* Depth shading overlay when card is positioned underneath active card */}
       <motion.div
@@ -340,9 +340,9 @@ function StackedCardItem({
         className="absolute inset-0 bg-black pointer-events-none z-30 transition-opacity duration-300"
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-12 min-h-[460px] sm:min-h-[490px] md:min-h-[510px]">
+      <div className="grid grid-cols-1 md:grid-cols-12 min-h-[460px] sm:min-h-[490px] md:min-h-[510px] lg:min-h-[530px]">
         {/* Left Side: Editorial Image & Status Badges */}
-        <div className="image-wrapper md:col-span-5 relative h-[140px] sm:h-[180px] md:h-auto overflow-hidden bg-zinc-950 flex items-center justify-center group">
+        <div className="image-wrapper md:col-span-5 relative h-[160px] sm:h-[200px] md:h-auto overflow-hidden bg-zinc-950 flex items-center justify-center group">
           <motion.img
             src={card.image}
             alt={card.title}
@@ -378,7 +378,7 @@ function StackedCardItem({
           variants={contentContainerVariants}
           initial="hidden"
           animate={isActive ? "visible" : "hidden"}
-          className="md:col-span-7 p-4 sm:p-5 md:p-6 flex flex-col justify-between space-y-2.5 sm:space-y-3 bg-gradient-to-b from-[#15151a] to-[#101013]"
+          className="md:col-span-7 p-4 sm:p-6 md:p-7 lg:p-8 flex flex-col justify-between space-y-3 sm:space-y-4 bg-gradient-to-b from-[#15151a] to-[#101013]"
         >
           {/* Header */}
           <motion.div variants={slideRightPopVariants} className="space-y-0.5 sm:space-y-1">
@@ -388,7 +388,7 @@ function StackedCardItem({
               </span>
             </div>
 
-            <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight leading-tight">
+            <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-white tracking-tight leading-tight">
               {card.title}
             </h3>
 
@@ -398,20 +398,20 @@ function StackedCardItem({
           </motion.div>
 
           {/* Section: Definition */}
-          <motion.div variants={slideRightPopVariants} className="p-2 sm:p-2.5 rounded-xl bg-white/[0.03] border border-white/10">
-            <h4 className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-white font-bold mb-0.5 sm:mb-1 flex items-center gap-1.5">
+          <motion.div variants={slideRightPopVariants} className="p-2.5 sm:p-3 md:p-3.5 rounded-xl bg-white/[0.03] border border-white/10">
+            <h4 className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-white font-bold mb-1 sm:mb-1.5 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-white" />
               Definition
             </h4>
-            <p className="text-xs sm:text-[13px] text-zinc-400 leading-relaxed font-sans">
+            <p className="text-xs sm:text-[13.5px] text-zinc-300 leading-relaxed font-sans">
               {card.definition}
             </p>
           </motion.div>
 
           {/* Sections: Cause, Symptoms, Treatment in 3 organized columns */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-2.5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 md:gap-3.5">
             {/* Cause */}
-            <motion.div variants={slideRightPopVariants} className="p-2 sm:p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-colors flex flex-col justify-start">
+            <motion.div variants={slideRightPopVariants} className="p-2.5 sm:p-3 md:p-3.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-colors flex flex-col justify-start">
               <h4 className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-white font-bold mb-1 sm:mb-1.5 flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-white" />
                 Cause
@@ -427,7 +427,7 @@ function StackedCardItem({
             </motion.div>
 
             {/* Symptoms */}
-            <motion.div variants={slideRightPopVariants} className="p-2 sm:p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-colors flex flex-col justify-start">
+            <motion.div variants={slideRightPopVariants} className="p-2.5 sm:p-3 md:p-3.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-colors flex flex-col justify-start">
               <h4 className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-white font-bold mb-1 sm:mb-1.5 flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-white" />
                 Symptoms
@@ -443,7 +443,7 @@ function StackedCardItem({
             </motion.div>
 
             {/* Treatment */}
-            <motion.div variants={slideRightPopVariants} className="p-2 sm:p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-colors flex flex-col justify-start">
+            <motion.div variants={slideRightPopVariants} className="p-2.5 sm:p-3 md:p-3.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/20 transition-colors flex flex-col justify-start">
               <h4 className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-white font-bold mb-1 sm:mb-1.5 flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-white" />
                 Treatment
@@ -542,9 +542,9 @@ export default function StackedCardsSection({ onBookClick }: StackedCardsSection
       </div>
 
       {/* STICKY PINNED VIEWPORT */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center py-6 sm:py-8 md:py-12 px-4 sm:px-6 md:px-12 z-20">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center py-4 sm:py-6 md:py-8 px-3 sm:px-6 md:px-8 lg:px-10 z-20">
         {/* Central Card Stacking Arena */}
-        <div className="relative w-full max-w-4xl lg:max-w-5xl mx-auto flex items-center justify-center min-h-[480px]">
+        <div className="relative w-full max-w-5xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[1480px] mx-auto flex items-center justify-center min-h-[480px] sm:min-h-[510px] md:min-h-[530px]">
           {STACKED_CARDS_DATA.map((card, index) => (
             <StackedCardItem
               key={card.id}
