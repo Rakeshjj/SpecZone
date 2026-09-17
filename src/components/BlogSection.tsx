@@ -103,23 +103,23 @@ const ARTICLES_DATA: Article[] = [
   }
 ];
 
+// Apple-style cubic-bezier easing for smooth cinematic reveals
+const EASE_PREMIUM = [0.22, 1, 0.36, 1] as const;
+
 export default function BlogSection() {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const shouldReduceMotion = useReducedMotion();
 
   const cardVariants = {
     hidden: shouldReduceMotion
-      ? { opacity: 1, y: 0, scale: 1 }
-      : { opacity: 0, y: 60, scale: 0.86 },
+      ? { opacity: 1, y: 0 }
+      : { opacity: 0, y: 80 },
     visible: (i: number) => ({
       opacity: 1,
       y: 0,
-      scale: 1,
       transition: {
-        type: "spring",
-        stiffness: 260,
-        damping: 20,
-        mass: 0.8,
+        duration: shouldReduceMotion ? 0 : 0.8,
+        ease: EASE_PREMIUM,
         delay: shouldReduceMotion ? 0 : (i % 3) * 0.12,
       },
     }),
@@ -152,7 +152,7 @@ export default function BlogSection() {
           </span>
         </motion.div>
 
-        {/* 3-Column Blog Grid with Pop-Up Scroll Animation */}
+        {/* 3-Column Blog Grid with Smooth Scroll-Triggered Slide-Up Animation */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
           {ARTICLES_DATA.map((article, index) => (
             <motion.div
@@ -160,7 +160,7 @@ export default function BlogSection() {
               custom={index}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.15, margin: "0px 0px -40px 0px" }}
+              viewport={{ once: true, amount: 0.25 }}
               variants={cardVariants}
               whileHover={
                 shouldReduceMotion

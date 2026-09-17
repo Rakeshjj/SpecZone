@@ -55,6 +55,32 @@ export default function AboutUs() {
     }
   ];
 
+  const contentContainerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.05,
+      },
+    },
+  };
+
+  const slideFromRightVariants = {
+    hidden: {
+      opacity: 0,
+      x: 60,
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.55,
+        ease: [0.16, 1, 0.3, 1],
+      },
+    },
+  };
+
   return (
     <section
       id="about"
@@ -65,10 +91,10 @@ export default function AboutUs() {
       <div className="max-w-7xl mx-auto w-full z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
         {/* Left Column: Visuals & Stats */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
           className="lg:col-span-5 space-y-8 flex flex-col"
         >
           {/* Aesthetic Luxury Image Card with Auto-Play Gallery */}
@@ -152,27 +178,36 @@ export default function AboutUs() {
  
         {/* Right Column: Copy & Actions */}
         <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+          variants={contentContainerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
           className="lg:col-span-7 space-y-8"
         >
           <div className="space-y-4">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-[50px] font-black text-white uppercase leading-[0.95] tracking-tight">
+            <motion.h2
+              variants={slideFromRightVariants}
+              className="font-serif text-3xl sm:text-4xl md:text-[50px] font-black text-white uppercase leading-[0.95] tracking-tight"
+            >
               SCULPTORS OF <br />
               <span className="text-zinc-500 italic font-black">PRECISION VISION</span>
-            </h2>
-            <p className="font-sans text-sm text-zinc-300 leading-relaxed font-light">
+            </motion.h2>
+            <motion.p
+              variants={slideFromRightVariants}
+              className="font-sans text-sm text-zinc-300 leading-relaxed font-light"
+            >
               Founded in 1959, Spectacal Zone stands as an institution of optical excellence in Southern India. We are not mere purveyors of frames, but custom sculptors of bespoke precision lenses and curators of international sartorial eyewear.
-            </p>
-            <p className="font-sans text-sm text-zinc-300 leading-relaxed font-light">
+            </motion.p>
+            <motion.p
+              variants={slideFromRightVariants}
+              className="font-sans text-sm text-zinc-300 leading-relaxed font-light"
+            >
               Through three generations of ocular mastery, we have paired clinical wavefront diagnostic expertise with elite couture designers like Maybach, Balmain, and Chopard. We ensure that your glasses reflect your true intellect and unique visage.
-            </p>
+            </motion.p>
           </div>
- 
+
           {/* Interactive Actions */}
-          <div className="flex flex-wrap gap-4">
+          <motion.div variants={slideFromRightVariants} className="flex flex-wrap gap-4">
             <motion.button
               onClick={() => setIsLoreOpen(true)}
               whileHover={{ scale: 1.03 }}
@@ -192,7 +227,7 @@ export default function AboutUs() {
             >
               Contact Our Ateliers
             </motion.button>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
 

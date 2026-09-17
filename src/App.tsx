@@ -4,11 +4,11 @@ import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
 import BrandTicker from "./components/BrandTicker";
 import TrustStrip from "./components/TrustStrip";
-import ShowroomShowcase from "./components/ShowroomShowcase";
 import AboutUs from "./components/AboutUs";
 import LensLab from "./components/LensLab";
 import LocationsSection from "./components/LocationsSection";
 import BlogSection from "./components/BlogSection";
+import StackedCardsSection from "./components/StackedCardsSection";
 import HomeEyeCare from "./components/HomeEyeCare";
 import FooterSection from "./components/FooterSection";
 import SmoothScroll from "./components/SmoothScroll";
@@ -158,10 +158,11 @@ export default function App() {
               {/* PHYSICAL ATELIER MAPS/GRID */}
               <LocationsSection />
 
-              <ShowroomShowcase />
-
               {/* BLOG SECTIONS & DIGITAL EYE CARE TIPS */}
               <BlogSection />
+
+              {/* SCROLL-DRIVEN STACKED CARD TRANSITION ARCHIVE */}
+              <StackedCardsSection onBookClick={(service) => handleOpenBooking(service || "Atelier Eyewear Consultation")} />
             </motion.div>
           ) : (
             <motion.div

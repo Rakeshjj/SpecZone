@@ -1,6 +1,9 @@
-import React, { useState, useRef } from "react";
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "motion/react";
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useReducedMotion } from "motion/react";
 import { Eye, ShieldCheck, Sun, Laptop, Droplets } from "lucide-react";
+
+// Apple-style cubic-bezier easing for smooth cinematic reveals
+const EASE_PREMIUM = [0.22, 1, 0.36, 1] as const;
 
 interface LensScenario {
   id: string;
@@ -67,6 +70,56 @@ export default function LensLab() {
   const [sliderPosition, setSliderPosition] = useState(50); // percentage (0 - 100)
   const [isDragging, setIsDragging] = useState(false);
   const [sweepKey, setSweepKey] = useState(0);
+
+  const shouldReduceMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+  const [hasEntered, setHasEntered] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(typeof window !== "undefined" ? window.innerWidth < 1024 : false);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Right-side staggered content animation variants
+  const rightContainerVariants = {
+    hidden: {
+      opacity: 0,
+      x: shouldReduceMotion ? 0 : (isMobile ? 0 : 100),
+      y: shouldReduceMotion ? 0 : (isMobile ? 40 : 0),
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      y: 0,
+      transition: {
+        duration: 1.0,
+        ease: EASE_PREMIUM,
+        staggerChildren: 0.14,
+        delayChildren: 0.08,
+      },
+    },
+  };
+
+  const rightItemVariants = {
+    hidden: {
+      opacity: 0,
+      x: shouldReduceMotion ? 0 : (isMobile ? 0 : 25),
+      y: shouldReduceMotion ? 0 : 15,
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      y: 0,
+      transition: {
+        duration: 0.85,
+        ease: EASE_PREMIUM,
+      },
+    },
+  };
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -204,12 +257,25 @@ export default function LensLab() {
           
           {/* Left Panel: Dynamic Lens Slider (7 columns) */}
           <div className="lg:col-span-7 space-y-4">
-            {/* Viewport Reveal Wrapper: subtle cinematic reveal scaling from 0.96 to 1.0, fading in, and moving upward slightly */}
+            {/* Scroll-triggered entrance: slides from left (or bottom on mobile) with subtle scale effect 0.96 -> 1 */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 22 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              initial={{
+                opacity: 0,
+                x: shouldReduceMotion ? 0 : (isMobile ? 0 : -100),
+                y: shouldReduceMotion ? 0 : (isMobile ? 45 : 0),
+                scale: shouldReduceMotion ? 1 : 0.96,
+              }}
+              whileInView={{
+                opacity: 1,
+                x: 0,
+                y: 0,
+                scale: 1,
+              }}
               viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+              transition={{
+                duration: 1.1,
+                ease: EASE_PREMIUM,
+              }}
               style={{ perspective: 1200 }}
               className="w-full"
             >
@@ -375,50 +441,71 @@ export default function LensLab() {
           </div>
 
           {/* Right Panel: Feature Info & Premium Details (5 columns) */}
-          <div className="lg:col-span-5 flex flex-col justify-between h-full space-y-8 min-h-[340px]">
-            {/* 400-600ms smooth fade/slide scenario transition for right-side content */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeScenario.id}
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="space-y-6"
-              >
-                <h3 className="font-serif text-3xl md:text-4xl font-normal text-white uppercase leading-tight tracking-tight">
-                  {activeScenario.title}
-                </h3>
+          <motion.div
+            variants={rightContainerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.25 }}
+            onAnimationComplete={() => setHasEntered(true)}
+            className="lg:col-span-5 flex flex-col justify-between h-full space-y-8 min-h-[340px]"
+          >
+            <div className="space-y-6">
+              {/* Scenario transition handling with AnimatePresence */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeScenario.id}
+                  initial={hasEntered ? { opacity: 0, y: 12 } : undefined}
+                  animate={hasEntered ? { opacity: 1, y: 0 } : undefined}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.45, ease: EASE_PREMIUM }}
+                  className="space-y-6"
+                >
+                  <motion.h3
+                    variants={rightItemVariants}
+                    className="font-serif text-3xl md:text-4xl font-normal text-white uppercase leading-tight tracking-tight"
+                  >
+                    {activeScenario.title}
+                  </motion.h3>
 
-                <p className="font-sans text-sm text-zinc-300 leading-relaxed font-light">
-                  {activeScenario.description}
-                </p>
+                  <motion.p
+                    variants={rightItemVariants}
+                    className="font-sans text-sm text-zinc-300 leading-relaxed font-light"
+                  >
+                    {activeScenario.description}
+                  </motion.p>
+                </motion.div>
+              </AnimatePresence>
 
-                {/* Technical Specifications list */}
-                <div className="space-y-3.5 pt-4 border-t border-white/5">
-                  <div className="flex items-start gap-3">
-                    <div className="p-1 rounded bg-zinc-900 border border-white/5 text-brand-blue shrink-0 mt-0.5">
-                      <ShieldCheck size={14} />
-                    </div>
-                    <div>
-                      <h5 className="font-mono text-[10px] font-bold text-white uppercase tracking-wider">High Index Multi-Resiliency</h5>
-                      <p className="font-sans text-xs text-zinc-400 mt-0.5">Sartorial scratch-resistant and anti-reflective armor on both sides of the lenses.</p>
-                    </div>
+              {/* Technical Specifications list */}
+              <div className="space-y-3.5 pt-4 border-t border-white/5">
+                <motion.div
+                  variants={rightItemVariants}
+                  className="flex items-start gap-3"
+                >
+                  <div className="p-1 rounded bg-zinc-900 border border-white/5 text-brand-blue shrink-0 mt-0.5">
+                    <ShieldCheck size={14} />
                   </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="p-1 rounded bg-zinc-900 border border-white/5 text-brand-blue shrink-0 mt-0.5">
-                      <Eye size={14} />
-                    </div>
-                    <div>
-                      <h5 className="font-mono text-[10px] font-bold text-white uppercase tracking-wider">Perfect Visual Neutrality</h5>
-                      <p className="font-sans text-xs text-zinc-400 mt-0.5">Zero chromatic aberrations, securing natural depth perception and premium optical alignment.</p>
-                    </div>
+                  <div>
+                    <h5 className="font-mono text-[10px] font-bold text-white uppercase tracking-wider">High Index Multi-Resiliency</h5>
+                    <p className="font-sans text-xs text-zinc-400 mt-0.5">Sartorial scratch-resistant and anti-reflective armor on both sides of the lenses.</p>
                   </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+                </motion.div>
+
+                <motion.div
+                  variants={rightItemVariants}
+                  className="flex items-start gap-3"
+                >
+                  <div className="p-1 rounded bg-zinc-900 border border-white/5 text-brand-blue shrink-0 mt-0.5">
+                    <Eye size={14} />
+                  </div>
+                  <div>
+                    <h5 className="font-mono text-[10px] font-bold text-white uppercase tracking-wider">Perfect Visual Neutrality</h5>
+                    <p className="font-sans text-xs text-zinc-400 mt-0.5">Zero chromatic aberrations, securing natural depth perception and premium optical alignment.</p>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          </motion.div>
 
         </div>
 
