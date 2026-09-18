@@ -100,17 +100,17 @@ export default function BrandTicker() {
 
   return (
     <section
-  id="brand-ticker-section"
-  className="bg-zinc-950/60 border-b border-white/5 py-4 overflow-hidden relative backdrop-blur-md"
->
+      id="brand-ticker-section"
+      className="bg-zinc-950/60 min-h-[90px] sm:min-h-[110px] md:min-h-[125px] py-7 sm:py-8 md:py-10 overflow-hidden relative backdrop-blur-md flex items-center justify-center"
+    >
       {/* Decorative gradient overlay bounds for clean luxury fade */}
-      <div className="absolute inset-y-0 left-0 w-24 md:w-48 bg-gradient-to-r from-zinc-950 to-transparent z-20 pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-24 md:w-48 bg-gradient-to-l from-zinc-950 to-transparent z-20 pointer-events-none" />
+      <div className="absolute inset-y-0 left-0 w-20 md:w-44 bg-gradient-to-r from-zinc-950 to-transparent z-20 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-20 md:w-44 bg-gradient-to-l from-zinc-950 to-transparent z-20 pointer-events-none" />
 
       {/* Scrolling Marquee Container */}
-      <div className="relative flex items-center overflow-x-hidden py-4 bg-zinc-950/20 backdrop-blur-sm ">
+      <div className="relative w-full flex items-center overflow-x-hidden py-2 sm:py-2.5 bg-zinc-950/20 backdrop-blur-sm">
         <motion.div
-          className="flex gap-16 items-center shrink-0"
+          className="flex gap-14 md:gap-18 items-center shrink-0"
           animate={{ x: ["0%", "-33.333%"] }}
           transition={{
             ease: "linear",
@@ -121,16 +121,16 @@ export default function BrandTicker() {
           {extendedBrands.map((brand, idx) => (
             <motion.div
               key={idx}
-              className="flex items-center gap-16 shrink-0 select-none cursor-pointer"
-              whileHover={{ scale: 1.1, y: -2 }}
+              className="flex items-center gap-14 md:gap-18 shrink-0 select-none cursor-pointer"
+              whileHover={{ scale: 1.08, y: -1 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
               <span
-                className={`${brand.fontStyle} text-3xl sm:text-4xl lg:text-5xl text-zinc-400 hover:text-white transition-colors duration-300 hover:drop-shadow-[0_0_20px_rgba(10,100,255,0.6)]`}
+                className={`${brand.fontStyle} text-3xl sm:text-4xl lg:text-[2.6rem] tracking-[0.2em] sm:tracking-[0.24em] text-zinc-400 hover:text-white transition-colors duration-300 hover:drop-shadow-[0_0_18px_rgba(10,100,255,0.6)]`}
               >
                 {brand.name}
               </span>
-              <span className="text-zinc-800 text-3xl sm:text-5xl font-extralight select-none animate-pulse">•</span>
+              <span className="text-zinc-800 text-3xl sm:text-4xl font-extralight select-none animate-pulse">•</span>
             </motion.div>
           ))}
         </motion.div>

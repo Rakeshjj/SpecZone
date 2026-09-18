@@ -24,11 +24,96 @@ export interface Location {
   hours: string;
 }
 
-export interface ClinicalSection {
-  definition: string;
+export interface ClinicalTableItem {
+  type: string;
+  description: string;
+}
+
+export interface MedicationTableItem {
+  medication: string;
+  action: string;
+}
+
+export interface ClinicalSignItem {
+  sign: string;
+  meaning: string;
+}
+
+export interface DiseaseStageItem {
+  stage: string;
+  category?: string;
+  description?: string;
+  features?: string[];
+  complications?: string[];
+}
+
+export interface InvestigationTableItem {
+  test: string;
+  purpose: string;
+}
+
+export interface TreatmentSubtypeItem {
+  category: string;
+  description?: string;
+  items: string[];
+  note?: string;
+}
+
+export interface SecondaryConditionItem {
+  title: string;
+  definition?: string;
   causes: string[];
   symptoms: string[];
   treatments: string[];
+  note?: string;
+}
+
+export interface FirstAidItem {
+  situation: string;
+  steps: string[];
+  warning?: string;
+  emergency?: boolean;
+}
+
+export interface InjuryTreatmentItem {
+  injury: string;
+  treatment: string;
+}
+
+export interface ClinicalSection {
+  definition: string;
+  causes: string[];
+  riskFactors?: string[];
+  symptoms: string[];
+  treatments: string[];
+  mechanism?: string;
+  clinicalSigns?: string[];
+  clinicalSignsTable?: ClinicalSignItem[];
+  clinicalSignsSubsections?: { title: string; signs: string[] }[];
+  stages?: DiseaseStageItem[];
+  investigations?: string[];
+  investigationsTable?: InvestigationTableItem[];
+  systemicManagement?: string[];
+  lifestyleChanges?: string[];
+  mgdTreatment?: string[];
+  prescriptionTreatment?: string[];
+  treatmentSubtypes?: TreatmentSubtypeItem[];
+  secondaryCondition?: SecondaryConditionItem;
+  firstAid?: FirstAidItem[];
+  injuryTreatmentTable?: InjuryTreatmentItem[];
+  injections?: {
+    category: string;
+    medications: string[];
+    action: string;
+  };
+  typesTable?: ClinicalTableItem[];
+  medicationsTable?: MedicationTableItem[];
+  laserTreatments?: string[];
+  surgicalTreatments?: string[];
+  earlyStageTreatment?: string[];
+  treatmentWarning?: string;
+  advancedTreatment?: string;
+  emergencyAlert?: string;
   note?: string;
   example?: string;
 }

@@ -3,7 +3,6 @@ import { motion, AnimatePresence, useScroll, useSpring } from "motion/react";
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
 import BrandTicker from "./components/BrandTicker";
-import TrustStrip from "./components/TrustStrip";
 import ShowroomShowcase from "./components/ShowroomShowcase";
 import AboutUs from "./components/AboutUs";
 import LensLab from "./components/LensLab";
@@ -23,6 +22,7 @@ export default function App() {
   const [view, setView] = useState<"home" | "booking" | "trial-form" | "article">("home");
   const [selectedServiceType, setSelectedServiceType] = useState<string>("Transform Your Look");
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const [highlightedCardId, setHighlightedCardId] = useState<number | null>(null);
 
   // Prevent background scrolling when full-screen trial-form portal is open
   useEffect(() => {
@@ -64,13 +64,36 @@ export default function App() {
   };
 
   const handleBackToArticles = () => {
+    const targetArticleId = selectedArticle?.id;
+    if (targetArticleId) {
+      setHighlightedCardId(targetArticleId);
+      setTimeout(() => {
+        setHighlightedCardId(null);
+      }, 3500);
+    }
     setView("home");
-    setTimeout(() => {
-      const el = document.getElementById("blog");
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
+
+    const scrollTarget = (retriesLeft = 12) => {
+      const cardEl = targetArticleId ? document.getElementById(`article-card-${targetArticleId}`) : null;
+      const targetEl = cardEl || document.getElementById("blog");
+
+      if (targetEl) {
+        const lenis = (window as any).lenis;
+        if (lenis && typeof lenis.scrollTo === "function") {
+          lenis.scrollTo(targetEl, { offset: -90, immediate: false, duration: 1.2 });
+        } else {
+          const topPos = targetEl.getBoundingClientRect().top + window.pageYOffset - 90;
+          window.scrollTo({ top: topPos, behavior: "smooth" });
+        }
+      } else if (retriesLeft > 0) {
+        setTimeout(() => scrollTarget(retriesLeft - 1), 60);
       }
-    }, 120);
+    };
+
+    // Give React and DOM mounting initial ticks then smoothly navigate
+    setTimeout(() => {
+      scrollTarget(12);
+    }, 70);
   };
 
   const handleCloseToHome = () => {
@@ -94,20 +117,26 @@ export default function App() {
 
   // Safe window-scrolling callback
   const scrollToSection = (sectionId: string) => {
-    if (view !== "home") {
-      setView("home");
-      // Short delay to allow DOM render before scrolling
-      setTimeout(() => {
-        const el = document.getElementById(sectionId);
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 100);
-    } else {
+    const doScroll = (retriesLeft = 8) => {
       const el = document.getElementById(sectionId);
       if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
+        const lenis = (window as any).lenis;
+        if (lenis && typeof lenis.scrollTo === "function") {
+          lenis.scrollTo(el, { offset: -80, immediate: false, duration: 1 });
+        } else {
+          const topPos = el.getBoundingClientRect().top + window.pageYOffset - 80;
+          window.scrollTo({ top: topPos, behavior: "smooth" });
+        }
+      } else if (retriesLeft > 0) {
+        setTimeout(() => doScroll(retriesLeft - 1), 60);
       }
+    };
+
+    if (view !== "home") {
+      setView("home");
+      setTimeout(() => doScroll(8), 80);
+    } else {
+      doScroll(8);
     }
   };
 
@@ -204,16 +233,16 @@ export default function App() {
               {/* ABOUT US & HERITAGE HISTORICAL STORY */}
               <AboutUs />
 
-              {/* TRUST STRIP */}
-              <TrustStrip />
-
               {/* PHYSICAL ATELIER MAPS/GRID */}
               <LocationsSection />
 
               <ShowroomShowcase />
 
               {/* BLOG SECTIONS & DIGITAL EYE CARE TIPS */}
-              <BlogSection onSelectArticle={handleOpenArticle} />
+              <BlogSection 
+                onSelectArticle={handleOpenArticle} 
+                highlightedArticleId={highlightedCardId}
+              />
 
               {/* SCROLL-DRIVEN STACKED CARD TRANSITION ARCHIVE */}
               <StackedCardsSection onBookClick={(service) => handleOpenBooking(service || "Atelier Eyewear Consultation")} />

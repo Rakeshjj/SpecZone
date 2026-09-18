@@ -367,7 +367,7 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
   return (
     <section 
       ref={targetRef}
-      className="relative bg-zinc-950 text-white h-[400vh] border-t border-white/10"
+      className="relative bg-zinc-950 text-white h-[400vh]"
     >
       {/* STICKY FULLSCREEN VIEWPORT */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between p-4 sm:p-6 md:p-8 lg:p-10 bg-zinc-950">

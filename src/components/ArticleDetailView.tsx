@@ -2,9 +2,7 @@ import { useEffect } from "react";
 import { motion } from "motion/react";
 import { 
   ArrowLeft, 
-  Calendar, 
   Clock, 
-  Share2, 
   Sparkles, 
   CheckCircle2, 
   ShieldCheck, 
@@ -13,7 +11,9 @@ import {
   Stethoscope, 
   Glasses, 
   ArrowUpRight,
-  BookOpen
+  Activity,
+  Layers,
+  AlertTriangle
 } from "lucide-react";
 import { Article } from "../types";
 
@@ -32,23 +32,6 @@ export default function ArticleDetailView({
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [article]);
-
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: article.title,
-          text: article.summary,
-          url: window.location.href,
-        });
-      } catch {
-        // User dismissed or share failed silently
-      }
-    } else {
-      navigator.clipboard?.writeText(window.location.href);
-      alert("Article link copied to clipboard!");
-    }
-  };
 
   // Split title if it contains parenthesis like "Hyperopia (Long-sightedness)"
   const titleMatch = article.title.match(/^(.*?)(?:\s*\((.*?)\))?$/);
@@ -72,8 +55,8 @@ export default function ArticleDetailView({
       </div>
 
       {/* Top Sticky Navigation Bar */}
-      <div className="sticky top-0 z-40 bg-zinc-950/80 backdrop-blur-xl border-b border-white/10 px-4 sm:px-8 py-3.5 transition-all">
-        <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
+      <div className="sticky top-0 z-40 bg-zinc-950/80 backdrop-blur-xl border-b border-white/10 px-4 sm:px-8 py-2.5 sm:py-3 transition-all">
+        <div className="max-w-4xl mx-auto flex items-center justify-start">
           <button
             type="button"
             onClick={onBack}
@@ -83,60 +66,25 @@ export default function ArticleDetailView({
             <ArrowLeft className="w-4 h-4 text-brand-blue group-hover:-translate-x-1 transition-transform" />
             <span>Back to Articles</span>
           </button>
-
-          <div className="hidden sm:flex items-center gap-2 text-zinc-400 font-mono text-[11px] uppercase tracking-wider">
-            <span>Articles</span>
-            <span className="text-zinc-600">/</span>
-            <span className="text-brand-blue truncate max-w-[220px]">{article.category}</span>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleShare}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/10 hover:border-white/20 text-zinc-400 hover:text-white transition-colors font-mono text-xs cursor-pointer"
-            title="Share article"
-          >
-            <Share2 className="w-3.5 h-3.5" />
-            <span className="hidden xs:inline">Share</span>
-          </button>
         </div>
       </div>
 
       {/* Article Content Container */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 md:px-8 pt-8 sm:pt-12 space-y-8 sm:space-y-10">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 md:px-8 pt-3 sm:pt-5 space-y-5 sm:space-y-6">
         
         {/* Article Header */}
-        <header className="space-y-4 sm:space-y-5">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-blue/15 border border-brand-blue/30 text-brand-blue font-mono text-[10px] sm:text-xs tracking-widest uppercase font-semibold">
-              <Sparkles className="w-3 h-3" />
-              {article.category}
-            </span>
-            <span className="text-zinc-500 font-mono text-xs flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5" />
-              {article.date}
-            </span>
-            <span className="text-zinc-500 font-mono text-xs flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5" />
-              {article.readTime}
-            </span>
-          </div>
-
+        <header>
           {/* Title & Subtitle */}
           <div>
-            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-tight leading-[1.05]">
+            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-black text-white uppercase tracking-tight leading-snug">
               {mainTitle}
             </h1>
             {displaySubtitle && (
-              <p className="font-serif text-lg sm:text-2xl md:text-3xl italic text-zinc-400 font-normal tracking-wide mt-1.5 sm:mt-2">
+              <p className="font-serif text-sm sm:text-base md:text-lg italic text-zinc-400 font-normal tracking-wide mt-1">
                 {displaySubtitle}
               </p>
             )}
           </div>
-
-          <p className="text-zinc-300 font-sans text-sm sm:text-base md:text-lg leading-relaxed font-light border-l-2 border-brand-blue/60 pl-4 py-0.5">
-            {article.summary}
-          </p>
         </header>
 
         {/* Featured High-Resolution Image */}
@@ -148,16 +96,6 @@ export default function ArticleDetailView({
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-700 ease-out"
             />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-black/20 pointer-events-none" />
-          
-          <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-10 flex items-center gap-2">
-            <div className="px-3 py-1 rounded-full bg-black/80 border border-white/20 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-white font-semibold text-[11px] sm:text-xs tracking-tight font-mono">
-                Clinical Diagnostic Reference
-              </span>
-            </div>
           </div>
         </div>
 
@@ -181,6 +119,38 @@ export default function ArticleDetailView({
               </p>
             </div>
 
+            {/* EMERGENCY ALERT (e.g. Acute Angle-Closure Glaucoma) */}
+            {article.clinicalDetails.emergencyAlert && (
+              <div className="p-4 sm:p-5 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-start gap-3.5 backdrop-blur-md">
+                <div className="w-8 h-8 rounded-lg bg-red-500/20 border border-red-500/30 flex items-center justify-center text-red-400 shrink-0 mt-0.5">
+                  <AlertTriangle className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="font-mono text-xs uppercase tracking-wider font-bold text-red-400 mb-1">
+                    Ophthalmic Emergency
+                  </h4>
+                  <p className="font-sans text-xs sm:text-sm text-red-200 leading-relaxed font-medium">
+                    {article.clinicalDetails.emergencyAlert}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* PATHOPHYSIOLOGY MECHANISM */}
+            {article.clinicalDetails.mechanism && (
+              <div className="rounded-2xl bg-[#131318]/90 border border-blue-500/20 p-5 sm:p-6 backdrop-blur-md shadow-lg">
+                <div className="flex items-center gap-2 mb-2.5">
+                  <span className="w-2 h-2 rounded-full bg-brand-blue" />
+                  <h3 className="font-mono text-xs uppercase tracking-wider text-brand-blue font-bold">
+                    Aqueous Humor Drainage Mechanism
+                  </h3>
+                </div>
+                <p className="font-sans text-xs sm:text-sm text-zinc-300 leading-relaxed font-light">
+                  {article.clinicalDetails.mechanism}
+                </p>
+              </div>
+            )}
+
             {/* 3 CORE MEDICAL PILLARS: CAUSE, SYMPTOMS, TREATMENT */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
               
@@ -203,6 +173,22 @@ export default function ArticleDetailView({
                     </li>
                   ))}
                 </ul>
+
+                {article.clinicalDetails.riskFactors && article.clinicalDetails.riskFactors.length > 0 && (
+                  <div className="mt-4 pt-3 border-t border-white/10 space-y-2">
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-amber-400 font-bold block">
+                      Risk Factors:
+                    </span>
+                    <ul className="space-y-1.5 font-sans text-xs text-zinc-300">
+                      {article.clinicalDetails.riskFactors.map((rf, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-amber-400 font-bold">•</span>
+                          <span>{rf}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
 
               {/* SYMPTOMS CARD */}
@@ -249,6 +235,795 @@ export default function ArticleDetailView({
 
             </div>
 
+            {/* CLINICAL NOTE CALLOUT */}
+            {article.clinicalDetails.note && (
+              <div className="p-4 rounded-xl bg-blue-500/[0.08] border border-brand-blue/30 flex items-start gap-3 backdrop-blur-sm">
+                <AlertCircle className="w-4 h-4 text-brand-blue shrink-0 mt-0.5" />
+                <p className="font-sans text-xs sm:text-sm text-blue-200 leading-relaxed font-medium">
+                  <span className="font-bold text-brand-blue uppercase tracking-wide font-mono text-[11px] block sm:inline mr-2">Important Clinical Note:</span>
+                  {article.clinicalDetails.note}
+                </p>
+              </div>
+            )}
+
+            {/* TYPES AND STAGES OF DISEASE (e.g. Diabetic Retinopathy NPDR, PDR, DME) */}
+            {article.clinicalDetails.stages && article.clinicalDetails.stages.length > 0 && (
+              <div className="rounded-2xl bg-[#131318]/80 border border-white/10 p-5 sm:p-6 backdrop-blur-sm shadow-lg space-y-4">
+                <div className="flex items-center gap-2.5 pb-3 border-b border-white/10">
+                  <div className="w-7 h-7 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">
+                    <Layers className="w-4 h-4" />
+                  </div>
+                  <h3 className="font-mono text-xs sm:text-sm uppercase tracking-wider text-white font-bold">
+                    Types & Stages of Diabetic Retinopathy
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {article.clinicalDetails.stages.map((stg, idx) => (
+                    <div 
+                      key={idx} 
+                      className={`p-4 rounded-xl border flex flex-col justify-between ${
+                        stg.stage.includes("Proliferative") 
+                          ? "bg-red-500/[0.04] border-red-500/25" 
+                          : stg.stage.includes("Macular") 
+                          ? "bg-amber-500/[0.04] border-amber-500/25 md:col-span-2" 
+                          : "bg-white/[0.02] border-white/10"
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-1.5 flex-wrap">
+                          <span className="font-mono text-xs font-bold text-white tracking-wide">
+                            {stg.stage}
+                          </span>
+                          {stg.category && (
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-zinc-400">
+                              {stg.category}
+                            </span>
+                          )}
+                        </div>
+
+                        {stg.description && (
+                          <p className="font-sans text-xs text-zinc-300 leading-relaxed font-light mb-2.5">
+                            {stg.description}
+                          </p>
+                        )}
+
+                        {stg.features && (
+                          <ul className="space-y-1 text-xs text-zinc-300">
+                            {stg.features.map((f, i) => (
+                              <li key={i} className="flex items-start gap-1.5">
+                                <span className="text-purple-400 font-bold">•</span>
+                                <span>{f}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+
+                        {stg.complications && (
+                          <div className="mt-2.5 pt-2 border-t border-white/10">
+                            <span className="font-mono text-[10px] uppercase tracking-wider text-red-400 font-bold block mb-1">
+                              Complications:
+                            </span>
+                            <ul className="space-y-1 text-xs text-red-200/90">
+                              {stg.complications.map((comp, i) => (
+                                <li key={i} className="flex items-start gap-1.5">
+                                  <span className="text-red-400 font-bold">•</span>
+                                  <span>{comp}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* CLINICAL SIGNS */}
+            {article.clinicalDetails.clinicalSigns && article.clinicalDetails.clinicalSigns.length > 0 && (
+              <div className="rounded-2xl bg-[#131318]/80 border border-white/10 p-5 sm:p-6 backdrop-blur-sm shadow-lg">
+                <div className="flex items-center gap-2.5 mb-4 pb-3 border-b border-white/10">
+                  <div className="w-7 h-7 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">
+                    <Activity className="w-4 h-4" />
+                  </div>
+                  <h3 className="font-mono text-xs sm:text-sm uppercase tracking-wider text-white font-bold">
+                    Clinical Signs
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-sans text-xs sm:text-[13px] text-zinc-300 leading-relaxed">
+                  {article.clinicalDetails.clinicalSigns.map((sign, idx) => (
+                    <div key={idx} className="flex items-start gap-2.5 p-3 rounded-xl bg-white/[0.02] border border-white/5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0 mt-2" />
+                      <span>{sign}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* CLINICAL SIGNS SUBSECTIONS (e.g. Anterior & Posterior Blepharitis Signs) */}
+            {article.clinicalDetails.clinicalSignsSubsections && article.clinicalDetails.clinicalSignsSubsections.length > 0 && (
+              <div className="rounded-2xl bg-[#131318]/80 border border-white/10 p-5 sm:p-6 backdrop-blur-sm shadow-lg space-y-4">
+                <div className="flex items-center gap-2.5 pb-3 border-b border-white/10">
+                  <div className="w-7 h-7 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">
+                    <Activity className="w-4 h-4" />
+                  </div>
+                  <h3 className="font-mono text-xs sm:text-sm uppercase tracking-wider text-white font-bold">
+                    Biomicroscopy & Clinical Examination Findings
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {article.clinicalDetails.clinicalSignsSubsections.map((sub, idx) => (
+                    <div key={idx} className="p-4 rounded-xl bg-white/[0.02] border border-white/10 space-y-3">
+                      <div className="border-b border-white/5 pb-2">
+                        <span className="font-mono text-xs font-bold text-brand-blue tracking-wide uppercase">
+                          {sub.title}
+                        </span>
+                      </div>
+                      <ul className="space-y-2 text-xs sm:text-[13px] text-zinc-300">
+                        {sub.signs.map((sign, sIdx) => (
+                          <li key={sIdx} className="flex items-start gap-2">
+                            <span className="text-purple-400 font-bold">•</span>
+                            <span>{sign}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* CLINICAL SIGNS TABLE (SIGN | MEANING) */}
+            {article.clinicalDetails.clinicalSignsTable && article.clinicalDetails.clinicalSignsTable.length > 0 && (
+              <div className="rounded-2xl bg-[#131318]/80 border border-white/10 p-5 sm:p-6 backdrop-blur-sm shadow-lg space-y-4">
+                <div className="flex items-center gap-2.5 pb-3 border-b border-white/10">
+                  <div className="w-7 h-7 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">
+                    <Activity className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-mono text-xs sm:text-sm uppercase tracking-wider text-white font-bold">
+                      Clinical Signs & Diagnostic Meaning
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto rounded-xl border border-white/10">
+                  <table className="w-full text-left font-sans text-xs sm:text-[13px]">
+                    <thead className="bg-white/[0.05] border-b border-white/10 font-mono text-[11px] uppercase tracking-wider text-zinc-400">
+                      <tr>
+                        <th className="py-3 px-4 sm:px-6 font-semibold w-1/3 text-purple-400">Sign</th>
+                        <th className="py-3 px-4 sm:px-6 font-semibold">Meaning</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {article.clinicalDetails.clinicalSignsTable.map((row, idx) => (
+                        <tr key={idx} className="hover:bg-white/[0.02] transition-colors">
+                          <td className="py-3.5 px-4 sm:px-6 font-medium text-white whitespace-nowrap">
+                            {row.sign}
+                          </td>
+                          <td className="py-3.5 px-4 sm:px-6 text-zinc-300 font-light leading-relaxed">
+                            {row.meaning}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* CLINICAL INVESTIGATIONS */}
+            {article.clinicalDetails.investigations && article.clinicalDetails.investigations.length > 0 && (
+              <div className="rounded-2xl bg-[#131318]/80 border border-white/10 p-5 sm:p-6 backdrop-blur-sm shadow-lg space-y-4">
+                <div className="flex items-center gap-2.5 pb-3 border-b border-white/10">
+                  <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0">
+                    <Stethoscope className="w-4 h-4" />
+                  </div>
+                  <h3 className="font-mono text-xs sm:text-sm uppercase tracking-wider text-white font-bold">
+                    Important Investigations
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 font-sans text-xs sm:text-[13px] text-zinc-300 leading-relaxed">
+                  {article.clinicalDetails.investigations.map((inv, idx) => {
+                    const [title, ...rest] = inv.split(":");
+                    return (
+                      <div key={idx} className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 flex flex-col justify-between">
+                        <span className="font-mono text-xs font-semibold text-cyan-400 mb-1">{title}</span>
+                        {rest.length > 0 && (
+                          <span className="text-zinc-400 text-xs font-light">{rest.join(":").trim()}</span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* INVESTIGATIONS TABLE (TEST | DIAGNOSTIC PURPOSE) */}
+            {article.clinicalDetails.investigationsTable && article.clinicalDetails.investigationsTable.length > 0 && (
+              <div className="rounded-2xl bg-[#131318]/80 border border-cyan-500/20 p-5 sm:p-6 backdrop-blur-sm shadow-lg space-y-4">
+                <div className="flex items-center gap-2.5 pb-3 border-b border-white/10">
+                  <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0">
+                    <Stethoscope className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-mono text-xs sm:text-sm uppercase tracking-wider text-white font-bold">
+                      Clinical Diagnostic Investigations
+                    </h3>
+                    <p className="text-xs text-zinc-400 font-light">Comprehensive ocular surface & tear film evaluation</p>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto rounded-xl border border-white/10">
+                  <table className="w-full text-left font-sans text-xs sm:text-[13px]">
+                    <thead className="bg-white/[0.05] border-b border-white/10 font-mono text-[11px] uppercase tracking-wider text-zinc-400">
+                      <tr>
+                        <th className="py-3 px-4 sm:px-6 font-semibold w-1/3 text-cyan-400">Test</th>
+                        <th className="py-3 px-4 sm:px-6 font-semibold">Diagnostic Purpose</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {article.clinicalDetails.investigationsTable.map((row, idx) => (
+                        <tr key={idx} className="hover:bg-white/[0.02] transition-colors">
+                          <td className="py-3.5 px-4 sm:px-6 font-medium text-white whitespace-nowrap">
+                            {row.test}
+                          </td>
+                          <td className="py-3.5 px-4 sm:px-6 text-zinc-300 font-light leading-relaxed">
+                            {row.purpose}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* TYPES TABLE */}
+            {article.clinicalDetails.typesTable && article.clinicalDetails.typesTable.length > 0 && (
+              <div className="rounded-2xl bg-[#131318]/80 border border-white/10 p-5 sm:p-6 backdrop-blur-sm shadow-lg space-y-4">
+                <div className="flex items-center gap-2.5 pb-3 border-b border-white/10">
+                  <div className="w-7 h-7 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-brand-blue shrink-0">
+                    <Layers className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-mono text-xs sm:text-sm uppercase tracking-wider text-white font-bold">
+                      Types & Classification
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto rounded-xl border border-white/10">
+                  <table className="w-full text-left font-sans text-xs sm:text-[13px]">
+                    <thead className="bg-white/[0.05] border-b border-white/10 font-mono text-[11px] uppercase tracking-wider text-zinc-400">
+                      <tr>
+                        <th className="py-3 px-4 sm:px-6 font-semibold w-1/3 text-brand-blue">Type</th>
+                        <th className="py-3 px-4 sm:px-6 font-semibold">Description</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {article.clinicalDetails.typesTable.map((row, idx) => (
+                        <tr key={idx} className="hover:bg-white/[0.02] transition-colors">
+                          <td className="py-3.5 px-4 sm:px-6 font-medium text-white whitespace-nowrap">
+                            {row.type}
+                          </td>
+                          <td className="py-3.5 px-4 sm:px-6 text-zinc-300 font-light leading-relaxed">
+                            {row.description}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* MEDICATIONS TABLE */}
+            {article.clinicalDetails.medicationsTable && article.clinicalDetails.medicationsTable.length > 0 && (
+              <div className="rounded-2xl bg-[#131318]/80 border border-white/10 p-5 sm:p-6 backdrop-blur-sm shadow-lg space-y-4">
+                <div className="flex items-center gap-2.5 pb-3 border-b border-white/10">
+                  <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+                    <CheckCircle2 className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-mono text-xs sm:text-sm uppercase tracking-wider text-white font-bold">
+                      Eye Drops (Topical Hypotensive Medications)
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto rounded-xl border border-white/10">
+                  <table className="w-full text-left font-sans text-xs sm:text-[13px]">
+                    <thead className="bg-white/[0.05] border-b border-white/10 font-mono text-[11px] uppercase tracking-wider text-zinc-400">
+                      <tr>
+                        <th className="py-3 px-4 sm:px-6 font-semibold w-1/3 text-emerald-400">Medication</th>
+                        <th className="py-3 px-4 sm:px-6 font-semibold">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {article.clinicalDetails.medicationsTable.map((row, idx) => (
+                        <tr key={idx} className="hover:bg-white/[0.02] transition-colors">
+                          <td className="py-3.5 px-4 sm:px-6 font-medium text-white whitespace-nowrap">
+                            {row.medication}
+                          </td>
+                          <td className="py-3.5 px-4 sm:px-6 text-zinc-300 font-light leading-relaxed">
+                            {row.action}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* SYSTEMIC MANAGEMENT */}
+            {article.clinicalDetails.systemicManagement && article.clinicalDetails.systemicManagement.length > 0 && (
+              <div className="rounded-2xl bg-[#131318]/80 border border-white/10 p-5 sm:p-6 backdrop-blur-sm shadow-lg space-y-4">
+                <div className="flex items-center gap-2.5 pb-3 border-b border-white/10">
+                  <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-mono text-xs sm:text-sm uppercase tracking-wider text-white font-bold">
+                      Systemic Disease Management
+                    </h3>
+                    <p className="text-xs text-zinc-400 font-light">Essential holistic control of diabetes and vascular risk factors</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-sans text-xs sm:text-[13px] text-zinc-300">
+                  {article.clinicalDetails.systemicManagement.map((item, idx) => (
+                    <div 
+                      key={idx} 
+                      className={`p-3.5 rounded-xl border flex items-start gap-2.5 ${
+                        item.includes("Important") 
+                          ? "bg-amber-500/[0.05] border-amber-500/30 sm:col-span-2 text-amber-200" 
+                          : "bg-white/[0.02] border-white/5"
+                      }`}
+                    >
+                      <span className={`font-bold mt-0.5 ${item.includes("Important") ? "text-amber-400" : "text-emerald-400"}`}>•</span>
+                      <span className="leading-relaxed">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* INTRAVITREAL INJECTIONS */}
+            {article.clinicalDetails.injections && (
+              <div className="rounded-2xl bg-[#131318]/80 border border-cyan-500/20 p-5 sm:p-6 backdrop-blur-sm shadow-lg space-y-4">
+                <div className="flex items-center gap-2.5 pb-3 border-b border-white/10">
+                  <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0">
+                    <Activity className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-mono text-xs sm:text-sm uppercase tracking-wider text-cyan-400 font-bold">
+                      {article.clinicalDetails.injections.category}
+                    </h3>
+                    <p className="text-xs text-zinc-400 font-light">Indicated for Diabetic Macular Edema (DME) & Selected Proliferative Disease</p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <span className="font-mono text-xs uppercase tracking-wider text-zinc-400 block mb-2">
+                      Common Anti-VEGF Agents:
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {article.clinicalDetails.injections.medications.map((med, idx) => (
+                        <span key={idx} className="px-3 py-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/30 font-mono text-xs text-cyan-300 font-medium">
+                          {med}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <p className="text-xs sm:text-[13px] text-zinc-300 leading-relaxed font-light p-3 rounded-xl bg-white/[0.02] border border-white/5">
+                    <span className="text-white font-medium">Action: </span>
+                    {article.clinicalDetails.injections.action}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* LASER & SURGICAL MODALITIES */}
+            {(article.clinicalDetails.laserTreatments || article.clinicalDetails.surgicalTreatments) && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                {article.clinicalDetails.laserTreatments && (
+                  <div className="rounded-2xl bg-[#131318]/80 border border-white/10 p-5 sm:p-6 backdrop-blur-sm shadow-lg space-y-3">
+                    <h4 className="font-mono text-xs sm:text-sm uppercase tracking-wider text-brand-blue font-bold flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-brand-blue" />
+                      Laser Treatment
+                    </h4>
+                    <ul className="space-y-2.5 font-sans text-xs sm:text-[13px] text-zinc-300">
+                      {article.clinicalDetails.laserTreatments.map((lt, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-brand-blue font-bold">•</span>
+                          <span>{lt}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {article.clinicalDetails.surgicalTreatments && (
+                  <div className="rounded-2xl bg-[#131318]/80 border border-white/10 p-5 sm:p-6 backdrop-blur-sm shadow-lg space-y-3">
+                    <h4 className="font-mono text-xs sm:text-sm uppercase tracking-wider text-purple-400 font-bold flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-purple-400" />
+                      Surgery
+                    </h4>
+                    <p className="font-sans text-xs text-zinc-400 italic">If medication and laser treatment are insufficient:</p>
+                    <ul className="space-y-2.5 font-sans text-xs sm:text-[13px] text-zinc-300">
+                      {article.clinicalDetails.surgicalTreatments.map((st, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-purple-400 font-bold">•</span>
+                          <span>{st}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TREATMENT PROTOCOL BREAKDOWN */}
+            {(article.clinicalDetails.earlyStageTreatment || 
+              article.clinicalDetails.lifestyleChanges || 
+              article.clinicalDetails.mgdTreatment || 
+              article.clinicalDetails.prescriptionTreatment || 
+              article.clinicalDetails.advancedTreatment) && (
+              <div className="rounded-2xl bg-[#131318]/80 border border-white/10 p-5 sm:p-6 backdrop-blur-sm shadow-lg space-y-6">
+                <div className="flex items-center gap-2.5 pb-3 border-b border-white/10">
+                  <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+                    <CheckCircle2 className="w-4 h-4" />
+                  </div>
+                  <h3 className="font-mono text-xs sm:text-sm uppercase tracking-wider text-white font-bold">
+                    Treatment Protocol
+                  </h3>
+                </div>
+
+                {/* ARTIFICIAL TEARS / EARLY STAGE */}
+                {article.clinicalDetails.earlyStageTreatment && (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-mono text-xs uppercase tracking-wider font-semibold text-emerald-400">
+                        {article.title.toLowerCase().includes("dry eye") ? "A. Artificial Tears (First-Line Lubrication)" : "Early Stage"}
+                      </span>
+                      <span className="text-zinc-400 text-xs font-sans">
+                        {article.title.toLowerCase().includes("dry eye") ? "(First-line therapy for tear film replacement)" : "(If the cataract is mild)"}
+                      </span>
+                    </div>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 font-sans text-xs sm:text-[13px] text-zinc-300">
+                      {article.clinicalDetails.earlyStageTreatment.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2 p-2.5 rounded-lg bg-white/[0.02] border border-white/5">
+                          <span className="text-emerald-400 font-bold">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* LIFESTYLE & ENVIRONMENTAL CHANGES */}
+                {article.clinicalDetails.lifestyleChanges && (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-xs uppercase tracking-wider font-semibold text-cyan-400">
+                        B. Lifestyle & Environmental Modifications
+                      </span>
+                    </div>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 font-sans text-xs sm:text-[13px] text-zinc-300">
+                      {article.clinicalDetails.lifestyleChanges.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2 p-2.5 rounded-lg bg-white/[0.02] border border-white/5">
+                          <span className="text-cyan-400 font-bold">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* MGD TREATMENT */}
+                {article.clinicalDetails.mgdTreatment && (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-xs uppercase tracking-wider font-semibold text-amber-400">
+                        C. Meibomian Gland Dysfunction (MGD) Protocol
+                      </span>
+                    </div>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 font-sans text-xs sm:text-[13px] text-zinc-300">
+                      {article.clinicalDetails.mgdTreatment.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2 p-2.5 rounded-lg bg-white/[0.02] border border-white/5">
+                          <span className="text-amber-400 font-bold">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* PRESCRIPTION TREATMENT */}
+                {article.clinicalDetails.prescriptionTreatment && (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-mono text-xs uppercase tracking-wider font-semibold text-purple-400">
+                        D. Prescription Anti-Inflammatory & Interventional Care
+                      </span>
+                      <span className="text-zinc-400 text-xs font-sans">(Prescribed by ophthalmologist/optometrist)</span>
+                    </div>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 font-sans text-xs sm:text-[13px] text-zinc-300">
+                      {article.clinicalDetails.prescriptionTreatment.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2 p-2.5 rounded-lg bg-white/[0.02] border border-white/5">
+                          <span className="text-purple-400 font-bold">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* SUBTYPE-SPECIFIC TREATMENTS (Viral, Bacterial, Allergic Conjunctivitis) */}
+                {article.clinicalDetails.treatmentSubtypes && article.clinicalDetails.treatmentSubtypes.length > 0 && (
+                  <div className="space-y-4 pt-2">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-xs uppercase tracking-wider font-semibold text-white">
+                        Etiology-Specific Treatment Protocols
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4">
+                      {article.clinicalDetails.treatmentSubtypes.map((sub, idx) => (
+                        <div key={idx} className="p-4 rounded-xl bg-white/[0.02] border border-white/10 space-y-3">
+                          <div>
+                            <h4 className="font-mono text-xs font-bold uppercase tracking-wide text-brand-blue mb-1">
+                              {sub.category}
+                            </h4>
+                            {sub.description && (
+                              <p className="text-xs text-zinc-300 font-light leading-relaxed">
+                                {sub.description}
+                              </p>
+                            )}
+                          </div>
+
+                          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-sans text-xs sm:text-[13px] text-zinc-300">
+                            {sub.items.map((item, itemIdx) => (
+                              <li key={itemIdx} className="flex items-start gap-2 p-2 rounded-lg bg-black/20 border border-white/5">
+                                <span className="text-brand-blue font-bold">•</span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+
+                          {sub.note && (
+                            <div className="p-2.5 rounded-lg bg-amber-500/[0.08] border border-amber-500/25 flex items-start gap-2">
+                              <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
+                              <p className="text-[12px] text-amber-200 font-medium">
+                                <span className="font-bold font-mono text-[11px] text-amber-400 mr-1">Note:</span>
+                                {sub.note}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {article.clinicalDetails.treatmentWarning && (
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-amber-500/[0.08] border border-amber-500/30 flex items-start gap-3">
+                    <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                    <p className="font-sans text-xs sm:text-sm text-amber-200 leading-relaxed font-medium">
+                      <span className="font-bold text-amber-400 uppercase tracking-wide font-mono text-[11px] block sm:inline mr-2">Important:</span>
+                      {article.clinicalDetails.treatmentWarning}
+                    </p>
+                  </div>
+                )}
+
+                {article.clinicalDetails.advancedTreatment && (
+                  <div className="p-4 rounded-xl bg-blue-500/[0.06] border border-brand-blue/20 flex items-center justify-between gap-4 flex-wrap">
+                    <div>
+                      <span className="font-mono text-xs uppercase tracking-wider font-semibold text-brand-blue block mb-1">Advanced Treatment</span>
+                      <p className="font-sans text-sm sm:text-base font-semibold text-white">
+                        {article.clinicalDetails.advancedTreatment}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => onBookConsultation?.("Clinical Assessment & Referral")}
+                      className="px-4 py-2 rounded-full bg-brand-blue hover:bg-brand-blue/90 text-white font-mono text-xs uppercase tracking-wider font-bold transition-all cursor-pointer"
+                    >
+                      Book Evaluation
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* FIRST AID PROTOCOLS (For Eye Injuries) */}
+            {article.clinicalDetails.firstAid && article.clinicalDetails.firstAid.length > 0 && (
+              <div className="rounded-2xl bg-gradient-to-br from-[#1b1511] to-[#121217] border border-amber-500/30 p-5 sm:p-7 backdrop-blur-md shadow-xl space-y-5">
+                <div className="flex items-center gap-3 pb-3 border-b border-amber-500/20">
+                  <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+                    <AlertTriangle className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-mono text-sm sm:text-base uppercase tracking-wider text-amber-300 font-bold">
+                      Emergency First Aid Protocols
+                    </h3>
+                    <p className="text-xs sm:text-sm text-zinc-300 font-light mt-0.5">
+                      Immediate triage, emergency procedures, and vital precautions before hospital ophthalmic evaluation.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {article.clinicalDetails.firstAid.map((fa, idx) => (
+                    <div 
+                      key={idx} 
+                      className={`p-4 rounded-xl border flex flex-col justify-between space-y-3 ${
+                        fa.emergency 
+                          ? "bg-red-500/[0.06] border-red-500/30" 
+                          : "bg-black/30 border-white/10"
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-2">
+                          <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-white">
+                            {fa.situation}
+                          </h4>
+                          {fa.emergency && (
+                            <span className="font-mono text-[9px] uppercase px-2 py-0.5 rounded-full bg-red-500/20 text-red-300 font-bold border border-red-500/30">
+                              Urgent
+                            </span>
+                          )}
+                        </div>
+                        <ul className="space-y-1.5 text-xs text-zinc-300 font-sans">
+                          {fa.steps.map((step, sIdx) => (
+                            <li key={sIdx} className="flex items-start gap-1.5">
+                              <span className={fa.emergency ? "text-red-400 font-bold" : "text-amber-400 font-bold"}>•</span>
+                              <span>{step}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {fa.warning && (
+                        <div className="p-2.5 rounded-lg bg-red-500/10 border border-red-500/25 text-[11px] text-red-200 font-medium">
+                          <span className="font-bold uppercase text-[10px] text-red-400 block mb-0.5">Action Alert:</span>
+                          {fa.warning}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* INJURY TREATMENT TABLE */}
+            {article.clinicalDetails.injuryTreatmentTable && article.clinicalDetails.injuryTreatmentTable.length > 0 && (
+              <div className="rounded-2xl bg-[#131318]/80 border border-white/10 p-5 sm:p-6 backdrop-blur-sm shadow-lg space-y-4">
+                <div className="flex items-center gap-2.5 pb-3 border-b border-white/10">
+                  <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                  <h3 className="font-mono text-xs sm:text-sm uppercase tracking-wider text-white font-bold">
+                    Treatment by Injury Classification
+                  </h3>
+                </div>
+
+                <div className="overflow-x-auto rounded-xl border border-white/10">
+                  <table className="w-full text-left font-sans text-xs sm:text-[13px]">
+                    <thead className="bg-white/[0.05] border-b border-white/10 font-mono text-[11px] uppercase tracking-wider text-zinc-400">
+                      <tr>
+                        <th className="py-3 px-4 sm:px-6 font-semibold w-1/3 text-emerald-400">Injury</th>
+                        <th className="py-3 px-4 sm:px-6 font-semibold">Treatment Protocol</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {article.clinicalDetails.injuryTreatmentTable.map((row, idx) => (
+                        <tr key={idx} className="hover:bg-white/[0.02] transition-colors">
+                          <td className="py-3.5 px-4 sm:px-6 font-medium text-white whitespace-nowrap">
+                            {row.injury}
+                          </td>
+                          <td className="py-3.5 px-4 sm:px-6 text-zinc-300 font-light leading-relaxed">
+                            {row.treatment}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* SECONDARY CLINICAL CONDITION: SUBCONJUNCTIVAL HEMORRHAGE */}
+            {article.clinicalDetails.secondaryCondition && (
+              <div className="rounded-2xl bg-gradient-to-br from-[#1b1418] to-[#121217] border border-red-500/30 p-5 sm:p-7 backdrop-blur-md shadow-xl space-y-5">
+                <div className="flex items-center gap-3 pb-3 border-b border-red-500/20">
+                  <div className="w-8 h-8 rounded-lg bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 shrink-0">
+                    <Activity className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-mono text-sm sm:text-base uppercase tracking-wider text-red-300 font-bold">
+                      {article.clinicalDetails.secondaryCondition.title}
+                    </h3>
+                    {article.clinicalDetails.secondaryCondition.definition && (
+                      <p className="text-xs sm:text-sm text-zinc-300 font-light mt-0.5">
+                        {article.clinicalDetails.secondaryCondition.definition}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* CAUSES */}
+                  <div className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-2.5">
+                    <h4 className="font-mono text-xs uppercase tracking-wider text-red-400 font-bold flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
+                      Causes & Triggers
+                    </h4>
+                    <ul className="space-y-1.5 text-xs text-zinc-300 font-sans">
+                      {article.clinicalDetails.secondaryCondition.causes.map((c, i) => (
+                        <li key={i} className="flex items-start gap-1.5">
+                          <span className="text-red-400 font-bold">•</span>
+                          <span>{c}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* SYMPTOMS */}
+                  <div className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-2.5">
+                    <h4 className="font-mono text-xs uppercase tracking-wider text-amber-400 font-bold flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                      Symptoms & Presentation
+                    </h4>
+                    <ul className="space-y-1.5 text-xs text-zinc-300 font-sans">
+                      {article.clinicalDetails.secondaryCondition.symptoms.map((s, i) => (
+                        <li key={i} className="flex items-start gap-1.5">
+                          <span className="text-amber-400 font-bold">•</span>
+                          <span>{s}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* TREATMENT */}
+                  <div className="p-4 rounded-xl bg-black/40 border border-white/10 space-y-2.5">
+                    <h4 className="font-mono text-xs uppercase tracking-wider text-emerald-400 font-bold flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                      Clinical Management
+                    </h4>
+                    <ul className="space-y-1.5 text-xs text-zinc-300 font-sans">
+                      {article.clinicalDetails.secondaryCondition.treatments.map((t, i) => (
+                        <li key={i} className="flex items-start gap-1.5">
+                          <span className="text-emerald-400 font-bold">•</span>
+                          <span>{t}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {article.clinicalDetails.secondaryCondition.note && (
+                  <div className="p-3.5 rounded-xl bg-red-500/[0.08] border border-red-500/25 flex items-start gap-3">
+                    <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                    <p className="text-xs sm:text-[13px] text-red-200 font-medium leading-relaxed">
+                      <span className="font-bold font-mono text-xs text-red-400 mr-1.5 uppercase">Clinical Alert:</span>
+                      {article.clinicalDetails.secondaryCondition.note}
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Optional Clinical Note (e.g. Age onset) */}
             {article.clinicalDetails.note && (
               <div className="p-4 rounded-2xl bg-brand-blue/[0.06] border border-brand-blue/20 flex items-start gap-3">
@@ -271,29 +1046,6 @@ export default function ArticleDetailView({
               </div>
             )}
           </section>
-        )}
-
-        {/* Narrative Article Paragraphs */}
-        {article.content && article.content.length > 0 && (
-          <div className="space-y-5 pt-4">
-            <div className="flex items-center gap-2 pb-2 border-b border-white/10">
-              <BookOpen className="w-4 h-4 text-brand-blue" />
-              <h3 className="font-mono text-xs uppercase tracking-widest text-zinc-400 font-bold">
-                Clinical Discussion & Optical Mechanism
-              </h3>
-            </div>
-            
-            <div className="space-y-4 font-sans text-sm sm:text-base text-zinc-300 leading-relaxed font-light">
-              {article.content.map((paragraph, index) => (
-                <p 
-                  key={index}
-                  className="first-letter:text-2xl first-letter:font-serif first-letter:font-bold first-letter:text-brand-blue first-letter:mr-1"
-                >
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-          </div>
         )}
 
         {/* Professional Consultation Call-To-Action Box */}
@@ -326,22 +1078,6 @@ export default function ArticleDetailView({
               )}
             </div>
           </div>
-        </div>
-
-        {/* Bottom Return Action */}
-        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <button
-            type="button"
-            onClick={onBack}
-            className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/[0.04] border border-white/15 hover:border-brand-blue text-zinc-300 hover:text-white transition-all font-mono text-xs uppercase tracking-wider cursor-pointer active:scale-95"
-          >
-            <ArrowLeft className="w-4 h-4 text-brand-blue group-hover:-translate-x-1 transition-transform" />
-            <span>← Back to Articles</span>
-          </button>
-
-          <span className="font-mono text-[11px] text-zinc-500 uppercase tracking-wider">
-            Spectacal Zone Clinical Depository
-          </span>
         </div>
 
       </div>

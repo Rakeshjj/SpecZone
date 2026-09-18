@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useReducedMotion } from "motion/react";
-import { Eye, ShieldCheck, Sun, Laptop, Droplets, Sparkles } from "lucide-react";
+import { Eye, ShieldCheck, Sun, Laptop, Droplets, Sparkles, Fingerprint, Shield, Menu, ChevronDown, Check } from "lucide-react";
 
 // Apple-style cubic-bezier easing for smooth cinematic reveals
 const EASE_PREMIUM = [0.22, 1, 0.36, 1] as const;
@@ -27,7 +27,7 @@ const LENS_SCENARIOS: LensScenario[] = [
     name: "POLARIZED ANTI-REFLECTIVE",
     label: "Antiglare",
     icon: <Sun size={14} />,
-    title: "100% Polarized Glare Elimination",
+    title: "100% POLARIZED GLARE ELIMINATION",
     description: "Anti-reflective (AR) coatings are treatments that are applied to the surface of the lens of glasses that reduce glare and let in more light. By reducing reflections on both sides of the lenses, this coating can make night driving and screen use more comfortable. AR coatings work by applying very thin layers of metal oxides to the lens, increasing the amount of light transmitted. This helps support clearer vision in changing lighting conditions and reduces the visual distractions that can occur when bright light hits the lens.",
     badge: "ULTRA SUN SECURITY",
     beforeLabel: "Standard Lens (Blinded by Reflective Glare)",
@@ -39,7 +39,7 @@ const LENS_SCENARIOS: LensScenario[] = [
   {
     id: "waterrepelant",
     name: "HYDROPHOBIC WATER-REPELLENT",
-    label: "Water Repelant",
+    label: "Water Repellent",
     icon: <Droplets size={14} />,
     title: "Hydrophobic Water-Resistant Coating",
     description: "Features a microscopic hydrophobic top-coat that changes surface tension, forcing water to bead up and roll off instantly. Prevents rain smears, reduces smudge buildup, and makes cleaning effortless.",
@@ -100,7 +100,7 @@ const LENS_SCENARIOS: LensScenario[] = [
   {
     id: "dustrepelant",
     name: "ANTI-STATIC DUST REPELLENT",
-    label: "Dust Repelant",
+    label: "Dust Repellent",
     icon: <Sparkles size={14} />,
     title: "Anti-Static Dust-Repellent Shield",
     description: "Features a specialized microscopic anti-static coating that neutralizes charge, preventing airborne particles, lint, and grit from sticking to the lens.",
@@ -173,6 +173,62 @@ const LENS_SCENARIOS: LensScenario[] = [
         </div>
       </div>
     )
+  },
+  {
+    id: "smudgeresistance",
+    name: "OLEOPHOBIC SMUDGE RESISTANCE",
+    label: "Smudge Resistance",
+    icon: <Fingerprint size={14} />,
+    title: "SMUDGE RESISTANCE",
+    description: "Features a specialized oleophobic coating engineered to reduce fingerprints, natural skin oils, and everyday smudges from adhering to the lens surface. By altering surface tension, it keeps lenses noticeably cleaner throughout the day and makes cleaning fast, effortless, and streak-free with a standard microfiber cloth.",
+    badge: "OLEOPHOBIC SHIELD",
+    beforeLabel: "Untreated Lens (Oil & Fingerprint Smudge Buildup)",
+    afterLabel: "Oleophobic Barrier (Repels Oils & Wipes Clean Effortlessly)",
+    bgImage: "/assets/img/lens3.jpg",
+    beforeClasses: "blur-[3.5px] contrast-[0.8] brightness-[0.9] saturate-[0.85]",
+    afterClasses: "blur-0 contrast-100 brightness-100 saturate-100"
+  },
+  {
+    id: "scratchresistance",
+    name: "HARDENED SCRATCH RESISTANCE",
+    label: "Scratch Resistance",
+    icon: <ShieldCheck size={14} />,
+    title: "SCRATCH RESISTANCE",
+    description: "Engineered with a high-density nano-composite hard coating designed to significantly improve resistance to everyday scratches, micro-abrasions, and routine handling wear. While no optical lens is completely scratch-proof, this durable protective shield helps prolong lens clarity and preserves surface performance.",
+    badge: "SCRATCH-RESISTANT SHIELD",
+    beforeLabel: "Standard Lens (Micro-Scratches & Surface Wear)",
+    afterLabel: "Hardened Coating (Reinforced Scratch Resistance)",
+    bgImage: "/assets/img/lens2.jpg",
+    beforeClasses: "blur-[2.5px] contrast-[0.85] brightness-[0.92] sepia-[0.1]",
+    afterClasses: "blur-0 contrast-100 brightness-100 sepia-0"
+  },
+  {
+    id: "blueuvcapture",
+    name: "SELECTIVE BLUE UV CAPTURE",
+    label: "Blue UV Capture",
+    icon: <Laptop size={14} />,
+    title: "BLUE UV CAPTURE",
+    description: "Utilizes advanced optical filtration technology designed to selectively manage high-energy blue-violet light emitted by digital monitors, smartphones, and harsh artificial LED lighting, while allowing beneficial natural light to pass through. Delivers comfortable, balanced visual contrast for extended screen viewing without distorting natural color perception.",
+    badge: "SMART DIGITAL FILTER",
+    beforeLabel: "Standard Lens (Harsh Screen Light & Blue Glare)",
+    afterLabel: "Blue UV Filter (Selective Screen Light Management)",
+    bgImage: "/assets/img/lens6.jpg",
+    beforeClasses: "brightness-[1.15] hue-rotate-[15deg] contrast-[0.92] saturate-[1.2]",
+    afterClasses: "brightness-100 hue-rotate-0 contrast-100 saturate-100"
+  },
+  {
+    id: "completeuvprotection",
+    name: "COMPLETE UV-400 DEFENSE",
+    label: "Complete UV Protection",
+    icon: <Shield size={14} />,
+    title: "COMPLETE UV PROTECTION",
+    description: "Incorporates dedicated optical UV absorbers formulated to provide broad-spectrum protection against harmful ultraviolet radiation (UV-A and UV-B) up to 400nm. Designed to reduce daily ocular UV exposure from both direct and reflected sunlight during everyday outdoor activity, maintaining precision defense across diverse lighting environments.",
+    badge: "FULL UV-400 SHIELD",
+    beforeLabel: "Unprotected Lens (Direct Ultraviolet Exposure)",
+    afterLabel: "UV-400 Barrier (Comprehensive Ultraviolet Defense)",
+    bgImage: "/assets/img/lens1.jpg",
+    beforeClasses: "brightness-[1.25] saturate-[0.7] contrast-[0.88] blur-[1.5px]",
+    afterClasses: "brightness-100 saturate-100 contrast-105 blur-0"
   }
 ];
 
@@ -184,6 +240,47 @@ export default function LensLab() {
 
   const shouldReduceMotion = useReducedMotion();
   const [isMobile, setIsMobile] = useState(false);
+
+  // Single compact menu navigation state
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [hasSelectedFeature, setHasSelectedFeature] = useState(false);
+  const menuContainerRef = useRef<HTMLDivElement | null>(null);
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    };
+  }, []);
+
+  // Close dropdown on outside click or touch
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (menuContainerRef.current && !menuContainerRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, []);
+
+  const handleMouseEnter = () => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+    setIsMenuOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    closeTimeoutRef.current = setTimeout(() => {
+      setIsMenuOpen(false);
+    }, 150);
+  };
 
   useEffect(() => {
     const checkMobile = () => {
@@ -309,54 +406,89 @@ export default function LensLab() {
       <div className="max-w-7xl mx-auto w-full z-10 space-y-16">
         
         {/* Elegant Section Title */}
-        <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 pb-6 border-b border-white/5">
-          <div className="space-y-4">
+        <div className="flex flex-col xl:flex-row items-start xl:items-end justify-between gap-6 pb-6 border-b border-white/5">
+          <div className="space-y-4 shrink-0">
             <h2 className="font-serif text-3xl sm:text-4xl md:text-[50px] font-black text-white uppercase leading-[0.95] tracking-tight">
               INTERACTIVE <br />
               <span className="text-zinc-500 italic font-black">LENS LAB</span>
             </h2>
-            <p className="font-sans text-sm text-zinc-400 max-w-xl font-light leading-relaxed">
-              Drag the premium lens slider below to preview how our proprietary optical coatings eliminate blinding glare, block harmful blue light, and resist moisture.
-            </p>
           </div>
 
-          {/* Scenario Tab Selectors */}
-          <div className="flex flex-wrap gap-2 shrink-0 bg-zinc-900/60 p-1.5 rounded-xl border border-white/5 backdrop-blur-sm">
-            {LENS_SCENARIOS.map((scenario) => {
-              const isActive = activeScenario.id === scenario.id;
-              return (
-                <button
-                  key={scenario.id}
-                  onClick={() => {
-                    if (activeScenario.id !== scenario.id) {
-                      setActiveScenario(scenario);
-                      setSliderPosition(50); // Reset slider to center
-                      setSweepKey((prev) => prev + 1); // Trigger glare reduction sweep
-                    }
-                  }}
-                  className={`relative px-4 py-2.5 rounded-lg font-mono text-[10px] tracking-wider uppercase transition-colors duration-300 flex items-center gap-2 cursor-pointer ${
-                    isActive
-                      ? "text-white font-bold"
-                      : "text-zinc-400 hover:text-white hover:bg-white/5"
-                  }`}
+          {/* Single Compact "LENS FEATURES" Menu Button + Hover/Tap Dropdown */}
+          <div
+            ref={menuContainerRef}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            className="relative z-40 shrink-0"
+          >
+            <button
+              onClick={() => setIsMenuOpen((prev) => !prev)}
+              aria-expanded={isMenuOpen}
+              aria-haspopup="true"
+              className="flex items-center gap-2.5 px-4 sm:px-4.5 py-2 sm:py-2.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800/90 border border-white/10 hover:border-white/20 text-white font-sans text-xs sm:text-[13px] font-semibold tracking-wider uppercase shadow-xl shadow-black/40 backdrop-blur-xl transition-all duration-200 cursor-pointer select-none group"
+            >
+              <Menu size={15} className="text-zinc-400 group-hover:text-white transition-colors shrink-0" />
+              <span>{hasSelectedFeature ? activeScenario.label.toUpperCase() : "LENS FEATURES"}</span>
+              <ChevronDown
+                size={14}
+                className={`text-zinc-400 transition-transform duration-200 shrink-0 ${
+                  isMenuOpen ? "rotate-180 text-brand-blue" : "group-hover:text-zinc-200"
+                }`}
+              />
+            </button>
+
+            {/* Premium Dropdown with Seamless Hover Hit-Area */}
+            <AnimatePresence>
+              {isMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.28, ease: "easeOut" }}
+                  className="absolute right-0 top-full pt-1.5 z-50 w-64 sm:w-72"
                 >
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeScenarioGlow"
-                      className="absolute inset-0 rounded-lg bg-brand-blue shadow-md shadow-brand-blue/30 -z-10"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  <span className="relative z-10 flex items-center gap-2">
-                    {scenario.icon}
-                    <span>{scenario.label}</span>
-                    {isActive && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/90 animate-pulse" />
-                    )}
-                  </span>
-                </button>
-              );
-            })}
+                  <div className="bg-[#0c0c0e]/95 backdrop-blur-xl border border-white/10 rounded-xl p-1.5 shadow-2xl shadow-black/80 flex flex-col gap-0.5">
+                    {LENS_SCENARIOS.map((scenario, index) => {
+                      const isActive = activeScenario.id === scenario.id;
+                      return (
+                        <motion.button
+                          key={scenario.id}
+                          initial={{ opacity: 0, x: -4 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.2, delay: index * 0.02, ease: "easeOut" }}
+                          onClick={() => {
+                            setIsMenuOpen(false);
+                            setHasSelectedFeature(true);
+                            if (activeScenario.id !== scenario.id) {
+                              setActiveScenario(scenario);
+                              setSliderPosition(50); // Reset slider to center
+                              setSweepKey((prev) => prev + 1); // Trigger glare reduction sweep
+                            }
+                          }}
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left font-sans text-xs font-medium tracking-wider uppercase transition-colors duration-150 cursor-pointer select-none group ${
+                            isActive
+                              ? "bg-brand-blue text-white font-semibold shadow-md shadow-brand-blue/25"
+                              : "text-zinc-300 hover:text-white hover:bg-white/[0.06]"
+                          }`}
+                        >
+                          <span className="flex items-center gap-2.5">
+                            <span
+                              className={`shrink-0 transition-colors ${
+                                isActive ? "text-white" : "text-zinc-400 group-hover:text-brand-blue"
+                              }`}
+                            >
+                              {scenario.icon}
+                            </span>
+                            <span>{scenario.label}</span>
+                          </span>
+                          {isActive && <Check size={14} className="text-white shrink-0 ml-2" />}
+                        </motion.button>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 
@@ -430,8 +562,11 @@ export default function LensLab() {
                       {activeScenario.id === "polarized" && (
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(255,255,255,0.7)_0%,transparent_60%)] mix-blend-overlay opacity-90 pointer-events-none" />
                       )}
-                      {activeScenario.id === "bluelight" && (
+                      {(activeScenario.id === "bluelight" || activeScenario.id === "blueuvcapture") && (
                         <div className="absolute inset-0 bg-blue-500/10 mix-blend-color pointer-events-none" />
+                      )}
+                      {activeScenario.id === "completeuvprotection" && (
+                        <div className="absolute inset-0 bg-amber-500/10 mix-blend-overlay pointer-events-none" />
                       )}
                       
                       {/* HUD Glare Label Overlay */}

@@ -40,21 +40,6 @@ export default function AboutUs() {
     return () => clearInterval(interval);
   }, []);
 
-  const stats = [
-    {
-      value: "Est. 1959",
-      label: "67 Years of Legacy"
-    },
-    {
-      value: "150K+",
-      label: "Custom Lenses Sculpted"
-    },
-    {
-      value: "6+",
-      label: "Bespoke Outlets"
-    }
-  ];
-
   const contentContainerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -152,30 +137,8 @@ export default function AboutUs() {
               </p>
             </div>
           </motion.div>
- 
-          {/* Core Stats Row */}
-          <div className="grid grid-cols-3 gap-4 text-center">
-            {stats.map((stat, idx) => (
-              <motion.div 
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3 + idx * 0.1, ease: "easeOut" }}
-                whileHover={{ scale: 1.05, borderColor: "rgba(0,102,204,0.4)" }}
-                className="p-4 rounded-xl border border-white/5 bg-zinc-900/40 backdrop-blur-sm transition-all duration-300"
-              >
-                <div className="font-serif text-lg md:text-xl font-black text-white uppercase tracking-tight">
-                  {stat.value}
-                </div>
-                <div className="font-sans text-[9px] text-zinc-400 uppercase tracking-widest mt-1">
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
-          </div>
         </motion.div>
- 
+
         {/* Right Column: Copy & Actions */}
         <motion.div
           variants={contentContainerVariants}
