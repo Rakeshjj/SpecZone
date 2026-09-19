@@ -140,7 +140,7 @@ export default function ConsultationBookingSection({
             poster="/videos/eyewear-video-poster.jpg"
             className="w-full h-full object-cover object-center lg:object-center"
           >
-            <source src="/videos/eyewear-craftsmanship.mp4" type="video/mp4" />
+            <source src="/videos/eyewear.mp4" type="video/mp4" />
           </video>
         </div>
 
