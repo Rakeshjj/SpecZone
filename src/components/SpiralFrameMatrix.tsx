@@ -1,7 +1,6 @@
 import React, { useState, useRef, useMemo, useEffect } from "react";
 import { motion, useScroll, useTransform, AnimatePresence, MotionValue } from "motion/react";
 import { 
-  Sparkles, 
   ArrowRight, 
   X, 
   Grid, 
@@ -12,13 +11,13 @@ import {
   Glasses
 } from "lucide-react";
 
-export type ProductCategory = "sunglasses" | "frames" | "lenses" | "all";
+export type ProductCategory = "sunglasses" | "frames" | "lenses" | "zero_power" | "all";
 
 export const CATEGORY_OPTIONS: { id: ProductCategory; label: string }[] = [
   { id: "sunglasses", label: "Sunglasses" },
   { id: "frames", label: "Frames" },
   { id: "lenses", label: "Lenses" },
-  { id: "all", label: "All" }
+  { id: "zero_power", label: "Zero Power" }
 ];
 
 interface SpiralGlassItem {
@@ -26,7 +25,7 @@ interface SpiralGlassItem {
   code: string;
   name: string;
   categoryLabel: string;
-  category: "sunglasses" | "frames" | "lenses";
+  category: "sunglasses" | "frames" | "lenses" | "zero_power";
   priceINR: number;
   image: string;
   badge?: string;
@@ -211,6 +210,60 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     origin: "Padova, Italy",
     weight: "17.1g",
     image: "/assets/img/lens.jpg"
+  },
+
+  // Zero Power Eyewear (Computer / Blue-Light / Screen Protection)
+  {
+    id: "sp-14",
+    code: "ZP-101-BLU",
+    name: "OptiShield Zero-Blue 420",
+    categoryLabel: "BLUE-CUT ZERO POWER",
+    category: "zero_power",
+    priceINR: 8900,
+    badge: "ZERO POWER",
+    material: "TR90 Featherweight Flex",
+    origin: "Tokyo, Japan",
+    weight: "12.0g",
+    image: "/assets/img/bluelens.jpg"
+  },
+  {
+    id: "sp-15",
+    code: "ZP-202-GLR",
+    name: "Computer Glare-Free Zero Pro",
+    categoryLabel: "DIGITAL SCREEN SHIELD",
+    category: "zero_power",
+    priceINR: 10500,
+    badge: "ANTI-FATIGUE",
+    material: "Aerospace Beta Titanium",
+    origin: "Seoul, South Korea",
+    weight: "10.8g",
+    image: "/assets/img/anti-reflections.jpg"
+  },
+  {
+    id: "sp-16",
+    code: "ZP-303-CLR",
+    name: "Lumina Clear Zero-Diopter",
+    categoryLabel: "ZERO DIOPTER OPTICS",
+    category: "zero_power",
+    priceINR: 9400,
+    badge: "100% UV400 CUT",
+    material: "Organic Bio-Acetate",
+    origin: "Berlin, Germany",
+    weight: "15.2g",
+    image: "/assets/img/lens2.jpg"
+  },
+  {
+    id: "sp-17",
+    code: "ZP-404-GAM",
+    name: "Krypton Gaming Zero Shield",
+    categoryLabel: "GAMING & CODING SHIELD",
+    category: "zero_power",
+    priceINR: 11900,
+    badge: "ZERO DISTORTION",
+    material: "Ultralight Grilamid TR",
+    origin: "Stockholm, Sweden",
+    weight: "13.4g",
+    image: "/assets/img/lens6.jpg"
   }
 ];
 
@@ -316,11 +369,6 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
 
   // Center stage scale
   const scaleCenter = useTransform(scrollYProgress, [0, 0.75, 1], [0.85, 1.0, 0.85]);
-  
-  // Opacity of "VIEW ALL" button at center (fades in when scroll approaches end)
-  const viewAllOpacity = useTransform(scrollYProgress, [0.75, 0.9, 1], [0, 0.8, 1]);
-  const viewAllScale = useTransform(scrollYProgress, [0.75, 0.9, 1], [0.6, 0.9, 1]);
-  const viewAllPointerEvents = useTransform(scrollYProgress, (val) => val > 0.75 ? "auto" : "none");
 
   const handleOpenViewAll = () => {
     setSelectedCategory("all");
@@ -413,7 +461,7 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
                       type="button"
                       role="tab"
                       aria-selected={isActive}
-                      onClick={() => setSelectedCategory(cat.id)}
+                      onClick={() => setSelectedCategory((prev) => (prev === cat.id ? "all" : cat.id))}
                       className={`group relative flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 lg:px-4 py-1.5 sm:py-2 rounded-lg text-[10.5px] sm:text-[11px] lg:text-xs font-semibold uppercase tracking-[0.06em] cursor-pointer whitespace-nowrap select-none shrink-0 transition-all duration-300 ease-out ${
                         isActive
                           ? "text-white"
@@ -493,30 +541,6 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
             ))}
           </motion.div>
 
-          {/* CENTER OF CIRCLE "VIEW ALL" PROMINENT BUTTON (APPEARS AT SCROLL FINISH) */}
-          <motion.div
-            style={{
-              opacity: viewAllOpacity,
-              scale: viewAllScale,
-              pointerEvents: viewAllPointerEvents
-            }}
-            className="absolute z-40 flex flex-col items-center justify-center mt-44 sm:mt-48 -translate-y-4 sm:-translate-y-6"
-          >
-            <div className="relative group">
-              <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-brand-blue via-cyan-400 to-indigo-600 opacity-80 blur-xl group-hover:opacity-100 transition-opacity animate-pulse" />
-              
-              <button
-                id="stage-view-all-btn"
-                onClick={handleOpenViewAll}
-                className="relative px-6 py-3 rounded-full bg-white text-zinc-950 hover:bg-brand-blue hover:text-white font-mono text-sm sm:text-base font-black uppercase tracking-widest shadow-2xl transition-all duration-300 flex items-center gap-3 cursor-pointer hover:scale-105 active:scale-95"
-              >
-                <Sparkles size={15} className="text-brand-blue group-hover:text-white" />
-                <span>VIEW ALL ({SPIRAL_GLASSES.length})</span>
-                <ArrowRight size={15} />
-              </button>
-            </div>
-          </motion.div>
-
         </div>
 
       </div>
@@ -534,7 +558,7 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div>
                   <span className="font-mono text-[9px] text-brand-blue font-bold uppercase tracking-widest block mb-1">
-                    [ {selectedGlass.category.toUpperCase()} • {selectedGlass.categoryLabel} ]
+                    [ {selectedGlass.category === "zero_power" ? "ZERO POWER" : selectedGlass.category.toUpperCase()} • {selectedGlass.categoryLabel} ]
                   </span>
                   <h3 className="font-serif text-xl sm:text-2xl font-bold uppercase tracking-tight text-white pr-4">
                     {selectedGlass.name}
@@ -570,7 +594,7 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
                 }}
                 className="w-full py-3.5 px-4 rounded-xl bg-brand-blue hover:bg-brand-blue/90 font-mono text-xs font-bold uppercase tracking-wider transition-all shadow-lg shadow-brand-blue/20 flex items-center justify-center gap-2 cursor-pointer"
               >
-                <span>SELECT {selectedGlass.category === "lenses" ? "LENS" : "FRAME"}</span>
+                <span>SELECT {selectedGlass.category === "lenses" ? "LENS" : selectedGlass.category === "zero_power" ? "ZERO POWER" : "FRAME"}</span>
                 <ArrowRight size={14} />
               </button>
             </motion.div>
@@ -606,7 +630,11 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
                       [ COMPLETE ATELIER COLLECTION • {filteredGlasses.length} PIECES ]
                     </span>
                     <h3 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold uppercase tracking-tight text-white mt-0.5">
-                      {selectedCategory === "all" ? "ALL GLASSES & LENSES" : `${selectedCategory.toUpperCase()} COLLECTION`}
+                      {selectedCategory === "all"
+                        ? "ALL GLASSES & LENSES"
+                        : selectedCategory === "zero_power"
+                        ? "ZERO POWER COLLECTION"
+                        : `${selectedCategory.toUpperCase()} COLLECTION`}
                     </h3>
                   </div>
 
@@ -639,7 +667,7 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
                           type="button"
                           role="tab"
                           aria-selected={isActive}
-                          onClick={() => setSelectedCategory(cat.id)}
+                          onClick={() => setSelectedCategory((prev) => (prev === cat.id ? "all" : cat.id))}
                           className={`group relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 lg:px-4 py-1.5 sm:py-2 rounded-lg text-[10.5px] sm:text-[11px] lg:text-xs font-semibold uppercase tracking-[0.06em] cursor-pointer whitespace-nowrap select-none shrink-0 transition-all duration-300 ease-out ${
                             isActive
                               ? "text-white"
@@ -737,7 +765,7 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
                       }}
                       className="w-full mt-3 py-2.5 sm:py-3 rounded-xl bg-white hover:bg-brand-blue text-zinc-950 hover:text-white font-mono text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow hover:shadow-brand-blue/30"
                     >
-                      <span>SELECT {item.category === "lenses" ? "LENS" : "FRAME"}</span>
+                      <span>SELECT {item.category === "lenses" ? "LENS" : item.category === "zero_power" ? "ZERO POWER" : "FRAME"}</span>
                       <ArrowRight size={14} />
                     </button>
                   </div>

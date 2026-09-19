@@ -951,15 +951,15 @@ export default function BlogSection({ onSelectArticle, highlightedArticleId }: B
         </div>
 
         {/* 3-Column Blog Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full py-3">
           {ARTICLES_DATA.map((article) => (
             <div
               key={article.id}
               id={`article-card-${article.id}`}
-              className={`bg-zinc-900/40 rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between group ${
+              className={`bg-zinc-900/40 rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between group transition-all duration-[350ms] ease-out [@media(hover:hover)]:hover:-translate-y-2.5 [@media(hover:hover)]:hover:scale-[1.02] [@media(hover:hover)]:hover:border-blue-500/60 [@media(hover:hover)]:hover:shadow-[0_20px_60px_rgba(37,99,235,0.18)] will-change-transform ${
                 highlightedArticleId === article.id
                   ? "border-2 border-brand-blue shadow-2xl shadow-brand-blue/30 ring-4 ring-brand-blue/30"
-                  : "border border-white/10 hover:border-brand-blue/40"
+                  : "border border-white/10"
               }`}
             >
               <div>
@@ -972,7 +972,7 @@ export default function BlogSection({ onSelectArticle, highlightedArticleId }: B
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1577803645773-f96470509666?auto=format&fit=crop&q=80&w=800";
                     }}
-                    className="w-full h-full object-cover opacity-85"
+                    className="w-full h-full object-cover opacity-85 transition-transform duration-[350ms] ease-out group-hover:scale-[1.03]"
                   />
                   <span className="absolute top-4 left-4 bg-zinc-950/60 backdrop-blur-md text-zinc-100 font-mono text-[9px] tracking-widest uppercase px-3 py-1 rounded-full border border-white/10">
                     {article.category}
@@ -985,7 +985,7 @@ export default function BlogSection({ onSelectArticle, highlightedArticleId }: B
                     <span className="flex items-center gap-1"><Clock size={10} /> {article.readTime}</span>
                   </div>
 
-                  <h3 className="font-serif text-xl font-bold text-white uppercase tracking-tight group-hover:text-brand-blue leading-snug">
+                  <h3 className="font-serif text-xl font-bold text-white uppercase tracking-tight leading-snug">
                     {article.title}
                   </h3>
 
@@ -1009,7 +1009,7 @@ export default function BlogSection({ onSelectArticle, highlightedArticleId }: B
                   className="flex items-center gap-1 font-mono text-[10px] text-brand-blue group-hover:text-white font-bold tracking-widest uppercase cursor-pointer"
                 >
                   <span>Read Article</span>
-                  <ChevronRight size={12} />
+                  <ChevronRight size={12} className="transition-transform duration-200 group-hover:translate-x-0.5" />
                 </button>
               </div>
             </div>

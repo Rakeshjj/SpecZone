@@ -137,19 +137,36 @@ export default function ConsultationBookingSection({
             loop
             playsInline
             preload="auto"
-            poster="/videos/eyewear-video-poster.jpg"
+            poster=""
             className="w-full h-full object-cover object-center lg:object-center"
           >
-            <source src="/videos/eyewear.mp4" type="video/mp4" />
+            <source src="/videos/eyewear-craftsmanship.mp4" type="video/mp4" />
           </video>
+
+          {/* Desktop Left-Edge Smooth Multi-Stop Gradient Overlay extending into video */}
+          <div
+            className="hidden lg:block absolute inset-y-0 -left-1 w-[260px] lg:w-[320px] xl:w-[380px] pointer-events-none z-[1]"
+            style={{
+              background:
+                "linear-gradient(to right, #09090b 0%, #09090b 6%, rgba(9, 9, 11, 0.92) 20%, rgba(9, 9, 11, 0.65) 45%, rgba(9, 9, 11, 0.3) 72%, rgba(9, 9, 11, 0.08) 88%, rgba(9, 9, 11, 0) 100%)",
+            }}
+          />
+
+          {/* Layer 2: Subtle soft black radial feathering around the transition zone */}
+          <div
+            className="hidden lg:block absolute inset-y-0 -left-4 w-[280px] lg:w-[350px] xl:w-[420px] pointer-events-none z-[2]"
+            style={{
+              background:
+                "radial-gradient(ellipse 85% 65% at 0% 50%, rgba(9, 9, 11, 0.85) 0%, rgba(9, 9, 11, 0.45) 45%, rgba(9, 9, 11, 0.1) 75%, rgba(9, 9, 11, 0) 100%)",
+            }}
+          />
         </div>
 
         {/* ======================================================================= */}
         {/* 2. SMOOTH DARK GRADIENT BLENDING LEFT CONTENT & RIGHT VIDEO AS ONE       */}
         {/* ======================================================================= */}
         {/* Desktop deep-black coverage on left transitioning seamlessly into video */}
-        <div className="hidden lg:block absolute inset-y-0 left-0 w-[48%] bg-zinc-950 z-[1]" />
-        <div className="hidden lg:block absolute inset-y-0 left-[47%] w-48 xl:w-64 bg-gradient-to-r from-zinc-950 via-zinc-950/80 to-transparent z-[2]" />
+        <div className="hidden lg:block absolute inset-y-0 left-0 right-[54%] xl:right-[50%] bg-zinc-950 z-[1]" />
 
         {/* Mobile & Tablet Gradient Overlay so video shows cleanly while text remains 100% legible */}
         <div className="lg:hidden absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/90 to-zinc-950/50 z-[1]" />
@@ -166,7 +183,7 @@ export default function ConsultationBookingSection({
       {/* ========================================================================= */}
       {/* 3. FOREGROUND PROMOTIONAL CONTENT LAYER                                   */}
       {/* ========================================================================= */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-1 sm:pt-2 md:pt-3 lg:pt-4 pb-8 sm:pb-12">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 pt-6 sm:pt-8 md:pt-10 lg:pt-12 pb-8 sm:pb-12">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -175,7 +192,7 @@ export default function ConsultationBookingSection({
           className="max-w-2xl lg:max-w-2xl xl:max-w-3xl"
         >
           {/* Main Large Bold Heading */}
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.6rem] xl:text-[4.1rem] 2xl:text-[4.5rem] font-bold tracking-tight text-white leading-[1.06] sm:leading-[1.03] mb-2 sm:mb-2.5">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.6rem] xl:text-[4.1rem] 2xl:text-[4.5rem] font-bold tracking-tight text-white leading-[1.06] sm:leading-[1.03] mb-3 sm:mb-3.5">
             <motion.span variants={lineVariants} className="block">
               Ungal Veetla
             </motion.span>
@@ -210,7 +227,6 @@ export default function ConsultationBookingSection({
               <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5" />
             </button>
           </motion.div>
-
         </motion.div>
       </div>
     </section>
