@@ -109,7 +109,7 @@ export const LOCATIONS_DATA: Location[] = [
     id: 1,
     name: "Avadi",
     city: "Chennai",
-    image: "/assets/img/opticalstore1.jpg ",
+    image: "/assets/img/location1.png",
     address: "No 617, TNHB Mig V Block, Avadi, Chennai, Tamil Nadu 600054",
     phone: "098404 00561",
     hours: "10:00 AM - 10:00 PM (Everyday)"

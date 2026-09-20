@@ -32,7 +32,7 @@ const LENS_SCENARIOS: LensScenario[] = [
     badge: "ULTRA SUN SECURITY",
     beforeLabel: "Standard Lens (Blinded by Reflective Glare)",
     afterLabel: "Oculis Polarized (Zero-Reflection Contrast)",
-    bgImage: "/assets/img/lenslab1.jpg",
+    bgImage: "/assets/img/antiglare.jpg",
     beforeClasses: "brightness-[1.3] saturate-[0.6] blur-[2px] contrast-[0.9]", // washed out & glaring
     afterClasses: "brightness-100 saturate-100 blur-0 contrast-105"
   },
@@ -46,7 +46,7 @@ const LENS_SCENARIOS: LensScenario[] = [
     badge: "HYDROPHOBIC SHIELD",
     beforeLabel: "Untreated Lens (Blinding Film & Rain Smears)",
     afterLabel: "Hydrophobic Coating (Instant Water Roll-Off)",
-    bgImage: "/assets/img/anti-reflections.jpg",
+    bgImage: "/assets/img/water-repellent.jpg",
     beforeClasses: "blur-[5px] contrast-[0.85] saturate-[0.9]", // water distorted & smudged
     afterClasses: "blur-0 contrast-100 saturate-100",
     content: (
@@ -107,7 +107,7 @@ const LENS_SCENARIOS: LensScenario[] = [
     badge: "EASY-CLEAN SHIELD",
     beforeLabel: "Untreated Lens (Dust Attraction & Smudge Buildup)",
     afterLabel: "Anti-Static Armor (Instant Dust-Repelling Clarity)",
-    bgImage: "/assets/img/bluelens.jpg",
+    bgImage: "/assets/img/dust-rep.png",
     beforeClasses: "blur-[3px] contrast-[0.9] saturate-[0.8] brightness-[0.95]",
     afterClasses: "blur-0 contrast-100 saturate-100",
     content: (
@@ -494,13 +494,6 @@ export default function LensLab() {
                       {activeScenario.id === "completeuvprotection" && (
                         <div className="absolute inset-0 bg-amber-500/10 mix-blend-overlay pointer-events-none" />
                       )}
-                      
-                      {/* HUD Glare Label Overlay */}
-                      <div className="absolute bottom-4 left-6 z-10 px-3 py-1 bg-black/60 backdrop-blur-md rounded-md border border-white/5 pointer-events-none">
-                        <span className="font-mono text-[9px] text-red-400 font-bold uppercase tracking-widest">
-                          {activeScenario.beforeLabel}
-                        </span>
-                      </div>
                     </div>
 
                     {/* Scenario Image Revealed (After Layer - Revealed precisely up to sliderPosition%) */}
@@ -520,13 +513,6 @@ export default function LensLab() {
                       
                       {/* Glass tint shimmer effect */}
                       <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 pointer-events-none" />
-
-                      {/* HUD Crisp Label Overlay */}
-                      <div className="absolute bottom-4 left-6 z-10 px-3 py-1 bg-black/60 backdrop-blur-md rounded-md border border-white/5 whitespace-nowrap pointer-events-none">
-                        <span className="font-mono text-[9px] text-brand-blue font-bold uppercase tracking-widest">
-                          {activeScenario.afterLabel}
-                        </span>
-                      </div>
                     </div>
                   </motion.div>
                 </AnimatePresence>
@@ -596,14 +582,6 @@ export default function LensLab() {
                       <span className="font-sans text-xs font-bold font-mono">↔</span>
                     </div>
                   </div>
-                </div>
-
-                {/* HUD Sensor Scanner indicators */}
-                <div className="absolute top-4 left-4 z-20 px-3 py-1 bg-black/60 backdrop-blur-md rounded-md border border-white/10 flex items-center gap-2 pointer-events-none">
-                  <span className="w-1.5 h-1.5 bg-brand-blue rounded-full animate-ping" />
-                  <span className="font-mono text-[9px] text-zinc-300 uppercase tracking-widest">
-                    COATING ANALYZER // ACTIVE
-                  </span>
                 </div>
 
                 <div className="absolute top-4 right-4 z-20 px-3 py-1 bg-black/60 backdrop-blur-md rounded-md border border-white/10 pointer-events-none">
