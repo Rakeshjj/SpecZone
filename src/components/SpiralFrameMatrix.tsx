@@ -570,93 +570,315 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
         </div>
 
         {/* RESPONSIVE TOP HEADER: DESKTOP 1-ROW (LEFT, CENTER, RIGHT), TABLET 2-ROW (ROW 1: HEADING & VIEW ALL, ROW 2: TABS), MOBILE 3-ROW (HEADING, TABS, VIEW ALL) */}
-        <header 
-          id="gallery-responsive-header"
-          className="relative z-30 w-full flex flex-col md:flex-row md:flex-wrap lg:flex-nowrap items-center justify-between gap-2.5 sm:gap-3.5 lg:gap-6"
-        >
-          {/* HEADING (LEFT ON DESKTOP & TABLET, CENTERED OR LEFT ON MOBILE) */}
-          <div className="order-1 w-full sm:w-auto shrink-0 flex flex-col justify-center text-center sm:text-left">
-            <h2 className="font-serif text-lg sm:text-2xl md:text-2xl lg:text-[26px] xl:text-3xl 2xl:text-4xl font-bold uppercase tracking-tight text-white leading-tight">
-              ORBITAL <span className="text-brand-blue italic font-normal">GLASSES GALLERY</span>
-            </h2>
-          </div>
+        {/* ========================================================================= */}
+{/* RESPONSIVE GALLERY HEADER - FIXED DESKTOP TAB OVERFLOW                   */}
+{/* ========================================================================= */}
+<header
+  id="gallery-responsive-header"
+  className="
+    relative
+    z-30
+    w-full
+    flex
+    flex-col
+    md:flex-row
+    md:flex-wrap
+    lg:flex-nowrap
+    items-center
+    justify-between
+    gap-2
+    sm:gap-3
+    lg:gap-3
+  "
+>
+  {/* ======================================================================= */}
+  {/* GALLERY HEADING                                                         */}
+  {/* ======================================================================= */}
+  <div
+    className="
+      order-1
+      w-full
+      sm:w-auto
+      shrink-0
+      flex
+      flex-col
+      justify-center
+      text-center
+      sm:text-left
+      lg:max-w-[330px]
+      xl:max-w-[370px]
+    "
+  >
+    <h2
+      className="
+        font-serif
+        text-lg
+        sm:text-2xl
+        md:text-2xl
+        lg:text-[34px]
+        xl:text-[36px]
+        2xl:text-[40px]
+        font-bold
+        uppercase
+        tracking-tight
+        text-white
+        leading-none
+        whitespace-nowrap
+      "
+    >
+      ORBITAL{" "}
+      <span className="text-brand-blue italic font-normal">
+        GLASSES GALLERY
+      </span>
+    </h2>
+  </div>
 
-          {/* CATEGORY TABS (CENTER ON DESKTOP, ROW 2 CENTERED ON TABLET, ROW 2 ON MOBILE) */}
-          <div className="order-2 md:order-3 lg:order-2 w-full md:w-full lg:w-auto lg:flex-1 flex items-center justify-center min-w-0 px-1">
-            <div className="w-full max-w-full overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden flex items-center justify-center py-1">
-              <div 
-                id="product-category-filter"
-                className="relative inline-flex items-center p-1 sm:p-1.25 rounded-xl border border-[rgba(59,130,246,0.18)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_8px_24px_rgba(0,0,0,0.45)] backdrop-blur-[20px] gap-1 sm:gap-1.5 select-none shrink-0"
-                style={{ backgroundColor: "rgba(15, 15, 18, 0.75)" }}
-                role="tablist"
-                aria-label="Product Categories"
-              >
-                {CATEGORY_OPTIONS.map((cat) => {
-                  const isActive = selectedCategory === cat.id;
-                  const count = cat.id === "all"
-                    ? SPIRAL_GLASSES.length
-                    : SPIRAL_GLASSES.filter(g => g.category === cat.id).length;
+  {/* ======================================================================= */}
+  {/* CATEGORY TABS                                                           */}
+  {/* ======================================================================= */}
+  <div
+    className="
+      order-2
+  md:order-3
+  lg:order-2
+  w-full
+  md:w-full
+  lg:w-auto
+  lg:flex-1
+  min-w-0
+  flex
+  items-center
+  justify-center
+  lg:translate-x-5
+  xl:translate-x-7
+  px-0
+    "
+  >
+    <div
+      className="
+        w-full
+        max-w-full
+        overflow-x-auto
+        [scrollbar-width:none]
+        [-ms-overflow-style:none]
+        [&::-webkit-scrollbar]:hidden
+        flex
+        items-center
+        justify-start
+        lg:justify-center
+        py-1
+      "
+    >
+      <div
+        id="product-category-filter"
+        className="
+          relative
+          inline-flex
+          items-center
+          p-1
+          rounded-xl
+          border
+          border-[rgba(59,130,246,0.18)]
+          shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_8px_24px_rgba(0,0,0,0.45)]
+          backdrop-blur-[20px]
+          gap-0.5
+          sm:gap-1
+          select-none
+          shrink-0
+        "
+        style={{
+          backgroundColor: "rgba(15, 15, 18, 0.75)",
+        }}
+        role="tablist"
+        aria-label="Product Categories"
+      >
+        {CATEGORY_OPTIONS.map((cat) => {
+          const isActive = selectedCategory === cat.id;
 
-                  return (
-                    <button
-                      key={cat.id}
-                      id={`cat-filter-${cat.id}`}
-                      type="button"
-                      role="tab"
-                      aria-selected={isActive}
-                      onClick={() => setSelectedCategory((prev) => (prev === cat.id ? "all" : cat.id))}
-                      className={`group relative flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 lg:px-4 py-1.5 sm:py-2 rounded-lg text-[10.5px] sm:text-[11px] lg:text-xs font-semibold uppercase tracking-[0.06em] cursor-pointer whitespace-nowrap select-none shrink-0 transition-all duration-300 ease-out ${
-                        isActive
-                          ? "text-white"
-                          : "text-zinc-400 hover:text-zinc-100 hover:-translate-y-[1px]"
-                      }`}
-                    >
-                      {/* Smooth sliding active illuminated indicator */}
-                      {isActive && (
-                        <motion.div
-                          layoutId="activeCategoryHeaderPill"
-                          className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#0066cc] via-[#1a7de6] to-[#0ea5e9] shadow-[0_0_16px_rgba(14,165,233,0.35),0_0_8px_rgba(0,102,204,0.45),inset_0_1px_1px_rgba(255,255,255,0.3)] border border-white/20 pointer-events-none"
-                          transition={{
-                            duration: 0.35,
-                            ease: [0.16, 1, 0.3, 1],
-                          }}
-                        />
-                      )}
+          const count =
+            cat.id === "all"
+              ? SPIRAL_GLASSES.length
+              : SPIRAL_GLASSES.filter(
+                  (g) => g.category === cat.id
+                ).length;
 
-                      {/* Category Label */}
-                      <span className="relative z-10 font-semibold tracking-[0.06em] transition-colors duration-300">
-                        {cat.label}
-                      </span>
-
-                      {/* Small Circular/Rounded Count Badge */}
-                      <span
-                        className={`relative z-10 inline-flex items-center justify-center min-w-[18px] sm:min-w-[20px] h-[18px] sm:h-[20px] px-1.5 rounded-full text-[9px] sm:text-[10px] font-medium leading-none transition-all duration-300 shrink-0 ${
-                          isActive
-                            ? "bg-white/20 text-white border border-white/25 shadow-sm"
-                            : "bg-white/[0.06] text-zinc-400 border border-white/[0.08] group-hover:text-zinc-200 group-hover:border-white/15"
-                        }`}
-                      >
-                        {count}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* VIEW ALL BUTTON (RIGHT ON DESKTOP & TABLET, ROW 3 ON MOBILE) */}
-          <div className="order-3 md:order-2 lg:order-3 w-full sm:w-auto shrink-0 flex items-center justify-center sm:justify-end">
+          return (
             <button
-              id="header-view-all-btn"
-              onClick={handleOpenViewAll}
-              className="px-3.5 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-full bg-white text-zinc-950 hover:bg-brand-blue hover:text-white font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 sm:gap-2 cursor-pointer shadow-lg hover:shadow-brand-blue/30 shrink-0 whitespace-nowrap"
+              key={cat.id}
+              id={`cat-filter-${cat.id}`}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              onClick={() =>
+                setSelectedCategory((prev) =>
+                  prev === cat.id ? "all" : cat.id
+                )
+              }
+              className={`
+                group
+                relative
+                flex
+                items-center
+                justify-center
+                gap-1
+                sm:gap-1.5
+                px-2
+                sm:px-2.5
+                lg:px-2.5
+                xl:px-3
+                py-1.5
+                sm:py-2
+                rounded-lg
+                text-[9px]
+                sm:text-[10px]
+                lg:text-[10px]
+                xl:text-[10.5px]
+                font-semibold
+                uppercase
+                tracking-[0.04em]
+                cursor-pointer
+                whitespace-nowrap
+                select-none
+                shrink-0
+                transition-all
+                duration-300
+                ease-out
+                ${
+                  isActive
+                    ? "text-white"
+                    : "text-zinc-400 hover:text-zinc-100 hover:-translate-y-[1px]"
+                }
+              `}
             >
-              <span>VIEW ALL ({SPIRAL_GLASSES.length})</span>
-              <Grid size={14} className="shrink-0" />
+              {/* Active Background */}
+              {isActive && (
+                <motion.div
+                  layoutId="activeCategoryHeaderPill"
+                  className="
+                    absolute
+                    inset-0
+                    rounded-lg
+                    bg-gradient-to-r
+                    from-[#0066cc]
+                    via-[#1a7de6]
+                    to-[#0ea5e9]
+                    shadow-[0_0_16px_rgba(14,165,233,0.35),0_0_8px_rgba(0,102,204,0.45),inset_0_1px_1px_rgba(255,255,255,0.3)]
+                    border
+                    border-white/20
+                    pointer-events-none
+                  "
+                  transition={{
+                    duration: 0.35,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                />
+              )}
+
+              {/* Category Name */}
+              <span
+                className="
+                  relative
+                  z-10
+                  font-semibold
+                  tracking-[0.04em]
+                  transition-colors
+                  duration-300
+                "
+              >
+                {cat.label}
+              </span>
+
+              {/* Count */}
+              <span
+                className={`
+                  relative
+                  z-10
+                  inline-flex
+                  items-center
+                  justify-center
+                  min-w-[17px]
+                  sm:min-w-[18px]
+                  h-[17px]
+                  sm:h-[18px]
+                  px-1
+                  rounded-full
+                  text-[8px]
+                  sm:text-[9px]
+                  font-medium
+                  leading-none
+                  transition-all
+                  duration-300
+                  shrink-0
+                  ${
+                    isActive
+                      ? "bg-white/20 text-white border border-white/25 shadow-sm"
+                      : "bg-white/[0.06] text-zinc-400 border border-white/[0.08] group-hover:text-zinc-200 group-hover:border-white/15"
+                  }
+                `}
+              >
+                {count}
+              </span>
             </button>
-          </div>
-        </header>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+
+  {/* ======================================================================= */}
+  {/* VIEW ALL BUTTON                                                         */}
+  {/* ======================================================================= */}
+  <div
+    className="
+      order-3
+      md:order-2
+      lg:order-3
+      w-full
+      sm:w-auto
+      shrink-0
+      flex
+      items-center
+      justify-center
+      sm:justify-end
+    "
+  >
+    <button
+      id="header-view-all-btn"
+      onClick={handleOpenViewAll}
+      className="
+        px-3
+        sm:px-4
+        md:px-4
+        py-2
+        sm:py-2.5
+        rounded-full
+        bg-white
+        text-zinc-950
+        hover:bg-brand-blue
+        hover:text-white
+        font-mono
+        text-[9px]
+        sm:text-[10px]
+        font-bold
+        uppercase
+        tracking-wider
+        transition-all
+        flex
+        items-center
+        gap-1.5
+        sm:gap-2
+        cursor-pointer
+        shadow-lg
+        hover:shadow-brand-blue/30
+        shrink-0
+        whitespace-nowrap
+      "
+    >
+      <span>VIEW ALL ({SPIRAL_GLASSES.length})</span>
+      <Grid size={13} className="shrink-0" />
+    </button>
+  </div>
+</header>
 
         {/* CENTER 3D SPIRAL STAGE */}
         <div className="relative z-20 my-auto w-full h-[360px] xs:h-[400px] sm:h-[460px] md:h-[500px] lg:h-[540px] xl:h-[580px] flex items-center justify-center [perspective:1200px] select-none translate-y-6 sm:translate-y-10 md:translate-y-14 lg:translate-y-18 xl:translate-y-20">
