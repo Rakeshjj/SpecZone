@@ -180,7 +180,7 @@ export default function ConsultationBookingSection({
             ref={videoRef}
             id="eyewear-consultation-video"
             autoPlay
-            // muted
+            muted
             loop
             playsInline
             preload="auto"
@@ -366,19 +366,19 @@ export default function ConsultationBookingSection({
           {/* ===================================================================== */}
           <h2
             className="
-        text-3xl
-        sm:text-4xl
-        md:text-5xl
-        lg:text-[3.8rem]
-        xl:text-[4.3rem]
-        2xl:text-[4.7rem]
+        text-4xl
+        sm:text-5xl
+        md:text-6xl
+        lg:text-[4.4rem]
+        xl:text-[5rem]
+        2xl:text-[5.5rem]
         font-bold
         tracking-tight
         text-white
-        leading-[1.06]
-        sm:leading-[1.03]
-        mb-3
-        sm:mb-3.5
+        leading-[1.05]
+        sm:leading-[1.02]
+        mb-3.5
+        sm:mb-4
       "
           >
             <motion.span
@@ -423,14 +423,15 @@ export default function ConsultationBookingSection({
           <motion.p
             variants={textVariants}
             className="
-              text-4xl
-              sm:text-sm
-              md:text-base
+              text-base
+              sm:text-lg
+              md:text-xl
+              lg:text-[1.4rem]
               text-zinc-300
               font-medium
               leading-snug
-              mb-3.5
-              sm:mb-4
+              mb-4
+              sm:mb-5
               whitespace-pre-line
             "
           >
@@ -453,9 +454,9 @@ export default function ConsultationBookingSection({
                 justify-center
                 gap-2.5
                 px-6
-                sm:px-7
+                sm:px-8
                 py-2.5
-                sm:py-3
+                sm:py-3.5
                 rounded-full
                 bg-brand-blue
                 hover:bg-blue-600
@@ -463,6 +464,7 @@ export default function ConsultationBookingSection({
                 font-bold
                 text-xs
                 sm:text-sm
+                md:text-base
                 tracking-wider
                 uppercase
                 transition-all

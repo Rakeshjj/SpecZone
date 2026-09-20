@@ -184,7 +184,7 @@ const LENS_SCENARIOS: LensScenario[] = [
     badge: "OLEOPHOBIC SHIELD",
     beforeLabel: "Untreated Lens (Oil & Fingerprint Smudge Buildup)",
     afterLabel: "Oleophobic Barrier (Repels Oils & Wipes Clean Effortlessly)",
-    bgImage: "/assets/img/lens3.jpg",
+    bgImage: "/assets/img/smudge-resistence.png",
     beforeClasses: "blur-[3.5px] contrast-[0.8] brightness-[0.9] saturate-[0.85]",
     afterClasses: "blur-0 contrast-100 brightness-100 saturate-100"
   },
@@ -198,7 +198,7 @@ const LENS_SCENARIOS: LensScenario[] = [
     badge: "SCRATCH-RESISTANT SHIELD",
     beforeLabel: "Standard Lens (Micro-Scratches & Surface Wear)",
     afterLabel: "Hardened Coating (Reinforced Scratch Resistance)",
-    bgImage: "/assets/img/lens2.jpg",
+    bgImage: "/assets/img/scratched.png",
     beforeClasses: "blur-[2.5px] contrast-[0.85] brightness-[0.92] sepia-[0.1]",
     afterClasses: "blur-0 contrast-100 brightness-100 sepia-0"
   },
@@ -212,7 +212,7 @@ const LENS_SCENARIOS: LensScenario[] = [
     badge: "SMART DIGITAL FILTER",
     beforeLabel: "Standard Lens (Harsh Screen Light & Blue Glare)",
     afterLabel: "Blue UV Filter (Selective Screen Light Management)",
-    bgImage: "/assets/img/lens6.jpg",
+    bgImage: "/assets/img/uvcut.jpg",
     beforeClasses: "brightness-[1.15] hue-rotate-[15deg] contrast-[0.92] saturate-[1.2]",
     afterClasses: "brightness-100 hue-rotate-0 contrast-100 saturate-100"
   },
@@ -226,7 +226,7 @@ const LENS_SCENARIOS: LensScenario[] = [
     badge: "FULL UV-400 SHIELD",
     beforeLabel: "Unprotected Lens (Direct Ultraviolet Exposure)",
     afterLabel: "UV-400 Barrier (Comprehensive Ultraviolet Defense)",
-    bgImage: "/assets/img/lens1.jpg",
+    bgImage: "/assets/img/uvprotection.jpg",
     beforeClasses: "brightness-[1.25] saturate-[0.7] contrast-[0.88] blur-[1.5px]",
     afterClasses: "brightness-100 saturate-100 contrast-105 blur-0"
   }

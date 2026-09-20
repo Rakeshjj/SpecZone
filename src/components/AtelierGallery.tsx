@@ -180,7 +180,7 @@ export default function AtelierGallery() {
     <section
       ref={targetRef}
       id="gallery-reveal"
-      className="relative min-h-screen bg-[#fafafa]/80 py-24 flex flex-col justify-center overflow-hidden border-b border-zinc-250/20 backdrop-blur-md"
+      className="relative min-h-screen bg-zinc-950 py-24 px-6 md:px-12 overflow-hidden border-b border-white/5"
     >
       {/* Dynamic Background Light Rays */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(10,100,255,0.03)_0%,transparent_70%)] pointer-events-none" />
@@ -506,6 +506,12 @@ export default function AtelierGallery() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Premium Section Bottom Divider */}
+      <div className="relative w-full mt-16 sm:mt-20 lg:mt-24 px-6 md:px-12">
+        <div className="h-px w-full bg-zinc-900/10" />
+        <div className="absolute left-6 md:left-12 top-0 h-px w-24 bg-gradient-to-r from-brand-blue/70 to-transparent" />
+      </div>
     </section>
   );
 }

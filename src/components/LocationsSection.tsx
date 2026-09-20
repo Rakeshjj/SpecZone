@@ -13,7 +13,7 @@ export default function LocationsSection() {
   return (
     <section
       id="locations"
-      className="relative min-h-screen bg-zinc-950 py-24 px-6 md:px-12 overflow-hidden border-b border-white/5"
+      className="relative bg-zinc-950 pt-8 sm:pt-10 md:pt-12 pb-10 md:pb-12 px-6 md:px-12 overflow-hidden border-b border-white/5"
     >
       <div className="max-w-7xl mx-auto w-full z-10 space-y-20">
         {/* TOP: Split Hero Selector (Matches Video layout) */}

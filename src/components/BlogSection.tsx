@@ -940,7 +940,7 @@ export default function BlogSection({ onSelectArticle, highlightedArticleId }: B
  return (
     <section
       id="blog"
-      className="relative bg-zinc-950 py-12 md:py-16 px-6 md:px-12 border-b border-white/5 overflow-hidden"
+      className="relative bg-zinc-950 pt-5 sm:pt-6 md:pt-8 pb-12 md:pb-16 px-6 md:px-12 border-b border-white/5 overflow-hidden"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(10,100,255,0.01)_0%,transparent_60%)] pointer-events-none" />
       <div className="max-w-7xl mx-auto w-full z-10 space-y-8">

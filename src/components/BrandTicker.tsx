@@ -101,7 +101,7 @@ export default function BrandTicker() {
   return (
     <section
       id="brand-ticker-section"
-      className="bg-zinc-950/60 min-h-[90px] sm:min-h-[110px] md:min-h-[125px] py-7 sm:py-8 md:py-10 overflow-hidden relative backdrop-blur-md flex items-center justify-center"
+      className="bg-zinc-950/50 min-h-[90px] sm:min-h-[110px] md:min-h-[125px]  py-7 sm:py-8 md:py-10 overflow-hidden relative backdrop-blur-md flex items-center justify-center"
     >
       {/* Decorative gradient overlay bounds for clean luxury fade */}
       <div className="absolute inset-y-0 left-0 w-20 md:w-44 bg-gradient-to-r from-zinc-950 to-transparent z-20 pointer-events-none" />

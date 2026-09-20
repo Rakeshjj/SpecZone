@@ -69,7 +69,7 @@ export default function AboutUs() {
   return (
     <section
       id="about"
-      className="relative min-h-screen bg-zinc-950 py-24 px-6 md:px-12 border-b border-white/5 flex items-center justify-center overflow-hidden"
+      className="relative bg-zinc-950 pt-16 md:pt-20 pb-12 md:pb-14 px-6 md:px-12 border-b border-white/5 flex items-center justify-center overflow-hidden"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(0,102,204,0.01)_0%,transparent_50%)] pointer-events-none" />
       
