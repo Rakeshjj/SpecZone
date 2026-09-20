@@ -118,7 +118,7 @@ export const LOCATIONS_DATA: Location[] = [
     id: 2,
     name: "Choolaimedu",
     city: "Chennai",
-    image: "/assets/img/opticalshop2.jpg",
+    image: "/assets/img/location3.jpg",
     address: "29, Anna Nedum Pathai, Choolaimedu, Chennai, Tamil Nadu 600094",
     phone: "098404 00643",
     hours: "10:00 AM - 10:00 PM (Everyday)"
@@ -127,7 +127,7 @@ export const LOCATIONS_DATA: Location[] = [
     id: 3,
     name: "Nungambakkam",
     city: "Chennai",
-    image: "/assets/img/opticalshop3.jpg",
+    image: "/assets/img/location5.png",
     address: "No 146C, Raju Building, Kodambakkam High Rd, Mahalingapuram, Nungambakkam, Chennai, Greater Chennai, Tamil Nadu 600034",
     phone: "098404 00561",
     hours: "10:00 AM - 10:00 PM (Everyday)"
@@ -136,7 +136,7 @@ export const LOCATIONS_DATA: Location[] = [
     id: 4,
     name: "Arumbakkam",
     city: "Chennai",
-    image: "/assets/img/opticalshop4.jpg",
+    image: "/assets/img/location4.png",
     address: "No:2/4, D-Block, oppt Arumbakkam Post Office, Annish Nagar, Q Block, MMDA Colony, Arumbakkam, Chennai, Greater Chennai, Tamil Nadu 600106",
     phone: "098404 00561",
     hours: "10:00 AM - 10:00 PM (Everyday)"

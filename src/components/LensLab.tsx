@@ -27,7 +27,7 @@ const LENS_SCENARIOS: LensScenario[] = [
     name: "POLARIZED ANTI-REFLECTIVE",
     label: "Antiglare",
     icon: <Sun size={15} />,
-    title: "100% POLARIZED GLARE ELIMINATION",
+    title: "VISIONARIES NEED CLEAR VISION",
     description: "Anti-reflective (AR) coatings are treatments that are applied to the surface of the lens of glasses that reduce glare and let in more light. By reducing reflections on both sides of the lenses, this coating can make night driving and screen use more comfortable. AR coatings work by applying very thin layers of metal oxides to the lens, increasing the amount of light transmitted. This helps support clearer vision in changing lighting conditions and reduces the visual distractions that can occur when bright light hits the lens.",
     badge: "ULTRA SUN SECURITY",
     beforeLabel: "Standard Lens (Blinded by Reflective Glare)",

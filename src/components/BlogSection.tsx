@@ -11,9 +11,11 @@ import myopiaDiseaseImg from "../assets/images/myopia_disease_diagram_1789639790
 import hyperopiaDiseaseImg from "../assets/images/hyperopia_disease_diagram_1789639808308.jpg";
 import astigmatismDiseaseImg from "../assets/images/astigmatism_disease_diagram_1789639821383.jpg";
 import presbyopiaDiseaseImg from "../assets/images/presbyopia_disease_diagram_1789639841630.jpg";
+import catractDiseaseImg from "../assets/images/Cataract.jpg";
+import glaucomaDiseaseImg from "../assets/images/Glaucoma.jpg";
 
 const ARTICLES_DATA: Article[] = [
-  {
+{
     id: 1,
     title: "Myopia (Short-sightedness)",
     subtitle: "Refractive Error Clinical Overview",
@@ -935,7 +937,7 @@ interface BlogSectionProps {
 export default function BlogSection({ onSelectArticle, highlightedArticleId }: BlogSectionProps) {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
 
-  return (
+ return (
     <section
       id="blog"
       className="relative bg-zinc-950 py-12 md:py-16 px-6 md:px-12 border-b border-white/5 overflow-hidden"
@@ -974,9 +976,6 @@ export default function BlogSection({ onSelectArticle, highlightedArticleId }: B
                     }}
                     className="w-full h-full object-cover opacity-85 transition-transform duration-[350ms] ease-out group-hover:scale-[1.03]"
                   />
-                  <span className="absolute top-4 left-4 bg-zinc-950/60 backdrop-blur-md text-zinc-100 font-mono text-[9px] tracking-widest uppercase px-3 py-1 rounded-full border border-white/10">
-                    {article.category}
-                  </span>
                 </div>
 
                 {/* Body Content */}
@@ -1054,10 +1053,7 @@ export default function BlogSection({ onSelectArticle, highlightedArticleId }: B
                 </button>
 
                 <div className="absolute bottom-6 left-6 right-6 space-y-1">
-                  <span className="bg-brand-blue/10 border border-brand-blue/20 text-brand-blue font-mono text-[9px] tracking-widest uppercase px-3 py-1 rounded-full">
-                    {selectedArticle.category}
-                  </span>
-                  <h4 className="font-serif text-2xl font-black text-white uppercase tracking-tight mt-3">
+                  <h4 className="font-serif text-2xl font-black text-white uppercase tracking-tight">
                     {selectedArticle.title}
                   </h4>
                 </div>
@@ -1681,3 +1677,4 @@ export default function BlogSection({ onSelectArticle, highlightedArticleId }: B
     </section>
   );
 }
+

@@ -17,7 +17,9 @@ export const CATEGORY_OPTIONS: { id: ProductCategory; label: string }[] = [
   { id: "sunglasses", label: "Sunglasses" },
   { id: "frames", label: "Frames" },
   { id: "lenses", label: "Lenses" },
-  { id: "zero_power", label: "Zero Power" }
+  { id: "zero_power", label: "Zero Power" },
+    { id: "all", label: "All  " }
+
 ];
 
 interface SpiralGlassItem {
@@ -35,7 +37,7 @@ interface SpiralGlassItem {
 }
 
 const SPIRAL_GLASSES: SpiralGlassItem[] = [
-  // Triad 1
+  // User Sunglasses Collection
   {
     id: "sp-01",
     code: "AT-908-JPN",
@@ -48,6 +50,203 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     origin: "Sabae, Japan",
     weight: "11.2g",
     image: "/assets/img/aero-titanium.jpg"
+  },
+  {
+    id: "sp-sg-01",
+    code: "WF-101-POL",
+    name: "Solstice Horizon Polarized 01",
+    categoryLabel: "POLARIZED WAYFARER",
+    category: "sunglasses",
+    priceINR: 14800,
+    badge: "POLARIZED",
+    material: "Forged Bio-Acetate & Metal Rivets",
+    origin: "Milan, Italy",
+    weight: "24.6g",
+    image: "/assets/img/sunglass1.jpg"
+  },
+  {
+    id: "sp-sg-03",
+    code: "NV-303-SMK",
+    name: "Navigator Smoke Titanium 03",
+    categoryLabel: "DOUBLE-BRIDGE NAVIGATOR",
+    category: "sunglasses",
+    priceINR: 16500,
+    badge: "NEW ARRIVAL",
+    material: "Translucent Bio-Polymer & Alloy",
+    origin: "Belluno, Italy",
+    weight: "19.2g",
+    image: "/assets/img/sunglass3.jpg"
+  },
+  {
+    id: "sp-sg-04",
+    code: "HX-404-SLV",
+    name: "Hexagonal Minimalist Chrome 04",
+    categoryLabel: "GEOMETRIC TITANIUM",
+    category: "sunglasses",
+    priceINR: 17900,
+    badge: "HANDCRAFTED",
+    material: "Surgical Silver Titanium",
+    origin: "Sabae, Japan",
+    weight: "12.4g",
+    image: "/assets/img/sunglass4.jpg"
+  },
+  {
+    id: "sp-sg-05",
+    code: "VC-505-OCT",
+    name: "Vincent Chase Octa-Round 05",
+    categoryLabel: "ROUND GEOMETRIC",
+    category: "sunglasses",
+    priceINR: 13900,
+    badge: "TRENDING",
+    material: "Stainless Steel & Acetate Tips",
+    origin: "Venice, Italy",
+    weight: "15.8g",
+    image: "/assets/img/sunglass5.jpg"
+  },
+  {
+    id: "sp-sg-07",
+    code: "EA-707-BLU",
+    name: "Emporio Armani Gunmetal Blue 07",
+    categoryLabel: "ITALIAN LUXURY",
+    category: "sunglasses",
+    priceINR: 18900,
+    badge: "BESTSELLER",
+    material: "Matte Blue Alloy & Temples",
+    origin: "Milan, Italy",
+    weight: "18.5g",
+    image: "/assets/img/sunglass7.jpg"
+  },
+  {
+    id: "sp-sg-08",
+    code: "TF-808-BLK",
+    name: "Signature T-Hinge Classic Square 08",
+    categoryLabel: "TIMELESS SARTORIAL",
+    category: "sunglasses",
+    priceINR: 21500,
+    badge: "SIGNATURE",
+    material: "Polished Deep Black Bio-Acetate",
+    origin: "Florence, Italy",
+    weight: "26.1g",
+    image: "/assets/img/sunglass8.jpg"
+  },
+  {
+    id: "sp-04",
+    code: "HP-300-SOL",
+    name: "Hyper-Polarized Horizon X",
+    categoryLabel: "POLARIZED SUN",
+    category: "sunglasses",
+    priceINR: 16800,
+    badge: "SOLAR SHIELD",
+    material: "Forged Carbon Alloy",
+    origin: "Geneva, Switzerland",
+    weight: "18.2g",
+    image: "/assets/img/hyper.jpg"
+  },
+  {
+    id: "sp-07",
+    code: "AV-880-GLD",
+    name: "Heritage Aviator Gold",
+    categoryLabel: "CLASSIC AVIATOR",
+    category: "sunglasses",
+    priceINR: 19200,
+    badge: "NEW ARRIVAL",
+    material: "Plated Stainless Steel",
+    origin: "Milan, Italy",
+    weight: "16.4g",
+    image: "/assets/img/Heritage.jpg"
+  },
+  {
+    id: "sp-11",
+    code: "OK-900-PRZ",
+    name: "Oakley Prizm Velocity",
+    categoryLabel: "SPORT PERFORMANCE",
+    category: "sunglasses",
+    priceINR: 17500,
+    badge: "PRIZM LENS",
+    material: "Unobtainium & O-Matter",
+    origin: "Foothill Ranch, USA",
+    weight: "24.0g",
+    image: "/assets/img/Oakley.jpg"
+  },
+  {
+    id: "sp-13",
+    code: "CR-808-SPD",
+    name: "Carrera Speedline Double-Bridge",
+    categoryLabel: "MOTORSPORT EDITION",
+    category: "sunglasses",
+    priceINR: 15400,
+    badge: "ICONIC BRIDGE",
+    material: "Optyl Ultra-Light Polymer",
+    origin: "Padova, Italy",
+    weight: "17.1g",
+    image: "/assets/img/carrera.jpg"
+  },
+  {
+    id: "sp-10-rb",
+    code: "RB-214-WFR",
+    name: "Ray-Ban Classic Wayfarer",
+    categoryLabel: "ICONIC TIMELESS",
+    category: "sunglasses",
+    priceINR: 14500,
+    badge: "ICON",
+    material: "High-Grade Italian Acetate",
+    origin: "Milano, Italy",
+    weight: "25.0g",
+    image: "/assets/img/Rayban.png"
+  },
+
+  // Optical Frames Collection
+  {
+    id: "sp-fr-01",
+    code: "FR-101-SLV",
+    name: "Aero-Titanium Contour 01",
+    categoryLabel: "SABAE TITANIUM",
+    category: "frames",
+    priceINR: 14500,
+    badge: "NEW ARRIVAL",
+    material: "Surgical Japanese Beta-Titanium",
+    origin: "Sabae, Japan",
+    weight: "9.8g",
+    image: "/assets/img/frames1.png"
+  },
+  {
+    id: "sp-fr-02",
+    code: "FR-202-ACT",
+    name: "Milano Sartorial Acetate 02",
+    categoryLabel: "BIO ACETATE",
+    category: "frames",
+    priceINR: 15800,
+    badge: "HANDCRAFTED",
+    material: "Cured Italian Bio-Acetate",
+    origin: "Milan, Italy",
+    weight: "18.4g",
+    image: "/assets/img/frames2.png"
+  },
+  {
+    id: "sp-fr-05",
+    code: "FR-505-RIM",
+    name: "Zurich Neo-Rimless Precision 05",
+    categoryLabel: "RIMLESS OPTICS",
+    category: "frames",
+    priceINR: 16900,
+    badge: "ZERO WEIGHT",
+    material: "Memory Flex Titanium Alloy",
+    origin: "Zurich, Switzerland",
+    weight: "7.8g",
+    image: "/assets/img/frames5.png"
+  },
+  {
+    id: "sp-fr-08",
+    code: "FR-808-BLK",
+    name: "Classic Bespoke Contour 08",
+    categoryLabel: "HERITAGE BESPOKE",
+    category: "frames",
+    priceINR: 16200,
+    badge: "BESTSELLER",
+    material: "Polished High-Density Composite",
+    origin: "Belluno, Italy",
+    weight: "15.6g",
+    image: "/assets/img/frames8.png"
   },
   {
     id: "sp-02",
@@ -63,6 +262,47 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     image: "/assets/img/sartorial-img.jpg"
   },
   {
+    id: "sp-06",
+    code: "NM-101-MIN",
+    name: "Neo-Rimless Minimalist",
+    categoryLabel: "RIMLESS OPTICS",
+    category: "frames",
+    priceINR: 13500,
+    badge: "ZERO WEIGHT",
+    material: "Memory Flex Nitinol",
+    origin: "Zurich, Switzerland",
+    weight: "8.5g",
+    image: "/assets/img/lens5.jpg"
+  },
+  {
+    id: "sp-10",
+    code: "SM-600-MT",
+    name: "Ray-Ban Meta Smart Optics",
+    categoryLabel: "SMART AI EYEWEAR",
+    category: "frames",
+    priceINR: 29990,
+    badge: "AI CONNECTED",
+    material: "Lightweight O-Matter Composite",
+    origin: "Milano, Italy",
+    weight: "48.2g",
+    image: "/assets/img/Ray-Ban.jpg"
+  },
+  {
+    id: "sp-12",
+    code: "VG-330-CAT",
+    name: "Vogue Parisienne Cat-Eye",
+    categoryLabel: "HIGH FASHION",
+    category: "frames",
+    priceINR: 11800,
+    badge: "COUTURE",
+    material: "Hand-Polished Bio Acetate",
+    origin: "Paris, France",
+    weight: "19.4g",
+    image: "/assets/img/vogue.jpeg"
+  },
+
+  // Precision Lenses Collection
+  {
     id: "sp-03",
     code: "CB-705-PRO",
     name: "Chrono-Shield HEV Pro",
@@ -74,21 +314,6 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     origin: "Innsbruck, Austria",
     weight: "14.5g",
     image: "/assets/img/lens4.jpg"
-  },
-
-  // Triad 2
-  {
-    id: "sp-04",
-    code: "HP-300-SOL",
-    name: "Hyper-Polarized Horizon X",
-    categoryLabel: "POLARIZED SUN",
-    category: "sunglasses",
-    priceINR: 16800,
-    badge: "SOLAR SHIELD",
-    material: "Forged Carbon Alloy",
-    origin: "Geneva, Switzerland",
-    weight: "18.2g",
-    image: "/assets/img/hyper.jpg"
   },
   {
     id: "sp-05",
@@ -102,34 +327,6 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     origin: "Paris Atelier",
     weight: "13.8g",
     image: "/assets/img/lens1.jpg"
-  },
-  {
-    id: "sp-06",
-    code: "NM-101-MIN",
-    name: "Neo-Rimless Minimalist",
-    categoryLabel: "RIMLESS OPTICS",
-    category: "frames",
-    priceINR: 13500,
-    badge: "ZERO WEIGHT",
-    material: "Memory Flex Nitinol",
-    origin: "Zurich, Switzerland",
-    weight: "8.5g",
-    image: "/assets/img/lens5.jpg"
-  },
-
-  // Triad 3
-  {
-    id: "sp-07",
-    code: "AV-880-GLD",
-    name: "Heritage Aviator Gold",
-    categoryLabel: "CLASSIC AVIATOR",
-    category: "sunglasses",
-    priceINR: 19200,
-    badge: "NEW ARRIVAL",
-    material: "Plated Stainless Steel",
-    origin: "Milan, Italy",
-    weight: "16.4g",
-    image: "/assets/img/Heritage.jpg"
   },
   {
     id: "sp-08",
@@ -156,60 +353,6 @@ const SPIRAL_GLASSES: SpiralGlassItem[] = [
     origin: "Kyoto, Japan",
     weight: "20.1g",
     image: "/assets/img/lens11.jpg"
-  },
-
-  // Additional 4 Items (Total 13)
-  {
-    id: "sp-10",
-    code: "SM-600-MT",
-    name: "Ray-Ban Meta Smart Optics",
-    categoryLabel: "SMART AI EYEWEAR",
-    category: "frames",
-    priceINR: 29990,
-    badge: "AI CONNECTED",
-    material: "Lightweight O-Matter Composite",
-    origin: "Milano, Italy",
-    weight: "48.2g",
-    image: "/assets/img/Ray-Ban.jpg"
-  },
-  {
-    id: "sp-11",
-    code: "OK-900-PRZ",
-    name: "Oakley Prizm Velocity",
-    categoryLabel: "SPORT PERFORMANCE",
-    category: "sunglasses",
-    priceINR: 17500,
-    badge: "PRIZM LENS",
-    material: "Unobtainium & O-Matter",
-    origin: "Foothill Ranch, USA",
-    weight: "24.0g",
-    image: "/assets/img/lens12.jpg"
-  },
-  {
-    id: "sp-12",
-    code: "VG-330-CAT",
-    name: "Vogue Parisienne Cat-Eye",
-    categoryLabel: "HIGH FASHION",
-    category: "frames",
-    priceINR: 11800,
-    badge: "COUTURE",
-    material: "Hand-Polished Bio Acetate",
-    origin: "Paris, France",
-    weight: "19.4g",
-    image: "/assets/img/vogue.jpeg"
-  },
-  {
-    id: "sp-13",
-    code: "CR-808-SPD",
-    name: "Carrera Speedline Double-Bridge",
-    categoryLabel: "MOTORSPORT EDITION",
-    category: "sunglasses",
-    priceINR: 15400,
-    badge: "ICONIC BRIDGE",
-    material: "Optyl Ultra-Light Polymer",
-    origin: "Padova, Italy",
-    weight: "17.1g",
-    image: "/assets/img/lens.jpg"
   },
 
   // Zero Power Eyewear (Computer / Blue-Light / Screen Protection)
@@ -326,13 +469,13 @@ function SpiralCardItem({
       onClick={() => onSelect(item)}
       className="w-[230px] sm:w-[270px] h-[270px] flex flex-col justify-between bg-zinc-900/90 hover:bg-zinc-900 backdrop-blur-2xl border border-white/15 hover:border-brand-blue/80 rounded-3xl p-4 shadow-2xl transition-colors duration-300 group cursor-pointer hover:border-brand-blue"
     >
-      {/* Glass image */}
+      {/* Glass image - clean edge-to-edge rounded frame with no dead space */}
       <div className="relative w-full h-[170px] rounded-2xl overflow-hidden bg-zinc-950 border border-white/5 shrink-0">
         <img 
           src={item.image} 
           alt={item.name}
           referrerPolicy="no-referrer"
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 select-none"
         />
       </div>
 
@@ -574,8 +717,8 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
               </div>
 
               <div className="space-y-4">
-                <div className="aspect-[16/10] rounded-2xl overflow-hidden bg-zinc-950 border border-white/5">
-                  <img src={selectedGlass.image} alt={selectedGlass.name} className="w-full h-full object-cover" />
+                <div className="aspect-[16/10] rounded-2xl overflow-hidden bg-zinc-950 border border-white/10 relative">
+                  <img src={selectedGlass.image} alt={selectedGlass.name} className="w-full h-full object-cover select-none" />
                 </div>
 
                 <div className="text-center bg-zinc-950 p-4 rounded-xl border border-white/5 space-y-1">
@@ -718,20 +861,40 @@ export default function SpiralFrameMatrix({ onPreSelectService }: SpiralFrameMat
                 {filteredGlasses.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-zinc-900/90 hover:bg-zinc-900 rounded-2xl p-4 sm:p-5 flex flex-col justify-between border border-white/10 hover:border-brand-blue/60 transition-all duration-300 shadow-xl group hover:-translate-y-1"
+                    className="
+                      group
+                      relative
+                      rounded-2xl
+                      border
+                      border-white/10
+                      bg-white/[0.03]
+                      overflow-hidden
+                      transition-all
+                      duration-500
+                      hover:-translate-y-2
+                      hover:border-blue-500/40
+                      hover:shadow-[0_20px_60px_rgba(37,99,235,0.15)]
+                      p-4 sm:p-5
+                      flex
+                      flex-col
+                      justify-between
+                      h-full
+                    "
                   >
-                    <div className="aspect-[4/3] rounded-xl overflow-hidden bg-zinc-950 relative border border-white/5">
+                    <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-zinc-950 relative border border-white/5">
                       <img 
                         src={item.image} 
                         alt={item.name}
                         referrerPolicy="no-referrer"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 select-none"
                       />
-                      <div className="absolute top-2.5 left-2.5">
-                        <span className="font-mono text-[9px] text-white font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/10">
-                          {item.badge}
-                        </span>
-                      </div>
+                      {item.badge && (
+                        <div className="absolute top-2.5 left-2.5">
+                          <span className="font-mono text-[9px] text-white font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/10">
+                            {item.badge}
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     <div className="pt-4 pb-2 text-left space-y-1.5">
