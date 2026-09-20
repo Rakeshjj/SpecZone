@@ -159,7 +159,7 @@ const ARTICLES_DATA: Article[] = [
     category: "Clinical Eye Care",
     readTime: "5 min read",
     date: "July 10, 2026",
-    thumbnail: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=800",
+    thumbnail: catractDiseaseImg,
     summary: "A cataract is the clouding of the natural crystalline lens of the eye. It prevents light from passing clearly to the retina and causes blurred vision.",
     clinicalDetails: {
       definition: "A cataract is the clouding of the natural crystalline lens of the eye. It prevents light from passing clearly to the retina and causes blurred vision.",
@@ -224,7 +224,7 @@ const ARTICLES_DATA: Article[] = [
     category: "Clinical Eye Care",
     readTime: "5 min read",
     date: "June 28, 2026",
-    thumbnail: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=800",
+    thumbnail: glaucomaDiseaseImg,
     summary: "Glaucoma is progressive damage to the optic nerve, commonly associated with elevated IOP, leading to visual field loss.",
     clinicalDetails: {
       definition: "Glaucoma is progressive damage to the optic nerve, commonly associated with elevated IOP, leading to visual field loss.",

@@ -180,7 +180,7 @@ export default function ConsultationBookingSection({
             ref={videoRef}
             id="eyewear-consultation-video"
             autoPlay
-            muted
+            // muted
             loop
             playsInline
             preload="auto"
