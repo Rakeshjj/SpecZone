@@ -581,11 +581,11 @@ export default function TrialClassPortal({
       <div className="app-dual-layout w-full flex-1 flex flex-col lg:flex-row overflow-hidden">
         
         {/* ========================================================================= */}
-        {/* 1. LEFT SIDEBAR (28% desktop width, luxury midnight navy, fixed in viewable area) */}
+        {/* 1. LEFT SIDEBAR (28% desktop width, luxury midnight navy, natural flow)   */}
         {/* ========================================================================= */}
         <aside
           id="left-form-sidebar"
-          className="sidebar-panel w-full lg:w-[28%] lg:max-w-[28%] lg:h-full lg:max-h-full overflow-y-auto overflow-x-hidden shrink-0 min-h-0 sidebar-dark-scroll bg-gradient-to-b from-[#0A0E17] via-[#080B12] to-[#04060A] text-white relative flex flex-col justify-between border-r border-[#1E293B] shadow-2xl z-30 font-sans"
+          className="sidebar-panel w-full lg:w-[28%] lg:max-w-[28%] lg:h-full lg:max-h-full overflow-y-auto overflow-x-hidden shrink-0 min-h-0 sidebar-dark-scroll bg-gradient-to-b from-[#0A0E17] via-[#080B12] to-[#04060A] text-white relative flex flex-col border-r border-[#1E293B] shadow-2xl z-30 font-sans"
         >
           {/* Technical Optics Glow & Precision Matrix Background */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -606,15 +606,15 @@ export default function TrialClassPortal({
             </div>
           </div>
 
-          <div className="relative px-3.5 sm:px-5 lg:px-4 py-2.5 sm:py-3 flex flex-col flex-1 justify-between z-10 min-h-full">
+          <div className="relative px-3.5 sm:px-5 lg:px-4 py-3 sm:py-4 flex flex-col z-10 w-full">
             {/* Top Bar with Optional Back Link */}
             <div>
               {onBackToMain && (
-                <div className="flex items-center justify-start mb-1.5">
+                <div className="flex items-center justify-start mb-2 sm:mb-2.5">
                   <button
                     type="button"
                     onClick={onBackToMain}
-                    className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-white transition-colors cursor-pointer"
+                    className="flex items-center gap-1 text-[11px] sm:text-xs text-slate-400 hover:text-white transition-colors cursor-pointer"
                   >
                     <ChevronLeft size={14} />
                     <span>Back to Site</span>
@@ -623,13 +623,13 @@ export default function TrialClassPortal({
               )}
 
               {/* Booking Headline - Dynamically updates based on dropdown selection */}
-              <div className="text-center mb-2 sm:mb-2.5">
+              <div className="text-center mb-3.5 sm:mb-4 mt-4 sm:mt-6 md:mt-8">
                 <motion.h1
                   key={selectedService}
                   initial={{ opacity: 0, y: -4 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="text-[20px] sm:text-[22px] lg:text-[24px] font-bold text-white leading-tight tracking-tight capitalize"
+                  className="text-xl sm:text-2xl lg:text-[25px] font-bold text-white leading-tight tracking-tight capitalize"
                 >
                   {selectedService}
                 </motion.h1>
@@ -638,12 +638,12 @@ export default function TrialClassPortal({
 
             {/* Form */}
             {!isSubmitted ? (
-              <form onSubmit={handleFormSubmit} className="flex-1 flex flex-col justify-between pt-1">
-                {/* 5 Input Fields with Strict Equal Vertical Spacing */}
-                <div className="space-y-3 sm:space-y-3.5">
+              <form onSubmit={handleFormSubmit} className="flex flex-col w-full">
+                {/* Input Fields with Consistent Compact Spacing (14-18px) */}
+                <div className="space-y-3.5 sm:space-y-4">
                   {/* Full Name */}
                   <div>
-                    <label className="block text-xs font-semibold text-slate-200 mb-2 text-left">
+                    <label className="block text-xs font-semibold text-slate-200 mb-1.5 sm:mb-2 text-left">
                       Full Name
                     </label>
                     <input
@@ -652,21 +652,21 @@ export default function TrialClassPortal({
                       value={studentName}
                       onChange={(e) => setStudentName(e.target.value)}
                       placeholder="Enter your full name"
-                      className="w-full h-8.5 sm:h-9 px-3 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-white placeholder-slate-500 text-xs focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all"
+                      className="w-full h-11 sm:h-12 px-3.5 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all"
                     />
                   </div>
 
                   {/* Phone Number */}
                   <div>
-                    <label className="block text-xs font-semibold text-slate-200 mb-2 text-left">
+                    <label className="block text-xs font-semibold text-slate-200 mb-1.5 sm:mb-2 text-left">
                       Phone Number
                     </label>
-                    <div className="flex gap-1.5">
-                      <div className="relative w-20 shrink-0">
+                    <div className="flex gap-2">
+                      <div className="relative w-20 sm:w-22 shrink-0">
                         <select
                           value={countryCode}
                           onChange={(e) => setCountryCode(e.target.value)}
-                          className="w-full h-8.5 sm:h-9 px-2 pr-6 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-slate-200 text-xs font-medium focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all appearance-none cursor-pointer"
+                          className="w-full h-11 sm:h-12 px-2.5 pr-6 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-slate-200 text-xs sm:text-sm font-medium focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all appearance-none cursor-pointer"
                         >
                           {COUNTRY_CODES.map((c) => (
                             <option key={c.code} value={c.code} className="bg-[#0C111C] text-white">
@@ -675,7 +675,7 @@ export default function TrialClassPortal({
                           ))}
                         </select>
                         <ChevronDown
-                          size={12}
+                          size={13}
                           className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
                         />
                       </div>
@@ -685,14 +685,14 @@ export default function TrialClassPortal({
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         placeholder="Enter WhatsApp number"
-                        className="flex-1 h-8.5 sm:h-9 px-3 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-white placeholder-slate-500 text-xs focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all"
+                        className="flex-1 h-11 sm:h-12 px-3.5 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all"
                       />
                     </div>
                   </div>
 
                   {/* Email (optional) */}
                   <div>
-                    <label className="block text-xs font-semibold text-slate-200 mb-2 text-left">
+                    <label className="block text-xs font-semibold text-slate-200 mb-1.5 sm:mb-2 text-left">
                       <span>Email</span>{" "}
                       <span className="font-normal text-slate-400 text-[11px] ml-0.5">(optional)</span>
                     </label>
@@ -701,22 +701,22 @@ export default function TrialClassPortal({
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter your email"
-                      className="w-full h-8.5 sm:h-9 px-3 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-white placeholder-slate-500 text-xs focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all"
+                      className="w-full h-11 sm:h-12 px-3.5 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all"
                     />
                   </div>
 
                   {/* Select Age Group */}
                   <div>
-                    <label className="block text-xs font-semibold text-slate-200 mb-2 text-left">
+                    <label className="block text-xs font-semibold text-slate-200 mb-1.5 sm:mb-2 text-left">
                       Select Age Group
                     </label>
-                    <div className="flex items-center justify-between gap-1 w-full">
+                    <div className="flex items-center justify-between gap-1.5 w-full">
                       {AGE_GROUPS.map((age) => (
                         <button
                           key={age}
                           type="button"
                           onClick={() => setSelectedAge(age)}
-                          className={`h-7 sm:h-7.5 flex-1 rounded-md text-[11px] font-semibold transition-all flex items-center justify-center cursor-pointer border ${
+                          className={`h-9 sm:h-10 flex-1 rounded-lg text-xs font-semibold transition-all flex items-center justify-center cursor-pointer border ${
                             selectedAge === age
                               ? "bg-gradient-to-r from-[#0052D4] to-[#0099FF] text-white border-cyan-400/80 shadow-md shadow-[#0052D4]/35 font-bold"
                               : "bg-[#0C111C]/90 text-slate-300 border-[#1E293B] hover:border-slate-600 hover:text-white"
@@ -730,36 +730,36 @@ export default function TrialClassPortal({
 
                   {/* Select Service Dropdown */}
                   <div>
-                    <label className="block text-xs font-semibold text-slate-200 mb-2 text-left">
+                    <label className="block text-xs font-semibold text-slate-200 mb-1.5 sm:mb-2 text-left">
                       Select Service
                     </label>
                     <div className="relative">
                       <select
                         value={selectedService}
                         onChange={(e) => handleServiceChange(e.target.value)}
-                        className="w-full h-8.5 sm:h-9 px-3 pr-7 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-slate-200 text-xs font-medium focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all appearance-none cursor-pointer truncate"
+                        className="w-full h-11 sm:h-12 px-3.5 pr-8 rounded-lg bg-[#0C111C]/95 border border-[#1E293B] text-slate-200 text-xs sm:text-sm font-medium focus:outline-none focus:border-[#0066FF] focus:ring-1 focus:ring-[#0066FF]/40 transition-all appearance-none cursor-pointer truncate"
                       >
-                        <option value="Transform Your Look" className="bg-[#0C111C] text-white">
-                          Transform Your Look
-                        </option>
                         <option value="Home Eye Check" className="bg-[#0C111C] text-white">
                           Home Eye Check
                         </option>
+                        <option value="Transform Your Look" className="bg-[#0C111C] text-white">
+                          Transform Your Look
+                        </option>
                       </select>
                       <ChevronDown
-                        size={13}
-                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                        size={14}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
                       />
                     </div>
                   </div>
                 </div>
 
-                {/* Submit CTA Button & Trust Badge */}
-                <div className="pt-5.5 sm:pt-3 space-y-5">
+                {/* Submit CTA Button & Trust Badge - Naturally following the fields with balanced 24-32px gap */}
+                <div className="mt-6 sm:mt-6 md:mt-8 space-y-3 sm:space-y-3.5">
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full h-9.5 sm:h-10 rounded-full bg-gradient-to-r from-[#0052D4] via-[#2A6DF5] to-[#00C2FF] hover:from-[#0041B8] hover:via-[#1D5AD8] hover:to-[#00A8E0] text-white font-bold text-xs sm:text-sm tracking-wide transition-all flex items-center justify-center cursor-pointer shadow-lg shadow-[#0052D4]/40 hover:shadow-cyan-500/25 active:scale-[0.99] border border-cyan-300/40"
+                    className="w-full h-11 sm:h-12 rounded-full bg-gradient-to-r from-[#0052D4] via-[#2A6DF5] to-[#00C2FF] hover:from-[#0041B8] hover:via-[#1D5AD8] hover:to-[#00A8E0] text-white font-bold text-xs sm:text-sm tracking-wide transition-all flex items-center justify-center cursor-pointer shadow-lg shadow-[#0052D4]/40 hover:shadow-cyan-500/25 active:scale-[0.99] border border-cyan-300/40"
                   >
                     {isSubmitting ? (
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -773,10 +773,10 @@ export default function TrialClassPortal({
 
                   {/* Trust Ratings & Frames Served - Combined Single Line Badge */}
                   <div className="text-center">
-                    <div className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-[#0B1324] border border-blue-500/30 text-white text-[10px] sm:text-[10.5px] font-medium tracking-tight shadow-xs whitespace-nowrap">
+                    <div className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-[#0B1324] border border-blue-500/30 text-white text-[10px] sm:text-[10.5px] font-medium tracking-tight shadow-xs whitespace-nowrap">
                       {/* Google Rating */}
                       <div className="inline-flex items-center gap-1 shrink-0">
-                        <svg className="w-3 h-3" viewBox="0 0 24 24">
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24">
                           <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                           <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                           <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
@@ -954,164 +954,10 @@ export default function TrialClassPortal({
             </section>
             */}
 
-          {/* ========================================================================= */}
-          {/* SECTION 2: CERTIFIED MASTER OPTOMETRISTS & STYLISTS                       */}
-          {/* ========================================================================= */}
-          <section id="section-optometrists" className="w-full text-center">
-            <h3 className="text-[26px] sm:text-[30px] font-bold text-neutral-900 tracking-tight">
-              Certified Master Optometrists & Stylists
-            </h3>
-              <p className="text-[14px] sm:text-[15px] text-zinc-600 mt-1">
-                Hospital-grade 14-step eye evaluation, precise pupil distance measurement & bespoke frame styling
-              </p>
-
-              {/* 3 Specs & Lens Group Composition with bottom fade - Interactive Carousel */}
-              <div 
-                className="relative w-full max-w-[480px] sm:max-w-[560px] mx-auto mt-6 flex items-center justify-between gap-2 sm:gap-4 select-none"
-                onMouseEnter={() => setIsShowcasePaused(true)}
-                onMouseLeave={() => setIsShowcasePaused(false)}
-              >
-                {/* Carousel Left Navigation Arrow (At outer left end) */}
-                <button
-                  type="button"
-                  onClick={handlePrevShowcase}
-                  aria-label="Previous optical frames"
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-zinc-200 bg-white text-zinc-700 hover:text-zinc-950 flex items-center justify-center hover:bg-zinc-50 shadow-xs transition-all hover:scale-105 active:scale-95 cursor-pointer shrink-0 z-20"
-                >
-                  <ChevronLeft size={18} />
-                </button>
-
-                {/* Center Triptych Frame Showcase */}
-                <div className="relative flex-1 max-w-[340px] sm:max-w-[420px] mx-auto">
-                  <AnimatePresence mode="wait" custom={showcaseDirection}>
-                    <motion.div
-                      key={showcaseSlideIndex}
-                      custom={showcaseDirection}
-                      initial={{ opacity: 0, x: showcaseDirection > 0 ? 25 : -25 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: showcaseDirection > 0 ? -25 : 25 }}
-                      transition={{ duration: 0.35, ease: "easeOut" }}
-                      className="relative flex items-end justify-center"
-                    >
-                      {/* Left Specs / Optical Frame */}
-                      <div 
-                        onClick={handlePrevShowcase}
-                        title="Click to view previous pair"
-                        className="w-[120px] sm:w-[145px] -mr-5 z-10 transition-transform duration-300 hover:scale-105 hover:z-30 cursor-pointer"
-                      >
-                        <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-md border border-purple-200/80 bg-zinc-100">
-                          <img
-                            src={SHOWCASE_SLIDES[showcaseSlideIndex].left.src}
-                            alt={SHOWCASE_SLIDES[showcaseSlideIndex].left.alt}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              e.currentTarget.src = SHOWCASE_SLIDES[showcaseSlideIndex].left.fallback;
-                            }}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Center Optical Precision Lens / Specs (Standing in front) */}
-                      <div className="w-[140px] sm:w-[170px] z-20 transition-transform duration-300 hover:scale-105">
-                        <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-xl border-2 border-purple-300 bg-white">
-                          <img
-                            src={SHOWCASE_SLIDES[showcaseSlideIndex].center.src}
-                            alt={SHOWCASE_SLIDES[showcaseSlideIndex].center.alt}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              e.currentTarget.src = SHOWCASE_SLIDES[showcaseSlideIndex].center.fallback;
-                            }}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Right Luxury Frame / Specs */}
-                      <div 
-                        onClick={handleNextShowcase}
-                        title="Click to view next pair"
-                        className="w-[120px] sm:w-[145px] -ml-5 z-10 transition-transform duration-300 hover:scale-105 hover:z-30 cursor-pointer"
-                      >
-                        <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-md border border-purple-200/80 bg-zinc-100">
-                          <img
-                            src={SHOWCASE_SLIDES[showcaseSlideIndex].right.src}
-                            alt={SHOWCASE_SLIDES[showcaseSlideIndex].right.alt}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              e.currentTarget.src = SHOWCASE_SLIDES[showcaseSlideIndex].right.fallback;
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
-
-                  {/* Bottom White Gradient Fade */}
-                  <div className="absolute bottom-4 left-0 right-0 h-10 bg-gradient-to-t from-white via-white/70 to-transparent pointer-events-none z-10" />
-
-                  {/* Subtle Carousel Dots */}
-                  <div className="flex items-center justify-center gap-1.5 mt-2.5 relative z-20">
-                    {SHOWCASE_SLIDES.map((_, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onClick={() => {
-                          setShowcaseDirection(idx > showcaseSlideIndex ? 1 : -1);
-                          setShowcaseSlideIndex(idx);
-                        }}
-                        aria-label={`View frame group ${idx + 1}`}
-                        className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                          idx === showcaseSlideIndex
-                            ? "w-5 bg-[#ff1375]"
-                            : "w-1.5 bg-purple-200 hover:bg-purple-300"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Carousel Right Navigation Arrow (At outer right end) */}
-                <button
-                  type="button"
-                  onClick={handleNextShowcase}
-                  aria-label="Next optical frames"
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-zinc-200 bg-white text-zinc-700 hover:text-zinc-950 flex items-center justify-center hover:bg-zinc-50 shadow-xs transition-all hover:scale-105 active:scale-95 cursor-pointer shrink-0 z-20"
-                >
-                  <ChevronRight size={18} />
-                </button>
-              </div>
-            </section>
-
             {/* ========================================================================= */}
-            {/* SECTION 3: STATISTICS CARDS (4 in one row, light lavender bg, short)      */}
+            {/* SECTION 4: WHY CHOOSE THE SPECTACLE ZONE? (Dark charcoal-purple #39364B)  */}
             {/* ========================================================================= */}
-            <section id="section-statistics" className="w-full">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
-              {STATS.map((st) => (
-                <motion.div
-                  key={st.value}
-                  whileHover={{
-                    scale: 1.06,
-                    y: -4,
-                    transition: { type: "spring", stiffness: 450, damping: 18 }
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                  className="bg-[#F8F6FD] border border-[#EDE8F8] hover:border-[#FF1375]/40 rounded-xl p-3 sm:p-3.5 flex flex-col items-center justify-center text-center h-[76px] sm:h-[82px] shadow-2xs hover:shadow-xl hover:shadow-[#FF1375]/15 transition-colors cursor-pointer select-none group"
-                >
-                  <span className="text-[20px] sm:text-[22px] font-bold text-[#FF1375] leading-none mb-1 transition-transform duration-200 group-hover:scale-110 origin-center inline-block">
-                    {st.value}
-                  </span>
-                  <span className="text-[11px] sm:text-[12px] font-medium text-zinc-800 leading-tight">
-                    {st.label}
-                  </span>
-                </motion.div>
-              ))}
-            </div>
-          </section>
-
-          {/* ========================================================================= */}
-          {/* SECTION 4: WHY CHOOSE THE SPECTACLE ZONE? (Dark charcoal-purple #39364B)  */}
-          {/* ========================================================================= */}
-          <section id="section-why-choose" className="w-full bg-[#39364B] rounded-2xl p-6 sm:p-8 md:p-10 text-white text-center shadow-lg">
+            <section id="section-why-choose" className="w-full bg-[#39364B] rounded-2xl p-6 sm:p-8 md:p-10 text-white text-center shadow-lg">
             <h3 className="text-[24px] sm:text-[28px] font-bold text-white tracking-tight">
                 Why Choose The Spectacle Zone?
               </h3>
