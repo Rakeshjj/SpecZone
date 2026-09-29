@@ -69,12 +69,12 @@ export default function Navbar({ onBookClick, onNavigate }: NavbarProps) {
           <button
             id="nav-logo-btn"
             onClick={() => handleMenuClick("hero")}
-            className="group flex items-center focus:outline-none cursor-pointer"
+            className="group relative h-12 w-[87.43px] md:h-14 md:w-[102px] flex items-center justify-center shrink-0 focus:outline-none cursor-pointer"
           >
             <img
               src={logo}
               alt="Spectacal Zone Logo"
-              className="h-12 md:h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              className="h-16 sm:h-[72px] md:h-20 w-auto max-w-none object-contain shrink-0 transition-transform duration-300 group-hover:scale-105"
             />
           </button>
 
