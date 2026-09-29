@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Menu, X, Calendar, MapPin, Phone, Glasses } from "lucide-react";
-import logo from "/assets/logo.png";
+import logo from "/assets/logo1.png";
 
 interface NavbarProps {
   onBookClick: () => void;
